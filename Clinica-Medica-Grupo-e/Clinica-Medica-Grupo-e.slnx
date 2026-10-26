@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Clinica-Medica-Grupo-e/Clinica-Medica-Grupo-e.csproj" />
+  <Project Path="dominio/dominio.csproj" />
+  <Project Path="negocio/negocio.csproj" />
+  <Project Path="vista/vista.csproj" />
+</Solution>
