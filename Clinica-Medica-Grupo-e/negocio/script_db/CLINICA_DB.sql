@@ -95,3 +95,72 @@ VALUES ('René', 'Favaloro', 'MN-00001', 'favaloro@clinica.com', '11-9988-7766',
 INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (1, 1) -- House -> Clínica Médica
 INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (2, 2) -- Favaloro -> Cardiología
 GO
+
+SQL
+USE [CLINICA_DB]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE TABLE [dbo].[PACIENTES](
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [Nombre] [varchar](50) NOT NULL,
+    [Apellido] [varchar](50) NOT NULL,
+    [Dni] [varchar](15) NOT NULL UNIQUE,
+    [FechaNacimiento] [smalldatetime] NOT NULL,
+    [Email] [varchar](50) NOT NULL,
+    [Telefono] [varchar](30) NULL,
+    [Direccion] [varchar](100) NULL,
+    [Activo] [bit] NOT NULL DEFAULT 1,
+ CONSTRAINT [PK_PACIENTES] PRIMARY KEY CLUSTERED ([Id] ASC)
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE [dbo].[TURNOS](
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [NumeroTurno] [int] NOT NULL,
+    [Fecha] [date] NOT NULL,
+    [Hora] [int] NOT NULL, -- Ej: 10 (representa el bloque de 10:00 a 11:00)
+    [IdPaciente] [int] NOT NULL,
+    [IdMedico] [int] NOT NULL,
+    [IdEspecialidad] [int] NOT NULL,
+    [Observaciones] [varchar](500) NULL,
+    [Estado] [int] NOT NULL DEFAULT 1, -- 1:Nuevo, 2:Reprogramado, 3:Cancelado, 4:NoAsistio, 5:Cerrado
+ CONSTRAINT [PK_TURNOS] PRIMARY KEY CLUSTERED ([Id] ASC),
+ CONSTRAINT [FK_TURNOS_PACIENTES] FOREIGN KEY([IdPaciente]) REFERENCES [dbo].[PACIENTES] ([Id]),
+ CONSTRAINT [FK_TURNOS_MEDICOS] FOREIGN KEY([IdMedico]) REFERENCES [dbo].[MEDICOS] ([Id]),
+ CONSTRAINT [FK_TURNOS_ESPECIALIDADES] FOREIGN KEY([IdEspecialidad]) REFERENCES [dbo].[ESPECIALIDADES] ([Id])
+) ON [PRIMARY]
+GO
+
+
+INSERT INTO PACIENTES (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo)
+VALUES ('Juan', 'Pérez', '35111222', '1990-05-15', 'juan.perez@email.com', '261-555-1234', 'Av. San Martín 123', 1)
+
+INSERT INTO PACIENTES (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo)
+VALUES ('María', 'Gómez', '40333444', '1997-10-20', 'maria.gomez@email.com', '261-555-5678', 'Belgrano 456', 1)
+
+INSERT INTO TURNOS (NumeroTurno, Fecha, Hora, IdPaciente, IdMedico, IdEspecialidad, Observaciones, Estado)
+VALUES (1001, CAST(GETDATE() AS DATE), 10, 1, 1, 1, 'Control anual general', 1)
+GO
+
+CREATE PROCEDURE [dbo].[storedListarEspecialidades] AS
+BEGIN
+    SELECT Id, Descripcion, Activo
+    FROM ESPECIALIDADES
+    WHERE Activo = 1
+END
+GO
+
+CREATE PROCEDURE [dbo].[storedListarPacientes] AS
+BEGIN
+    SELECT Id, Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo
+    FROM PACIENTES
+    WHERE Activo = 1
+END
+GO
