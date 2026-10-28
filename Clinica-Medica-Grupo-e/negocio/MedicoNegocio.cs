@@ -66,6 +66,42 @@ namespace negocio
         }
 
         /// <summary>
+        /// Lista los médicos ordenados por apellido (para combos y filtros).
+        /// No trae especialidades ni turno de trabajo.
+        /// </summary>
+        public List<Medico> listar(bool soloActivos)
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(
+                    "SELECT Id, Nombre, Apellido, Matricula, Activo FROM MEDICOS " +
+                    (soloActivos ? "WHERE Activo = 1 " : "") +
+                    "ORDER BY Apellido, Nombre");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico medico = new Medico();
+                    medico.Id = (int)datos.Lector["Id"];
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.Matricula = (string)datos.Lector["Matricula"];
+                    medico.Activo = (bool)datos.Lector["Activo"];
+                    lista.Add(medico);
+                }
+
+                return lista;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        /// <summary>
         /// Especialidades asignadas a un médico (tabla MEDICOS_ESPECIALIDADES).
         /// </summary>
         public List<Especialidad> listarEspecialidades(int idMedico)

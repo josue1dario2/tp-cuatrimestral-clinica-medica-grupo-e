@@ -5,6 +5,12 @@
 
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
 
+    <!-- Mensaje de error (por ejemplo, si la base de datos no responde) -->
+    <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert alert-warning d-flex align-items-center gap-2 mb-4">
+        <span class="material-symbols-outlined">warning</span>
+        <asp:Label ID="lblError" runat="server"></asp:Label>
+    </asp:Panel>
+
     <!-- ===================== 1. ENCABEZADO ===================== -->
     <div class="d-flex flex-column gap-4 mb-4">
         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
@@ -148,7 +154,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4 col-xl-1">
                 <asp:Label ID="lblFiltroNumero" runat="server" AssociatedControlID="txtNumeroTurno" CssClass="filter-label form-label text-muted fw-medium mb-1" Text="N° de turno"></asp:Label>
-                <asp:TextBox ID="txtNumeroTurno" runat="server" CssClass="filter-input form-control form-control-sm" placeholder="T-2025-000123"></asp:TextBox>
+                <asp:TextBox ID="txtNumeroTurno" runat="server" CssClass="filter-input form-control form-control-sm" placeholder="Ej: 1001"></asp:TextBox>
             </div>
         </div>
 
@@ -171,9 +177,9 @@
         <div class="table-responsive">
             <%--
                 Campos esperados en el DataSource (un ítem por turno):
-                  IdTurno, NumeroTurno ("T-2025-000123"), FechaHora ("24/05/2025 • 16:00 hs"),
-                  Subtexto (consultorio, o "Cupo liberado" si está cancelado),
-                  PacienteNombre, PacienteDni, Cobertura, MedicoNombre, MedicoMatricula, Especialidad,
+                  IdTurno, NumeroTurno ("#1001"), FechaHora ("24/05/2025 • 16:00 hs"),
+                  Subtexto (turno de trabajo del médico, o "Cupo liberado" si está cancelado),
+                  PacienteNombre, PacienteDni, Contacto (teléfono o email), MedicoNombre, MedicoMatricula, Especialidad,
                   EstadoTexto, EstadoCss (badge-estado-nuevo | -cerrado | -reprogramado | -no-asistio | -cancelado),
                   EstadoIcono (Material Symbols: fiber_new | check_circle | history | person_off | cancel),
                   FilaCss ("" | row-inactivo | row-cancelado),
@@ -186,7 +192,7 @@
                             <tr>
                                 <th scope="col" class="py-3 px-3">N° Turno</th>
                                 <th scope="col" class="py-3 px-3">Fecha y Hora</th>
-                                <th scope="col" class="py-3 px-3">Paciente &amp; Cobertura</th>
+                                <th scope="col" class="py-3 px-3">Paciente &amp; Contacto</th>
                                 <th scope="col" class="py-3 px-3">Médico &amp; Matrícula</th>
                                 <th scope="col" class="py-3 px-3">Especialidad</th>
                                 <th scope="col" class="py-3 px-3 text-center">Estado</th>
@@ -206,7 +212,7 @@
                                 </td>
                                 <td class="py-3 px-3">
                                     <div class="fw-semibold text-dark"><%#: Eval("PacienteNombre") %></div>
-                                    <div class="text-muted fs-12">DNI <%#: Eval("PacienteDni") %> • <span class="fw-medium text-cl-primary"><%#: Eval("Cobertura") %></span></div>
+                                    <div class="text-muted fs-12">DNI <%#: Eval("PacienteDni") %> • <span class="fw-medium text-cl-primary"><%#: Eval("Contacto") %></span></div>
                                 </td>
                                 <td class="py-3 px-3">
                                     <div class="fw-medium text-dark"><%#: Eval("MedicoNombre") %></div>
@@ -398,7 +404,7 @@
                                     <div>DNI: <asp:Label ID="lblDetalleDni" runat="server" CssClass="fw-bold text-dark" Text="32.115.420"></asp:Label></div>
                                     <div>Teléfono: <asp:Label ID="lblDetalleTelefono" runat="server" Text="+54 11 4892-1104"></asp:Label></div>
                                     <div>Email: <asp:Label ID="lblDetalleEmail" runat="server" Text="l.martinez@gmail.com"></asp:Label></div>
-                                    <div>Cobertura: <asp:Label ID="lblDetalleCobertura" runat="server" CssClass="fw-bold text-cl-primary" Text="Galeno Plata (Credencial 90218-4)"></asp:Label></div>
+                                    <div>Dirección: <asp:Label ID="lblDetalleDireccion" runat="server" Text="Av. San Martín 123"></asp:Label></div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
@@ -407,7 +413,7 @@
                                 <div class="modal-datos text-muted mt-1">
                                     <div>Matrícula: <asp:Label ID="lblDetalleMatricula" runat="server" Text="MN 120.441"></asp:Label></div>
                                     <div>Especialidad: <asp:Label ID="lblDetalleEspecialidad" runat="server" Text="Ginecología"></asp:Label></div>
-                                    <div>Consultorio: <asp:Label ID="lblDetalleConsultorio" runat="server" Text="Consultorio 08 (Sector B)"></asp:Label></div>
+                                    <div>Turno de trabajo: <asp:Label ID="lblDetalleTurnoTrabajo" runat="server" Text="Mañana (08:00 a 14:00 hs)"></asp:Label></div>
                                     <div>Fecha y hora: <asp:Label ID="lblDetalleFechaHora" runat="server" CssClass="fw-bold text-dark" Text="24/05/2025 • 11:15 hs"></asp:Label></div>
                                 </div>
                             </div>
@@ -418,6 +424,9 @@
                         </div>
                     </div>
 
+                    <%-- La base todavía no tiene una tabla de historial de movimientos:
+                         esta sección queda oculta hasta que exista (phHistorial.Visible = true). --%>
+                    <asp:PlaceHolder ID="phHistorial" runat="server" Visible="false">
                     <div class="mb-3">
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <span class="material-symbols-outlined text-cl-primary">timeline</span>
@@ -449,6 +458,7 @@
                             </asp:Repeater>
                         </div>
                     </div>
+                    </asp:PlaceHolder>
                 </div>
 
                 <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">

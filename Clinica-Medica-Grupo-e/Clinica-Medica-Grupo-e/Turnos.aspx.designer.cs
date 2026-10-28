@@ -15,6 +15,16 @@ namespace Clinica_Medica_Grupo_e
     {
 
         /// <summary>
+        /// Control pnlError.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Panel pnlError;
+
+        /// <summary>
+        /// Control lblError.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblError;
+
+        /// <summary>
         /// Control lnkNuevoTurno.
         /// </summary>
         protected global::System.Web.UI.WebControls.HyperLink lnkNuevoTurno;
@@ -295,9 +305,9 @@ namespace Clinica_Medica_Grupo_e
         protected global::System.Web.UI.WebControls.Label lblDetalleEmail;
 
         /// <summary>
-        /// Control lblDetalleCobertura.
+        /// Control lblDetalleDireccion.
         /// </summary>
-        protected global::System.Web.UI.WebControls.Label lblDetalleCobertura;
+        protected global::System.Web.UI.WebControls.Label lblDetalleDireccion;
 
         /// <summary>
         /// Control lblDetalleMedico.
@@ -315,9 +325,9 @@ namespace Clinica_Medica_Grupo_e
         protected global::System.Web.UI.WebControls.Label lblDetalleEspecialidad;
 
         /// <summary>
-        /// Control lblDetalleConsultorio.
+        /// Control lblDetalleTurnoTrabajo.
         /// </summary>
-        protected global::System.Web.UI.WebControls.Label lblDetalleConsultorio;
+        protected global::System.Web.UI.WebControls.Label lblDetalleTurnoTrabajo;
 
         /// <summary>
         /// Control lblDetalleFechaHora.
@@ -328,6 +338,11 @@ namespace Clinica_Medica_Grupo_e
         /// Control lblDetalleMotivo.
         /// </summary>
         protected global::System.Web.UI.WebControls.Label lblDetalleMotivo;
+
+        /// <summary>
+        /// Control phHistorial.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.PlaceHolder phHistorial;
 
         /// <summary>
         /// Control rptHistorial.
