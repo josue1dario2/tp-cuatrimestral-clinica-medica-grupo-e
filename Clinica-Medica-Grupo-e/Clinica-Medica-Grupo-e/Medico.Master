@@ -1,0 +1,123 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="Clinica_Medica_Grupo_e.Medico" %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Control Médico - Gestión de Turnos</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap 5.3.8 + Bootstrap Icons (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <!-- Estilos propios (siempre después de Bootstrap) -->
+    <link href="~/Content/medico.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <!-- ===================== MENÚ LATERAL ===================== -->
+        <aside class="cl-sidebar">
+            <div class="d-flex flex-column gap-4">
+
+                <!-- Marca -->
+                <div class="d-flex flex-column px-2 gap-1">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="cl-brand-icon rounded-3 d-flex align-items-center justify-content-center text-white">
+                            <i class="bi bi-hospital-fill fs-5 lh-1"></i>
+                        </div>
+                        <span class="fs-4 fw-bold text-white">Clínica</span>
+                    </div>
+                    <span class="cl-brand-subtitle text-uppercase fw-semibold ps-4 text-white-50">Gestión de turnos</span>
+                </div>
+
+                <!-- Navegación (la clase "active" se asigna desde el code-behind según la página actual) -->
+                <nav class="d-flex flex-column gap-1">
+                    <asp:HyperLink ID="lnkNavInicio" runat="server" NavigateUrl="~/InicioMedico.aspx" CssClass="cl-nav-link">
+                        <i class="bi bi-house-door-fill fs-5"></i>
+                        <span>Inicio</span>
+                    </asp:HyperLink>
+                    <asp:HyperLink ID="lnkNavMisTurnos" runat="server" NavigateUrl="~/MisTurnos.aspx" CssClass="cl-nav-link">
+                        <i class="bi bi-calendar3 fs-5"></i>
+                        <span>Mis turnos</span>
+                    </asp:HyperLink>
+                </nav>
+            </div>
+
+            <!-- Pie del menú -->
+            <div class="cl-sidebar-footer p-3 rounded-3">
+                <span class="cl-sidebar-footer-label d-block text-uppercase fw-semibold text-white-50">Atención médica</span>
+                <span class="d-block text-white small fw-medium mt-1">Portal Profesional</span>
+            </div>
+        </aside>
+
+        <div class="cl-main-wrapper">
+
+            <!-- ===================== BARRA SUPERIOR ===================== -->
+            <header class="cl-header">
+                <div class="w-100 d-flex align-items-center justify-content-between">
+
+                    <!-- Título y fecha -->
+                    <div class="d-flex align-items-center gap-3">
+                        <div>
+                            <%-- Cada página puede reemplazar este título con un asp:Content para "TituloHeader".
+                                 Si no lo hace, se muestra este contenido por defecto. --%>
+                            <asp:ContentPlaceHolder ID="TituloHeader" runat="server">
+                                <div class="cl-header-title fw-semibold text-dark lh-sm">Panel de Control Médico</div>
+                                <div class="cl-header-subtitle text-secondary small">Gestión de Pacientes y Agenda Diaria</div>
+                            </asp:ContentPlaceHolder>
+                        </div>
+                        <div class="cl-header-divider vr mx-2 d-none d-md-block opacity-25"></div>
+                        <div class="d-none d-md-flex align-items-center gap-2 text-secondary small">
+                            <i class="bi bi-calendar-event fs-6"></i>
+                            <asp:Label ID="lblFechaActual" runat="server" CssClass="text-capitalize fw-medium" Text="Miércoles, 24 de mayo"></asp:Label>
+                        </div>
+                    </div>
+
+                    <!-- Médico logueado y cierre de sesión -->
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="cl-user-chip d-flex align-items-center gap-2 py-1 px-2 rounded-3">
+                            <div class="cl-user-avatar rounded-circle d-flex align-items-center justify-content-center text-white">
+                                <i class="bi bi-person-fill fs-5"></i>
+                            </div>
+                            <div class="d-flex flex-column text-start">
+                                <asp:Label ID="lblNombreMedico" runat="server" CssClass="cl-user-name fw-semibold text-dark lh-1" Text="Dr. Alejandro Gómez"></asp:Label>
+                                <asp:Label ID="lblEspecialidadMedico" runat="server" CssClass="cl-user-role fw-medium" Text="Médico Especialista - Dermatología"></asp:Label>
+                            </div>
+                        </div>
+                        <asp:LinkButton ID="btnLogout" runat="server" CausesValidation="false" OnClick="btnLogout_Click"
+                            CssClass="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1 border-0 fw-semibold px-2 py-1">
+                            <i class="bi bi-box-arrow-right fs-6"></i>
+                            <span class="d-none d-sm-inline">Cerrar sesión</span>
+                        </asp:LinkButton>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ===================== CONTENIDO DE CADA PÁGINA ===================== -->
+            <main class="cl-content-area">
+                <div class="cl-content-container container-fluid p-0">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </main>
+        </div>
+    </form>
+
+    <!-- Bootstrap 5.3.8 JS Bundle (incluye Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Scripts propios de cada página -->
+    <asp:ContentPlaceHolder ID="Scripts" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>

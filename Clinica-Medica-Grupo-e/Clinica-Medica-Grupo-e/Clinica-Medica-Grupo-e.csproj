@@ -64,12 +64,39 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\medico.css" />
     <Content Include="Global.asax" />
+    <Content Include="InicioMedico.aspx" />
+    <Content Include="Medico.Master" />
+    <Content Include="MisTurnos.aspx" />
+    <Content Include="Scripts\inicio-medico.js" />
+    <Content Include="Scripts\mis-turnos.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="InicioMedico.aspx.cs">
+      <DependentUpon>InicioMedico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InicioMedico.aspx.designer.cs">
+      <DependentUpon>InicioMedico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Medico.Master.cs">
+      <DependentUpon>Medico.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Medico.Master.designer.cs">
+      <DependentUpon>Medico.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MisTurnos.aspx.cs">
+      <DependentUpon>MisTurnos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MisTurnos.aspx.designer.cs">
+      <DependentUpon>MisTurnos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

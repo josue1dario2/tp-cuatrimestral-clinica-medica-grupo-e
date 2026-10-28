@@ -1,0 +1,685 @@
+﻿/* =========================================================
+   Clínica - Portal Médico
+   Estilos de la Master Page (Medico.Master) y del panel de inicio.
+   Se carga DESPUÉS de Bootstrap para poder sobrescribir sus variables.
+   ========================================================= */
+
+:root {
+    --bs-primary: #0E7C86;
+    --bs-primary-rgb: 14, 124, 134;
+    --cl-primary-dark: #00626a;
+    --cl-navy-dark: #12263F;
+    --cl-navy-card: #213145;
+    --cl-bg-main: #f8f9ff;
+    --cl-bg-soft: #eff4ff;
+    --cl-surface-card: #ffffff;
+    --cl-text-main: #0b1c30;
+    --cl-text-muted: #4f627e;
+    --cl-text-subtle: #6e797a;
+    --cl-border-subtle: #e5eeff;
+    --cl-success: #008237;
+    --cl-success-bg: #e6f9ed;
+    --cl-danger: #ba1a1a;
+    --cl-danger-bg: #ffdad6;
+    --cl-sidebar-width: 260px;
+    --cl-header-height: 64px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--cl-bg-main);
+    color: var(--cl-text-main);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.text-cl-primary { color: var(--bs-primary) !important; }
+.text-cl-success { color: var(--cl-success) !important; }
+.bg-cl-soft      { background-color: var(--cl-bg-soft) !important; }
+
+/* =========================================================
+   LAYOUT (Master Page)
+   ========================================================= */
+
+.cl-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--cl-sidebar-width);
+    background-color: var(--cl-navy-dark);
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cl-main-wrapper {
+    margin-left: var(--cl-sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.cl-header {
+    position: fixed;
+    top: 0;
+    left: var(--cl-sidebar-width);
+    right: 0;
+    height: var(--cl-header-height);
+    background: rgba(248, 249, 255, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 1030;
+    border-bottom: 1px solid rgba(229, 238, 255, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.cl-content-area {
+    margin-top: var(--cl-header-height);
+    padding: 1.75rem 2rem;
+    flex-grow: 1;
+}
+
+.cl-content-container {
+    max-width: 1240px;
+}
+
+/* ---------- Sidebar: marca ---------- */
+.cl-brand-icon {
+    background-color: var(--bs-primary);
+    width: 34px;
+    height: 34px;
+}
+
+.cl-brand-subtitle {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+}
+
+/* ---------- Sidebar: navegación ---------- */
+.cl-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #eaf1ff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cl-nav-link:hover {
+    background-color: var(--cl-navy-card);
+    color: #ffffff;
+}
+
+.cl-nav-link.active {
+    background-color: var(--bs-primary);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(14, 124, 134, 0.25);
+}
+
+/* ---------- Sidebar: pie ---------- */
+.cl-sidebar-footer {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.cl-sidebar-footer-label {
+    font-size: 0.7rem;
+}
+
+/* ---------- Header ---------- */
+.cl-header-title {
+    font-size: 0.95rem;
+}
+
+.cl-header-subtitle {
+    font-size: 0.78rem;
+}
+
+.cl-header-divider {
+    height: 24px;
+}
+
+.cl-user-chip {
+    background-color: var(--cl-bg-soft);
+}
+
+.cl-user-avatar {
+    background-color: var(--bs-primary);
+    width: 34px;
+    height: 34px;
+}
+
+.cl-user-name {
+    font-size: 0.85rem;
+}
+
+.cl-user-role {
+    font-size: 0.72rem;
+    color: var(--bs-primary);
+}
+
+/* =========================================================
+   COMPONENTES COMUNES
+   ========================================================= */
+
+.cl-card {
+    background-color: var(--cl-surface-card);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(229, 238, 255, 0.9);
+    box-shadow: 0 1px 3px rgba(11, 28, 48, 0.04);
+    transition: box-shadow 0.2s ease;
+}
+
+.cl-card:hover {
+    box-shadow: 0 4px 12px rgba(11, 28, 48, 0.07);
+}
+
+.btn-cl-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-cl-primary:hover,
+.btn-cl-primary:focus {
+    background-color: var(--cl-primary-dark);
+    border-color: var(--cl-primary-dark);
+    color: #ffffff;
+}
+
+.btn-cl-subtle {
+    background-color: var(--cl-bg-soft);
+    border-color: var(--cl-bg-soft);
+    color: var(--cl-text-main);
+    font-weight: 600;
+}
+
+.btn-cl-subtle:hover,
+.btn-cl-subtle:focus {
+    background-color: var(--cl-border-subtle);
+    border-color: var(--cl-border-subtle);
+    color: var(--cl-text-main);
+}
+
+/* Etiquetas de estado */
+.cl-badge-custom {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    border-radius: 50rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.cl-badge-espera       { background-color: #cbdeff; color: var(--cl-navy-dark); }
+.cl-badge-nuevo        { background-color: var(--cl-border-subtle); color: var(--cl-text-muted); }
+.cl-badge-reprogramado { background-color: var(--cl-border-subtle); color: var(--cl-text-muted); }
+.cl-badge-cancelado    { background-color: var(--cl-danger-bg); color: var(--cl-danger); }
+.cl-badge-cerrado      { background-color: #dbffd9; color: #00662a; }
+
+/* Punto pulsante */
+.cl-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--cl-success);
+    display: inline-block;
+    animation: clPulse 1.6s infinite;
+}
+
+.cl-pulse-dot-primary {
+    background-color: var(--bs-primary);
+}
+
+@keyframes clPulse {
+    0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 130, 55, 0.7); }
+    70%  { transform: scale(1);    box-shadow: 0 0 0 5px rgba(0, 130, 55, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 130, 55, 0); }
+}
+
+/* =========================================================
+   PANEL DE INICIO (InicioMedico.aspx)
+   ========================================================= */
+
+.cl-status-pill {
+    background-color: var(--cl-border-subtle);
+    font-size: 0.75rem;
+}
+
+/* KPIs */
+.cl-kpi-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+}
+
+.cl-kpi-icon {
+    width: 44px;
+    height: 44px;
+    background-color: var(--cl-bg-soft);
+    color: var(--bs-primary);
+}
+
+.cl-kpi-icon-success {
+    background-color: var(--cl-success-bg);
+    color: var(--cl-success);
+}
+
+.cl-kpi-footer {
+    font-size: 0.8rem;
+}
+
+.cl-kpi-progress-label {
+    font-size: 0.75rem;
+}
+
+.cl-progress {
+    height: 6px;
+}
+
+.cl-progress .progress-bar {
+    background-color: var(--cl-success);
+}
+
+/* Próximo turno */
+.cl-accent-bar {
+    height: 5px;
+    background: linear-gradient(90deg, #0E7C86 0%, #00626a 50%, #98f0fb 100%);
+}
+
+.cl-pill-proximo {
+    background-color: #cbdeff;
+    color: var(--bs-primary);
+    font-size: 0.72rem;
+}
+
+.cl-pill-proximo-dot {
+    font-size: 0.5rem;
+}
+
+.cl-pill-llegada {
+    background-color: var(--cl-success-bg);
+    color: var(--cl-success);
+    font-size: 0.72rem;
+}
+
+.cl-patient-avatar {
+    width: 58px;
+    height: 58px;
+    background-color: #dce9ff;
+}
+
+.cl-reason-box {
+    background-color: var(--cl-bg-main);
+    border: 1px solid var(--cl-bg-soft);
+}
+
+.cl-reason-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+}
+
+.cl-reason-text {
+    font-size: 0.875rem;
+}
+
+.cl-reason-meta {
+    font-size: 0.78rem;
+}
+
+/* Agenda */
+.cl-filter-group {
+    background-color: var(--cl-bg-soft);
+}
+
+.cl-schedule-grid {
+    min-width: 760px;
+}
+
+.cl-table-header {
+    background-color: var(--cl-bg-soft);
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cl-text-muted);
+    letter-spacing: 0.03em;
+    padding: 0.65rem 1rem;
+}
+
+.cl-schedule-row {
+    padding: 0.85rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.15s ease;
+    align-items: center;
+}
+
+.cl-schedule-row:hover               { background-color: var(--cl-bg-soft); }
+.cl-schedule-row-active              { background-color: #eaf3fe; }
+.cl-schedule-row-active:hover        { background-color: #e0ecfc; }
+.cl-schedule-row-reprogramado        { background-color: rgba(239, 244, 255, 0.4); }
+.cl-schedule-row-cancelado           { background-color: rgba(255, 218, 214, 0.15); opacity: 0.75; }
+
+.cl-row-time {
+    font-size: 0.9rem;
+}
+
+.cl-row-dni,
+.cl-row-coverage {
+    font-size: 0.75rem;
+}
+
+/* =========================================================
+   MIS TURNOS (MisTurnos.aspx)
+   ========================================================= */
+
+/* Encabezado de sección */
+.cl-section-icon {
+    width: 48px;
+    height: 48px;
+    background-color: rgba(14, 124, 134, 0.12);
+    color: var(--cl-primary-dark);
+    font-size: 26px;
+}
+
+.cl-section-title {
+    font-size: 20px;
+}
+
+.cl-section-meta {
+    font-size: 14px;
+}
+
+.cl-pill-activo {
+    background-color: rgba(0, 102, 42, 0.12);
+    color: #00662a;
+    font-size: 11px;
+    padding: 0.35rem 0.65rem;
+}
+
+.cl-pill-activo .spinner-grow {
+    width: 8px;
+    height: 8px;
+}
+
+.btn-cl-secondary {
+    background-color: var(--cl-bg-soft);
+    color: #4d5f7b;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.btn-cl-secondary:hover,
+.btn-cl-secondary:focus {
+    background-color: var(--cl-border-subtle);
+    color: var(--cl-text-main);
+}
+
+.btn-cl-secondary.text-cl-primary:hover {
+    color: var(--cl-primary-dark) !important;
+}
+
+/* Semana */
+.cl-small-caps {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+}
+
+.cl-week-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.cl-week-card {
+    border: 1px solid rgba(229, 238, 255, 0.9);
+    border-radius: 12px;
+    padding: 1rem;
+    background-color: #ffffff;
+    transition: all 0.15s ease-in-out;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cl-week-link:hover .cl-week-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    background-color: var(--cl-bg-soft);
+}
+
+.cl-week-card.cl-week-today {
+    box-shadow: 0 0 0 2px var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.cl-week-card.cl-week-off {
+    background-color: var(--cl-bg-soft);
+    opacity: 0.75;
+}
+
+.cl-week-today .cl-week-dayname,
+.cl-week-today .cl-week-count {
+    color: var(--cl-primary-dark) !important;
+}
+
+.cl-week-badge-hoy {
+    background-color: var(--cl-primary-dark);
+    font-size: 10px;
+}
+
+.cl-week-number {
+    font-size: 24px;
+}
+
+.cl-week-month,
+.cl-week-detail {
+    font-size: 12px;
+}
+
+.cl-week-count {
+    font-size: 14px;
+}
+
+.cl-week-footer {
+    border-top: 1px solid var(--cl-border-subtle);
+}
+
+/* Métricas */
+.cl-metric-label  { font-size: 13px; }
+.cl-metric-value  { font-size: 32px; }
+.cl-metric-unit   { font-size: 14px; }
+.cl-metric-note   { font-size: 11px; }
+
+.cl-metric-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+}
+
+.cl-metric-icon-blue    { background-color: #d4e3ff; color: #061c35; }
+.cl-metric-icon-teal    { background-color: rgba(124, 212, 223, 0.4); color: var(--cl-primary-dark); }
+.cl-metric-icon-green   { background-color: rgba(127, 252, 151, 0.4); color: #00662a; }
+
+.text-cl-primary-dark { color: var(--cl-primary-dark) !important; }
+.text-cl-green-dark   { color: #00662a !important; }
+
+/* Filtros */
+.cl-btn-square {
+    width: 36px;
+    height: 36px;
+}
+
+.cl-date-box {
+    background-color: var(--cl-bg-soft);
+    font-size: 14px;
+}
+
+.cl-btn-hoy {
+    color: var(--cl-primary-dark);
+    background-color: rgba(14, 124, 134, 0.1);
+    font-size: 13px;
+}
+
+.cl-input-soft {
+    background-color: var(--cl-bg-soft) !important;
+    font-size: 14px;
+    height: 40px;
+}
+
+.cl-filter-select { max-width: 220px; }
+.cl-filter-search { max-width: 260px; }
+
+.cl-search-icon {
+    left: 12px;
+    font-size: 14px;
+}
+
+/* Tabla de turnos */
+.cl-turnos-table thead {
+    background-color: rgba(239, 244, 255, 0.7);
+}
+
+.cl-turnos-table thead tr {
+    font-size: 13px;
+}
+
+.cl-turnos-table tbody {
+    font-size: 14px;
+}
+
+.cl-turnos-table tr {
+    border-bottom: 1px solid var(--cl-border-subtle);
+}
+
+.cl-turnos-table .cl-row-detail {
+    font-size: 12px;
+}
+
+.cl-turnos-table tr.cl-fila-actual > td {
+    background-color: rgba(14, 124, 134, 0.05);
+}
+
+.cl-turnos-table tr.cl-fila-actual .cl-col-hora {
+    color: var(--cl-primary-dark) !important;
+}
+
+.cl-turnos-table tr.cl-fila-atenuada {
+    opacity: 0.88;
+}
+
+.cl-pill-sala {
+    background-color: var(--bs-primary);
+    font-size: 11px;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50rem;
+}
+
+.cl-btn-accion {
+    font-size: 13px;
+}
+
+/* Estados de turno */
+.cl-estado {
+    font-weight: 600;
+    font-size: 11px;
+    padding: 0.3rem 0.65rem;
+    border-radius: 50rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.cl-estado-cerrado      { background-color: rgba(0, 130, 55, 0.12); color: #00662a; }
+.cl-estado-nuevo        { background-color: #d4e3ff; color: #061c35; }
+.cl-estado-reprogramado { background-color: #fef3c7; color: #92400e; }
+.cl-estado-cancelado    { background-color: var(--cl-danger-bg); color: var(--cl-danger); }
+.cl-estado-noasistio    { background-color: var(--cl-border-subtle); color: var(--cl-text-muted); }
+
+.cl-table-footer {
+    background-color: rgba(239, 244, 255, 0.5);
+    font-size: 13px;
+    color: #4d5f7b;
+    border-top: 1px solid var(--cl-border-subtle);
+}
+
+/* Modal de atención */
+.cl-modal-header {
+    background-color: var(--cl-navy-card);
+}
+
+.cl-modal-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--bs-primary);
+    font-size: 20px;
+}
+
+.cl-modal-subtitle {
+    font-size: 12px;
+    color: #bdc9ca;
+}
+
+.cl-modal-badge-hora {
+    background-color: rgba(14, 124, 134, 0.12);
+    color: var(--cl-primary-dark);
+    font-size: 11px;
+}
+
+.cl-modal-badge-estado {
+    background-color: rgba(0, 102, 42, 0.12);
+    color: #00662a;
+    font-size: 11px;
+}
+
+.cl-modal-quote {
+    background-color: #ffffff;
+    font-size: 14px;
+    border: 1px solid var(--cl-border-subtle);
+}
+
+.cl-modal-notes {
+    background-color: var(--cl-bg-soft);
+    font-size: 14px;
+    resize: none;
+}
+
+.cl-modal-footer {
+    background-color: rgba(239, 244, 255, 0.6);
+    border-top: 1px solid var(--cl-border-subtle);
+}
+
+.cl-text-13 { font-size: 13px; }
+.cl-text-12 { font-size: 12px; }
+
+/* =========================================================
+   IMPRESIÓN (botón "Imprimir agenda")
+   ========================================================= */
+@media print {
+    .cl-sidebar,
+    .cl-header,
+    .cl-no-print {
+        display: none !important;
+    }
+
+    .cl-main-wrapper {
+        margin-left: 0;
+    }
+
+    .cl-content-area {
+        margin-top: 0;
+        padding: 0;
+    }
+}
