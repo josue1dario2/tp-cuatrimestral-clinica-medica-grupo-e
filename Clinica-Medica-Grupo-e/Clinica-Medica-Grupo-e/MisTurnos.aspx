@@ -11,6 +11,15 @@
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="d-flex flex-column w-100 gap-4">
 
+        <!-- Mensaje cuando no se puede mostrar la agenda (médico inválido, error de base de datos) -->
+        <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert alert-warning d-flex align-items-center gap-2 mb-0">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <asp:Label ID="lblError" runat="server"></asp:Label>
+        </asp:Panel>
+
+        <%-- Todo el contenido de la agenda; se oculta si hay un error --%>
+        <asp:PlaceHolder ID="phContenido" runat="server">
+
         <!-- ===================== 1. ENCABEZADO DE SECCIÓN ===================== -->
         <div class="cl-card p-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             <div class="d-flex align-items-start gap-3">
@@ -254,6 +263,8 @@
                 <asp:Label ID="lblTurnosRestantes" runat="server" CssClass="fw-semibold" Text="Turnos restantes: 8"></asp:Label>
             </div>
         </div>
+
+        </asp:PlaceHolder>
 
         <!-- ===================== 6. MODAL: INICIAR ATENCIÓN ===================== -->
         <%-- Se abre desde el code-behind al presionar "Atender" en una fila (ver comentario en MisTurnos.aspx.cs) --%>

@@ -20,6 +20,21 @@ namespace Clinica_Medica_Grupo_e
         protected global::System.Web.UI.WebControls.Label lblSubtituloHeader;
 
         /// <summary>
+        /// Control pnlError.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Panel pnlError;
+
+        /// <summary>
+        /// Control lblError.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.Label lblError;
+
+        /// <summary>
+        /// Control phContenido.
+        /// </summary>
+        protected global::System.Web.UI.WebControls.PlaceHolder phContenido;
+
+        /// <summary>
         /// Control lblEstadoConsultorio.
         /// </summary>
         protected global::System.Web.UI.WebControls.Label lblEstadoConsultorio;
