@@ -77,7 +77,7 @@
                                 <span class="material-symbols-outlined">schedule</span>
                                 <span>Turnos de Trabajo</span>
                             </asp:HyperLink>
-                            <asp:HyperLink ID="lnkNavUsuarios" runat="server" NavigateUrl="~/Usuarios.aspx" CssClass="nav-item-custom">
+                            <asp:HyperLink ID="lnkNavUsuarios" runat="server" NavigateUrl="~/GestionUsuariosAdmin.aspx" CssClass="nav-item-custom">
                                 <span class="material-symbols-outlined">manage_accounts</span>
                                 <span>Usuarios</span>
                             </asp:HyperLink>
