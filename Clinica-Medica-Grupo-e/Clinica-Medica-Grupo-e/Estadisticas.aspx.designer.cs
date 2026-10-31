@@ -7,7 +7,7 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace vista
+namespace Clinica_Medica_Grupo_e
 {
 
 

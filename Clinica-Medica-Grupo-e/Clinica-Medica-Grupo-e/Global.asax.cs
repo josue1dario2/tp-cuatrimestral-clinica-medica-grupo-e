@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.UI; 
-namespace vista
+namespace Clinica_Medica_Grupo_e
 {
     public class Global : System.Web.HttpApplication
     {

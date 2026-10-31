@@ -7,9 +7,7 @@ using dominio;
 
 namespace negocio
 {
-    /// <summary>
     /// Operaciones sobre la tabla ESPECIALIDADES.
-    /// </summary>
     public class EspecialidadNegocio
     {
         /// Especialidades activas, usando el procedimiento almacenado storedListarEspecialidades.

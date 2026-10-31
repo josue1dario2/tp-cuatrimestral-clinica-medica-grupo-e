@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -102,7 +102,7 @@ namespace Clinica_Medica_Grupo_e
             lblMetricaJornada.Text = "Jornada " + horario;
             lblModalMedico.Text = medico.NombreCompleto;
 
-            Medico master = Master as Medico;
+            Clinica_Medica_Grupo_e.Medico master = Master as Clinica_Medica_Grupo_e.Medico;
             if (master != null)
                 master.MostrarMedico(medico.NombreCompleto, especialidades);
         }

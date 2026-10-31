@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Inicio - Panel Médico" Language="C#" MasterPageFile="~/Medico.Master" AutoEventWireup="true" CodeBehind="InicioMedico.aspx.cs" Inherits="vista.InicioMedico" %>
+﻿<%@ Page Title="Inicio - Panel Médico" Language="C#" MasterPageFile="~/Medico.Master" AutoEventWireup="true" CodeBehind="InicioMedico.aspx.cs" Inherits="Clinica_Medica_Grupo_e.InicioMedico" %>
 
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
