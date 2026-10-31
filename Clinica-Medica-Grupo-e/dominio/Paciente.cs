@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace dominio
 {
-    /// <summary>
-    /// Tabla PACIENTES.
-    /// </summary>
     public class Paciente
     {
         public int Id { get; set; }
@@ -17,32 +18,9 @@ namespace dominio
         public string Direccion { get; set; }
         public bool Activo { get; set; }
 
-        /// <summary>
-        /// Ej: "Pérez, Juan".
-        /// </summary>
-        public string NombreCompleto
-        {
-            get { return Apellido + ", " + Nombre; }
-        }
-
-        /// <summary>
-        /// Edad en años cumplidos a la fecha de hoy.
-        /// </summary>
-        public int Edad
-        {
-            get
-            {
-                DateTime hoy = DateTime.Today;
-                int edad = hoy.Year - FechaNacimiento.Year;
-                if (FechaNacimiento.Date > hoy.AddYears(-edad))
-                    edad--;
-                return edad;
-            }
-        }
-
         public override string ToString()
         {
-            return NombreCompleto;
+            return Apellido + ", " + Nombre;
         }
     }
 }

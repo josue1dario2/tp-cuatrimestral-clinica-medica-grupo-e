@@ -1,8 +1,11 @@
-﻿namespace dominio
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace dominio
 {
-    /// <summary>
-    /// Tabla USUARIOS.
-    /// </summary>
     public class Usuario
     {
         public int Id { get; set; }
