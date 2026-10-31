@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using dominio;
 
 namespace negocio
@@ -8,9 +12,7 @@ namespace negocio
     /// </summary>
     public class EspecialidadNegocio
     {
-        /// <summary>
         /// Especialidades activas, usando el procedimiento almacenado storedListarEspecialidades.
-        /// </summary>
         public List<Especialidad> listar()
         {
             List<Especialidad> lista = new List<Especialidad>();
@@ -18,7 +20,7 @@ namespace negocio
 
             try
             {
-                datos.setearProcedimientoAlmacenado("storedListarEspecialidades");
+                datos.setearProcedimiento("storedListarEspecialidades");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -32,6 +34,10 @@ namespace negocio
 
                 lista.Sort((a, b) => string.Compare(a.Descripcion, b.Descripcion, System.StringComparison.CurrentCulture));
                 return lista;
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
             }
             finally
             {

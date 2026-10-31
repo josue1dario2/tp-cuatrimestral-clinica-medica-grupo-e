@@ -1,48 +1,57 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
+using dominio; 
+using negocio; 
 
-namespace Clinica_Medica_Grupo_e
+namespace vista 
 {
-    public partial class Medico : MasterPage
+    public partial class Medico : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            CultureInfo cultura = new CultureInfo("es-AR");
-            lblFechaActual.Text = DateTime.Today.ToString("dddd, d 'de' MMMM", cultura);
-
-            // Mientras no haya login, el médico viaja en la URL (?idMedico=...).
-            // Se agrega a los links del menú para no perderlo al navegar.
-            string idMedico = Request.QueryString["idMedico"];
-            if (!string.IsNullOrEmpty(idMedico))
+            // 1. Control de Seguridad Centralizado (Idéntico a Master.Master.cs del profesor)
+            // Asumiendo que las páginas públicas son Login y Error.
+            if (!(Page is Login || Page is Error))
             {
-                string parametro = "?idMedico=" + Server.UrlEncode(idMedico);
-                lnkNavInicio.NavigateUrl = "~/InicioMedico.aspx" + parametro;
-                lnkNavMisTurnos.NavigateUrl = "~/MisTurnos.aspx" + parametro;
+                // Validación de sesión activa (reemplaza a tu inseguro QueryString)
+                if (Session["medicoLogueado"] == null)
+                {
+                    Response.Redirect("Login.aspx", false);
+                }
+                else
+                {
+                    // 2. Carga de datos del médico desde la memoria segura del servidor
+                    dominio.Medico medico = (dominio.Medico)Session["medicoLogueado"];
+
+                    // Solo actualizamos la UI si no es un PostBack para ahorrar procesamiento
+                    if (!IsPostBack)
+                    {
+                        lblNombreMedico.Text = medico.Apellido + ", " + medico.Nombre;
+
+                        // Si guardas la especialidad principal en la entidad, asígnala aquí:
+                        // lblEspecialidadMedico.Text = medico.Especialidades[0].Descripcion;
+                    }
+                }
             }
 
-            // Marca como activo el link de la página actual.
-            string paginaActual = Path.GetFileName(Request.Path);
-            if (string.Equals(paginaActual, "InicioMedico.aspx", StringComparison.OrdinalIgnoreCase))
-                lnkNavInicio.CssClass = "cl-nav-link active";
-            else if (string.Equals(paginaActual, "MisTurnos.aspx", StringComparison.OrdinalIgnoreCase))
-                lnkNavMisTurnos.CssClass = "cl-nav-link active";
+            // 3. Renderizado de fecha y controles estáticos
+            if (!IsPostBack)
+            {
+                CultureInfo cultura = new CultureInfo("es-AR");
+                lblFechaActual.Text = DateTime.Today.ToString("dddd, d 'de' MMMM", cultura);
+            }
         }
 
-        /// <summary>
-        /// Muestra el médico en la barra superior. La llama cada página de contenido
-        /// cuando ya sabe qué médico está usando el sistema.
-        /// </summary>
-        public void MostrarMedico(string nombre, string detalle)
-        {
-            lblNombreMedico.Text = nombre;
-            lblEspecialidadMedico.Text = detalle;
-        }
-
+        // 4. Implementación obligatoria del Cierre de Sesión
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            // TODO: cerrar sesión y redirigir al login.
+            Session.Clear(); // Limpia toda la memoria de sesión del servidor
+            Response.Redirect("Login.aspx", false); // Expulsa al login
         }
     }
 }

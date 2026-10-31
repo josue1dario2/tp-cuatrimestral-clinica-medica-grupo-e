@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminRecep.Master.cs" Inherits="Clinica_Medica_Grupo_e.AdminRecep" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminRecep.Master.cs" Inherits="vista.AdminRecep" %>
 
 <!DOCTYPE html>
 <html lang="es">

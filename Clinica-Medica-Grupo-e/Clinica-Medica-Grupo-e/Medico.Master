@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="Clinica_Medica_Grupo_e.Medico" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="vista.Medico" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -25,7 +25,7 @@
 <body>
     <form id="form1" runat="server">
 
-        <!-- ===================== MENÚ LATERAL ===================== -->
+        <!-- ===================== MENÚ LATERAL =====================-->
         <aside class="cl-sidebar">
             <div class="d-flex flex-column gap-4">
 

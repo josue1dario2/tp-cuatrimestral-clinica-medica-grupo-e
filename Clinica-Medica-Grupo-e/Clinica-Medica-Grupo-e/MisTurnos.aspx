@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Mis turnos - Agenda Médica" Language="C#" MasterPageFile="~/Medico.Master" AutoEventWireup="true" CodeBehind="MisTurnos.aspx.cs" Inherits="Clinica_Medica_Grupo_e.MisTurnos" %>
+﻿<%@ Page Title="Mis turnos - Agenda Médica" Language="C#" MasterPageFile="~/Medico.Master" AutoEventWireup="true" CodeBehind="MisTurnos.aspx.cs" Inherits="vista.MisTurnos" %>
 
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

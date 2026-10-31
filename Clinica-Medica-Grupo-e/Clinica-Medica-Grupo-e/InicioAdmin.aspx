@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Inicio - Gestión de Turnos" Language="C#" MasterPageFile="~/AdminRecep.Master" AutoEventWireup="true" CodeBehind="InicioAdmin.aspx.cs" Inherits="Clinica_Medica_Grupo_e.InicioAdmin" %>
+﻿<%@ Page Title="Inicio - Gestión de Turnos" Language="C#" MasterPageFile="~/AdminRecep.Master" AutoEventWireup="true" CodeBehind="InicioAdmin.aspx.cs" Inherits="vista.InicioAdmin" %>
 
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

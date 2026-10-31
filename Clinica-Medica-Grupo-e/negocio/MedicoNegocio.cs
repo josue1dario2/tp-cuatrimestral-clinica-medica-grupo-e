@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using dominio;
 
 namespace negocio
 {
-    /// <summary>
-    /// Operaciones sobre la tabla MEDICOS.
-    /// </summary>
     public class MedicoNegocio
     {
-        /// <summary>
         /// Busca un médico por Id con su turno de trabajo y sus especialidades.
         /// Devuelve null si no existe.
-        /// </summary>
         public Medico buscarPorId(int id)
         {
             Medico medico = null;
@@ -54,6 +52,10 @@ namespace negocio
                     medico.TurnoTrabajo.HoraSalida = (int)datos.Lector["HoraSalida"];
                 }
             }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
             finally
             {
                 datos.cerrarConexion();
@@ -65,10 +67,8 @@ namespace negocio
             return medico;
         }
 
-        /// <summary>
         /// Lista los médicos ordenados por apellido (para combos y filtros).
         /// No trae especialidades ni turno de trabajo.
-        /// </summary>
         public List<Medico> listar(bool soloActivos)
         {
             List<Medico> lista = new List<Medico>();
@@ -95,15 +95,17 @@ namespace negocio
 
                 return lista;
             }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
             finally
             {
                 datos.cerrarConexion();
             }
         }
 
-        /// <summary>
         /// Especialidades asignadas a un médico (tabla MEDICOS_ESPECIALIDADES).
-        /// </summary>
         public List<Especialidad> listarEspecialidades(int idMedico)
         {
             List<Especialidad> lista = new List<Especialidad>();
@@ -130,6 +132,10 @@ namespace negocio
                 }
 
                 return lista;
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
             }
             finally
             {

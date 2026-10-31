@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Clinica_Medica_Grupo_e.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="vista.Global" Language="C#" %>
