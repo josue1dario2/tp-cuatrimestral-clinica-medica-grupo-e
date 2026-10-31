@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,7 +69,7 @@ namespace negocio
 
         /// Lista los médicos ordenados por apellido (para combos y filtros).
         /// No trae especialidades ni turno de trabajo.
-        public List<Medico> listar(bool soloActivos)
+        public List<Medico> listar(bool soloActivos = false)
         {
             List<Medico> lista = new List<Medico>();
             AccesoDatos datos = new AccesoDatos();

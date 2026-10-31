@@ -49,7 +49,7 @@ namespace Clinica_Medica_Grupo_e
                 {
                     try
                     {
-                        List<dominio.Medico> lista = new MedicoNegocio().listar();
+                        List<dominio.Medico> lista = new MedicoNegocio().listar(true);
                         if (lista != null && lista.Count > 0)
                             idMedico = lista[0].Id;
                         else
