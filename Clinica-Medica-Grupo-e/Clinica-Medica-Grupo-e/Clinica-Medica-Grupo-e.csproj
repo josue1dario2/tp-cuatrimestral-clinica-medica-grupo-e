@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -73,6 +73,7 @@
     <Content Include="Global.asax" />
     <Content Include="InicioAdmin.aspx" />
     <Content Include="InicioMedico.aspx" />
+    <Content Include="MasterInicio.Master" />
     <Content Include="Medico.Master" />
     <Content Include="Medicos.aspx" />
     <Content Include="MisTurnos.aspx" />
@@ -116,6 +117,13 @@
     </Compile>
     <Compile Include="AdminRecep.Master.designer.cs">
       <DependentUpon>AdminRecep.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterInicio.Master.cs">
+      <DependentUpon>MasterInicio.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterInicio.Master.designer.cs">
+      <DependentUpon>MasterInicio.Master</DependentUpon>
     </Compile>
     <Compile Include="InicioAdmin.aspx.cs">
       <DependentUpon>InicioAdmin.aspx</DependentUpon>

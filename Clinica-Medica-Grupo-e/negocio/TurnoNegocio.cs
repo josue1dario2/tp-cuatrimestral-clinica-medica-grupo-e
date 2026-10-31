@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using dominio;
 
 namespace negocio
 {
-    /// <summary>
-    /// Operaciones sobre la tabla TURNOS.
-    /// </summary>
+
     public class TurnoNegocio
     {
-        /// <summary>
         /// SELECT común a todas las consultas de turnos: trae el turno con su paciente,
         /// médico (y turno de trabajo) y especialidad. Cada método le agrega su WHERE.
-        /// </summary>
         private const string SELECT_TURNOS =
             "SELECT T.Id, T.NumeroTurno, T.Fecha, T.Hora, T.Observaciones, T.Estado, " +
             "       P.Id AS IdPaciente, P.Nombre AS PacienteNombre, P.Apellido AS PacienteApellido, " +
@@ -27,10 +26,8 @@ namespace negocio
             "INNER JOIN TURNOS_TRABAJO TT ON TT.Id = M.IdTurnoTrabajo " +
             "INNER JOIN ESPECIALIDADES E ON E.Id = T.IdEspecialidad ";
 
-        /// <summary>
         /// Devuelve los turnos de un médico entre dos fechas (inclusive),
         /// ordenados por fecha y hora.
-        /// </summary>
         public List<Turno> listarPorMedico(int idMedico, DateTime desde, DateTime hasta)
         {
             FiltroTurnos filtro = new FiltroTurnos();
@@ -40,9 +37,7 @@ namespace negocio
             return buscar(filtro);
         }
 
-        /// <summary>
         /// Búsqueda avanzada: aplica solo los filtros que vienen cargados.
-        /// </summary>
         public List<Turno> buscar(FiltroTurnos filtro)
         {
             List<Turno> lista = new List<Turno>();
@@ -99,15 +94,17 @@ namespace negocio
 
                 return lista;
             }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
             finally
             {
                 datos.cerrarConexion();
             }
         }
 
-        /// <summary>
         /// Busca un turno por Id. Devuelve null si no existe.
-        /// </summary>
         public Turno buscarPorId(int id)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -120,15 +117,17 @@ namespace negocio
 
                 return datos.Lector.Read() ? armarTurno(datos) : null;
             }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
             finally
             {
                 datos.cerrarConexion();
             }
         }
 
-        /// <summary>
         /// Arma un Turno con la fila actual del lector (columnas de SELECT_TURNOS).
-        /// </summary>
         private Turno armarTurno(AccesoDatos datos)
         {
             Turno turno = new Turno();
@@ -171,9 +170,7 @@ namespace negocio
         }
     }
 
-    /// <summary>
     /// Criterios de la búsqueda avanzada de turnos. Los que quedan en null / 0 / vacío no filtran.
-    /// </summary>
     public class FiltroTurnos
     {
         public DateTime? Desde { get; set; }

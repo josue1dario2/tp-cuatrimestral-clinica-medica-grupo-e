@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +17,10 @@ namespace dominio
         public Especialidad Especialidad { get; set; }
         public string Observaciones { get; set; }
         public EstadoTurno Estado { get; set; }
+
+        public string HoraTexto
+        {
+            get { return Hora.ToString("00") + ":00 hs"; }
+        }
     }
 }

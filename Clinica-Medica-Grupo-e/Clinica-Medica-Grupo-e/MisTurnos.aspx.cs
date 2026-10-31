@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -41,8 +41,25 @@ namespace Clinica_Medica_Grupo_e
             int idMedico;
             if (!int.TryParse(Request.QueryString["idMedico"], out idMedico))
             {
-                MostrarError("Falta indicar el médico en la dirección. Ejemplo: MisTurnos.aspx?idMedico=1");
-                return;
+                if (Session["medicoLogueado"] is dominio.Medico medSesion)
+                {
+                    idMedico = medSesion.Id;
+                }
+                else
+                {
+                    try
+                    {
+                        List<dominio.Medico> lista = new MedicoNegocio().listar(true);
+                        if (lista != null && lista.Count > 0)
+                            idMedico = lista[0].Id;
+                        else
+                            idMedico = 1;
+                    }
+                    catch
+                    {
+                        idMedico = 1;
+                    }
+                }
             }
 
             try
@@ -102,7 +119,7 @@ namespace Clinica_Medica_Grupo_e
             lblMetricaJornada.Text = "Jornada " + horario;
             lblModalMedico.Text = medico.NombreCompleto;
 
-            Medico master = Master as Medico;
+            Clinica_Medica_Grupo_e.Medico master = Master as Clinica_Medica_Grupo_e.Medico;
             if (master != null)
                 master.MostrarMedico(medico.NombreCompleto, especialidades);
         }

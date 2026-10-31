@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +17,23 @@ namespace dominio
         public string Telefono { get; set; }
         public string Direccion { get; set; }
         public bool Activo { get; set; }
+
+        public string NombreCompleto
+        {
+            get { return Apellido + ", " + Nombre; }
+        }
+
+        public int Edad
+        {
+            get
+            {
+                DateTime hoy = DateTime.Today;
+                int edad = hoy.Year - FechaNacimiento.Year;
+                if (FechaNacimiento.Date > hoy.AddYears(-edad))
+                    edad--;
+                return edad >= 0 ? edad : 0;
+            }
+        }
 
         public override string ToString()
         {
