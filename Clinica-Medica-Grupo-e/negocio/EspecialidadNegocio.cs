@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +7,9 @@ using dominio;
 
 namespace negocio
 {
-    /// Operaciones sobre la tabla ESPECIALIDADES.
     public class EspecialidadNegocio
     {
-        /// Especialidades activas, usando el procedimiento almacenado storedListarEspecialidades.
-        public List<Especialidad> listar()
+        public List<Especialidad> listar(string id = "")
         {
             List<Especialidad> lista = new List<Especialidad>();
             AccesoDatos datos = new AccesoDatos();
@@ -27,13 +25,83 @@ namespace negocio
                     especialidad.Id = (int)datos.Lector["Id"];
                     especialidad.Descripcion = (string)datos.Lector["Descripcion"];
                     especialidad.Activo = (bool)datos.Lector["Activo"];
-                    lista.Add(especialidad);
+
+                    if (string.IsNullOrEmpty(id) || especialidad.Id.ToString() == id)
+                    {
+                        lista.Add(especialidad);
+                    }
                 }
 
-                lista.Sort((a, b) => string.Compare(a.Descripcion, b.Descripcion, System.StringComparison.CurrentCulture));
                 return lista;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Especialidad buscarPorId(int id)
+        {
+            List<Especialidad> lista = listar(id.ToString());
+            return lista.Count > 0 ? lista[0] : null;
+        }
+
+        public void agregar(Especialidad nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedAltaEspecialidad");
+                datos.setearParametro("@Descripcion", nuevo.Descripcion);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void modificar(Especialidad mod)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedModificarEspecialidad");
+                datos.setearParametro("@Id", mod.Id);
+                datos.setearParametro("@Descripcion", mod.Descripcion);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminar(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedEliminarEspecialidad");
+                datos.setearParametro("@Id", id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

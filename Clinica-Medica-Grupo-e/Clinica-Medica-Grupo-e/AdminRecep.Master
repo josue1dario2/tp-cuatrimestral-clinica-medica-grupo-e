@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminRecep.Master.cs" Inherits="Clinica_Medica_Grupo_e.AdminRecep" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminRecep.Master.cs" Inherits="Clinica_Medica_Grupo_e.AdminRecep" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -69,7 +69,7 @@
                             <div class="my-2 px-3 pt-1">
                                 <span class="nav-section-title text-uppercase fw-semibold">Administración</span>
                             </div>
-                            <asp:HyperLink ID="lnkNavEspecialidades" runat="server" NavigateUrl="~/Especialidades.aspx" CssClass="nav-item-custom">
+                            <asp:HyperLink ID="lnkNavEspecialidades" runat="server" NavigateUrl="~/EspecialidadesLista.aspx" CssClass="nav-item-custom">
                                 <span class="material-symbols-outlined">clinical_notes</span>
                                 <span>Especialidades</span>
                             </asp:HyperLink>

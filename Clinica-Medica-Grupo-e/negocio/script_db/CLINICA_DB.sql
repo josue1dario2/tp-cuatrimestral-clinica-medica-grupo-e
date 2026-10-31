@@ -96,7 +96,6 @@ INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (1, 1) -- H
 INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (2, 2) -- Favaloro -> Cardiología
 GO
 
-SQL
 USE [CLINICA_DB]
 GO
 
@@ -154,6 +153,37 @@ BEGIN
     SELECT Id, Descripcion, Activo
     FROM ESPECIALIDADES
     WHERE Activo = 1
+    ORDER BY Descripcion ASC;
+END
+GO
+
+CREATE PROCEDURE [dbo].[storedAltaEspecialidad]
+    @Descripcion VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO ESPECIALIDADES (Descripcion, Activo)
+    VALUES (@Descripcion, 1);
+END
+GO
+
+CREATE PROCEDURE [dbo].[storedModificarEspecialidad]
+    @Id INT,
+    @Descripcion VARCHAR(50)
+AS
+BEGIN
+    UPDATE ESPECIALIDADES
+    SET Descripcion = @Descripcion
+    WHERE Id = @Id;
+END
+GO
+
+CREATE PROCEDURE [dbo].[storedEliminarEspecialidad]
+    @Id INT
+AS
+BEGIN
+    UPDATE ESPECIALIDADES
+    SET Activo = 0
+    WHERE Id = @Id;
 END
 GO
 
