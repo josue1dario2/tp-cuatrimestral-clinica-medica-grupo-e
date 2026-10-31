@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,10 +17,9 @@ namespace Clinica_Medica_Grupo_e
 
         void Application_Error(object sender, EventArgs e)
         {
-            Exception exc = Server.GetLastError();
-
-            Session.Add("error", exc.ToString());
-            Server.Transfer("Error.aspx");
+            // Exception exc = Server.GetLastError();
+            // Session.Add("error", exc.ToString());
+            // Server.Transfer("Error.aspx");
         }
     }
 }

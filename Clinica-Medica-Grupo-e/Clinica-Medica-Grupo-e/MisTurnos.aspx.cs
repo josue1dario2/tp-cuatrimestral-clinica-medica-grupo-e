@@ -41,8 +41,25 @@ namespace Clinica_Medica_Grupo_e
             int idMedico;
             if (!int.TryParse(Request.QueryString["idMedico"], out idMedico))
             {
-                MostrarError("Falta indicar el médico en la dirección. Ejemplo: MisTurnos.aspx?idMedico=1");
-                return;
+                if (Session["medicoLogueado"] is dominio.Medico medSesion)
+                {
+                    idMedico = medSesion.Id;
+                }
+                else
+                {
+                    try
+                    {
+                        List<dominio.Medico> lista = new MedicoNegocio().listar();
+                        if (lista != null && lista.Count > 0)
+                            idMedico = lista[0].Id;
+                        else
+                            idMedico = 1;
+                    }
+                    catch
+                    {
+                        idMedico = 1;
+                    }
+                }
             }
 
             try

@@ -44,7 +44,7 @@ namespace Clinica_Medica_Grupo_e
         protected void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            Response.Redirect("Login.aspx", false);
+            Response.Redirect("InicioMedico.aspx", false);
         }
     }
 }
