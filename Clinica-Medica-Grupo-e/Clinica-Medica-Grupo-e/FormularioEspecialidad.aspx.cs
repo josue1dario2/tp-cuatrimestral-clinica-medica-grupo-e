@@ -33,7 +33,6 @@ namespace Clinica_Medica_Grupo_e
                         Especialidad seleccionada = negocio.buscarPorId(int.Parse(id));
                         if (seleccionada != null)
                         {
-                            txtId.Text = seleccionada.Id.ToString();
                             txtDescripcion.Text = seleccionada.Descripcion;
                         }
                         else

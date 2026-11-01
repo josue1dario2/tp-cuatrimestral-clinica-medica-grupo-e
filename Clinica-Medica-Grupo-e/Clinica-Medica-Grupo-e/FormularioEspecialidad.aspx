@@ -12,13 +12,6 @@
                     </h3>
                 </div>
                 <div class="card-body p-4">
-                    <% if (Request.QueryString["id"] != null) { %>
-                    <div class="mb-3">
-                        <label for="txtId" class="form-label fw-semibold">Id</label>
-                        <asp:TextBox ID="txtId" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                    </div>
-                    <% } %>
-
                     <div class="mb-4">
                         <label for="txtDescripcion" class="form-label fw-semibold">Descripción de la Especialidad <span class="text-danger">*</span></label>
                         <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" placeholder="Ej: Pediatría, Dermatología..." MaxLength="50"></asp:TextBox>
