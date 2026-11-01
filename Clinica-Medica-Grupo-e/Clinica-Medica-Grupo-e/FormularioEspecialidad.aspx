@@ -19,10 +19,10 @@
                     </div>
 
                     <div class="d-flex align-items-center gap-2 pt-2 border-top">
-                        <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-primary px-4" OnClick="btnAceptar_Click" />
-                        <a href="EspecialidadesLista.aspx" class="btn btn-outline-secondary px-4">Cancelar</a>
+                        <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-teal px-4 fw-semibold shadow-sm" OnClick="btnAceptar_Click" />
+                        <a href="EspecialidadesLista.aspx" class="btn btn-light border px-4 text-secondary">Cancelar</a>
                         <% if (Request.QueryString["id"] != null) { %>
-                        <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-danger ms-auto" OnClick="btnEliminar_Click" />
+                        <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-danger ms-auto px-3" OnClick="btnEliminar_Click" />
                         <% } %>
                     </div>
 

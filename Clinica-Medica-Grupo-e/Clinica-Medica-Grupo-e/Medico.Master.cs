@@ -11,7 +11,7 @@ using negocio;
 
 namespace Clinica_Medica_Grupo_e 
 {
-    public partial class Medico : System.Web.UI.MasterPage
+    public partial class MedicoMaster : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

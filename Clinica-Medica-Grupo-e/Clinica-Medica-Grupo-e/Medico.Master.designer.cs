@@ -3,7 +3,7 @@ namespace Clinica_Medica_Grupo_e
 {
 
 
-    public partial class Medico
+    public partial class MedicoMaster
     {
 
         /// <summary>

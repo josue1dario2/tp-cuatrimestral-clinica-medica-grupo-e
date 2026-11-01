@@ -5,6 +5,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using dominio;
 using negocio;
+using Medico = dominio.Medico;
 
 namespace Clinica_Medica_Grupo_e
 {
@@ -109,6 +110,12 @@ namespace Clinica_Medica_Grupo_e
         }
 
         protected void txtFiltro_TextChanged(object sender, EventArgs e)
+        {
+            dgvMedicos.PageIndex = 0;
+            aplicarFiltros();
+        }
+
+        protected void btnBuscar_Click(object sender, EventArgs e)
         {
             dgvMedicos.PageIndex = 0;
             aplicarFiltros();

@@ -76,6 +76,12 @@ namespace Clinica_Medica_Grupo_e
             aplicarFiltro();
         }
 
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            dgvEspecialidades.PageIndex = 0;
+            aplicarFiltro();
+        }
+
         protected void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtFiltro.Text = string.Empty;

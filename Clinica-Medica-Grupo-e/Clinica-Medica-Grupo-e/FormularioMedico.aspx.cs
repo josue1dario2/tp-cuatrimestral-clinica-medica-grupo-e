@@ -4,6 +4,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using dominio;
 using negocio;
+using Medico = dominio.Medico;
 
 namespace Clinica_Medica_Grupo_e
 {
