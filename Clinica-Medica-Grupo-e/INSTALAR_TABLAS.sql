@@ -209,16 +209,29 @@ CREATE PROCEDURE storedAltaMedico
     @IdEspecialidad INT = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula)
+    BEGIN
+        RAISERROR('Ya existe un médico registrado con la matrícula ingresada.', 16, 1);
+        RETURN;
+    END
+
+    BEGIN TRANSACTION;
+
     INSERT INTO MEDICOS (Nombre, Apellido, Matricula, Email, Telefono, IdTurnoTrabajo, Activo)
     VALUES (@Nombre, @Apellido, @Matricula, @Email, @Telefono, @IdTurnoTrabajo, 1);
 
     DECLARE @IdMedicoNuevo INT = SCOPE_IDENTITY();
 
-    IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0
+    IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0 AND @IdMedicoNuevo IS NOT NULL
     BEGIN
         INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
         VALUES (@IdMedicoNuevo, @IdEspecialidad);
     END
+
+    COMMIT TRANSACTION;
 END
 GO
 
@@ -236,6 +249,17 @@ CREATE PROCEDURE storedModificarMedico
     @IdEspecialidad INT = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula AND Id <> @Id)
+    BEGIN
+        RAISERROR('La matrícula ingresada ya pertenece a otro médico.', 16, 1);
+        RETURN;
+    END
+
+    BEGIN TRANSACTION;
+
     UPDATE MEDICOS
     SET Nombre = @Nombre,
         Apellido = @Apellido,
@@ -251,6 +275,8 @@ BEGIN
         INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
         VALUES (@Id, @IdEspecialidad);
     END
+
+    COMMIT TRANSACTION;
 END
 GO
 

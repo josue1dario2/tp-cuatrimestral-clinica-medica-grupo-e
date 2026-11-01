@@ -185,16 +185,29 @@ namespace negocio
                             @IdEspecialidad INT = NULL
                         AS
                         BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;
+
+                            IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula)
+                            BEGIN
+                                RAISERROR('Ya existe un médico registrado con la matrícula ingresada.', 16, 1);
+                                RETURN;
+                            END
+
+                            BEGIN TRANSACTION;
+
                             INSERT INTO MEDICOS (Nombre, Apellido, Matricula, Email, Telefono, IdTurnoTrabajo, Activo)
                             VALUES (@Nombre, @Apellido, @Matricula, @Email, @Telefono, @IdTurnoTrabajo, 1);
 
                             DECLARE @IdMedicoNuevo INT = SCOPE_IDENTITY();
 
-                            IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0
+                            IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0 AND @IdMedicoNuevo IS NOT NULL
                             BEGIN
                                 INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
                                 VALUES (@IdMedicoNuevo, @IdEspecialidad);
                             END
+
+                            COMMIT TRANSACTION;
                         END");
 
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedModificarMedico', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedModificarMedico]");
@@ -210,6 +223,17 @@ namespace negocio
                             @IdEspecialidad INT = NULL
                         AS
                         BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;
+
+                            IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula AND Id <> @Id)
+                            BEGIN
+                                RAISERROR('La matrícula ingresada ya pertenece a otro médico.', 16, 1);
+                                RETURN;
+                            END
+
+                            BEGIN TRANSACTION;
+
                             UPDATE MEDICOS
                             SET Nombre = @Nombre,
                                 Apellido = @Apellido,
@@ -225,6 +249,8 @@ namespace negocio
                                 INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
                                 VALUES (@Id, @IdEspecialidad);
                             END
+
+                            COMMIT TRANSACTION;
                         END");
 
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedEliminarMedico', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedEliminarMedico]");
@@ -275,6 +301,14 @@ namespace negocio
                             IF @idFavaloro IS NOT NULL AND @idCardiologia IS NOT NULL
                                 INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (@idFavaloro, @idCardiologia);
                         END");
+
+                    EjecutarComando(conexion, @"
+                        -- Asegurar que cualquier médico existente tenga al menos una especialidad vinculada
+                        INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
+                        SELECT M.Id, (SELECT TOP 1 Id FROM ESPECIALIDADES WHERE Activo = 1)
+                        FROM MEDICOS M
+                        WHERE NOT EXISTS (SELECT 1 FROM MEDICOS_ESPECIALIDADES ME WHERE ME.IdMedico = M.Id)
+                        AND EXISTS (SELECT 1 FROM ESPECIALIDADES WHERE Activo = 1);");
 
                     EjecutarComando(conexion, @"
                         IF NOT EXISTS (SELECT * FROM PACIENTES)

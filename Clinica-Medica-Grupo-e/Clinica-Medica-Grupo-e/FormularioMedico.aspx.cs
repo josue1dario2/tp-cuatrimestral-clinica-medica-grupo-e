@@ -161,6 +161,12 @@ namespace Clinica_Medica_Grupo_e
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("duplicada") || ex.Message.Contains("UNIQUE") || ex.Message.Contains("matrícula") || ex.Message.Contains("Matricula"))
+                {
+                    mostrarError("La matrícula \"" + txtMatricula.Text.Trim() + "\" ya se encuentra registrada en el sistema. Ingrese una matrícula diferente.");
+                    return;
+                }
+
                 Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx", false);
             }

@@ -209,16 +209,29 @@ CREATE PROCEDURE storedAltaMedico
     @IdEspecialidad INT = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula)
+    BEGIN
+        RAISERROR('Ya existe un médico registrado con la matrícula ingresada.', 16, 1);
+        RETURN;
+    END
+
+    BEGIN TRANSACTION;
+
     INSERT INTO MEDICOS (Nombre, Apellido, Matricula, Email, Telefono, IdTurnoTrabajo, Activo)
     VALUES (@Nombre, @Apellido, @Matricula, @Email, @Telefono, @IdTurnoTrabajo, 1);
 
     DECLARE @IdMedicoNuevo INT = SCOPE_IDENTITY();
 
-    IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0
+    IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0 AND @IdMedicoNuevo IS NOT NULL
     BEGIN
         INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
         VALUES (@IdMedicoNuevo, @IdEspecialidad);
     END
+
+    COMMIT TRANSACTION;
 END
 GO
 
@@ -236,6 +249,17 @@ CREATE PROCEDURE storedModificarMedico
     @IdEspecialidad INT = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula AND Id <> @Id)
+    BEGIN
+        RAISERROR('La matrícula ingresada ya pertenece a otro médico.', 16, 1);
+        RETURN;
+    END
+
+    BEGIN TRANSACTION;
+
     UPDATE MEDICOS
     SET Nombre = @Nombre,
         Apellido = @Apellido,
@@ -251,120 +275,8 @@ BEGIN
         INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
         VALUES (@Id, @IdEspecialidad);
     END
-END
-GO
 
-IF OBJECT_ID('storedEliminarMedico', 'P') IS NOT NULL
-    DROP PROCEDURE storedEliminarMedico
-GO
-CREATE PROCEDURE storedEliminarMedico
-    @Id INT
-AS
-BEGIN
-    UPDATE MEDICOS
-    SET Activo = 0
-    WHERE Id = @Id;
-END
-GO
-
-IF OBJECT_ID('storedListarTurnosTrabajo', 'P') IS NOT NULL
-    DROP PROCEDURE storedListarTurnosTrabajo
-GO
-CREATE PROCEDURE storedListarTurnosTrabajo
-AS
-BEGIN
-    SELECT Id, Nombre, HoraEntrada, HoraSalida
-    FROM TURNOS_TRABAJO
-    ORDER BY HoraEntrada ASC;
-END
-GO
-
-IF OBJECT_ID('storedListarMedicosConDetalle', 'P') IS NOT NULL
-    DROP PROCEDURE storedListarMedicosConDetalle
-GO
-CREATE PROCEDURE storedListarMedicosConDetalle
-AS
-BEGIN
-    SELECT 
-        M.Id, M.Nombre, M.Apellido, M.Matricula, M.Email, M.Telefono,
-        M.IdTurnoTrabajo, T.Nombre AS TurnoTrabajoNombre, T.HoraEntrada, T.HoraSalida,
-        M.IdUsuario, M.Activo
-    FROM MEDICOS M
-    INNER JOIN TURNOS_TRABAJO T ON M.IdTurnoTrabajo = T.Id
-    WHERE M.Activo = 1
-    ORDER BY M.Apellido, M.Nombre ASC;
-END
-GO
-
-IF OBJECT_ID('storedListarEspecialidadesPorMedico', 'P') IS NOT NULL
-    DROP PROCEDURE storedListarEspecialidadesPorMedico
-GO
-CREATE PROCEDURE storedListarEspecialidadesPorMedico
-    @IdMedico INT
-AS
-BEGIN
-    SELECT E.Id, E.Descripcion, E.Activo
-    FROM ESPECIALIDADES E
-    INNER JOIN MEDICOS_ESPECIALIDADES ME ON E.Id = ME.IdEspecialidad
-    WHERE ME.IdMedico = @IdMedico AND E.Activo = 1;
-END
-GO
-
-IF OBJECT_ID('storedAltaMedico', 'P') IS NOT NULL
-    DROP PROCEDURE storedAltaMedico
-GO
-CREATE PROCEDURE storedAltaMedico
-    @Nombre VARCHAR(50),
-    @Apellido VARCHAR(50),
-    @Matricula VARCHAR(20),
-    @Email VARCHAR(50) = NULL,
-    @Telefono VARCHAR(30) = NULL,
-    @IdTurnoTrabajo INT,
-    @IdEspecialidad INT = NULL
-AS
-BEGIN
-    INSERT INTO MEDICOS (Nombre, Apellido, Matricula, Email, Telefono, IdTurnoTrabajo, Activo)
-    VALUES (@Nombre, @Apellido, @Matricula, @Email, @Telefono, @IdTurnoTrabajo, 1);
-
-    DECLARE @IdMedicoNuevo INT = SCOPE_IDENTITY();
-
-    IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0
-    BEGIN
-        INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
-        VALUES (@IdMedicoNuevo, @IdEspecialidad);
-    END
-END
-GO
-
-IF OBJECT_ID('storedModificarMedico', 'P') IS NOT NULL
-    DROP PROCEDURE storedModificarMedico
-GO
-CREATE PROCEDURE storedModificarMedico
-    @Id INT,
-    @Nombre VARCHAR(50),
-    @Apellido VARCHAR(50),
-    @Matricula VARCHAR(20),
-    @Email VARCHAR(50) = NULL,
-    @Telefono VARCHAR(30) = NULL,
-    @IdTurnoTrabajo INT,
-    @IdEspecialidad INT = NULL
-AS
-BEGIN
-    UPDATE MEDICOS
-    SET Nombre = @Nombre,
-        Apellido = @Apellido,
-        Matricula = @Matricula,
-        Email = @Email,
-        Telefono = @Telefono,
-        IdTurnoTrabajo = @IdTurnoTrabajo
-    WHERE Id = @Id;
-
-    IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0
-    BEGIN
-        DELETE FROM MEDICOS_ESPECIALIDADES WHERE IdMedico = @Id;
-        INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
-        VALUES (@Id, @IdEspecialidad);
-    END
+    COMMIT TRANSACTION;
 END
 GO
 
@@ -422,21 +334,6 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM MEDICOS_ESPECIALIDADES)
-BEGIN
-    DECLARE @idHouse INT = (SELECT TOP 1 Id FROM MEDICOS WHERE Matricula = 'MN-10455');
-    DECLARE @idFavaloro INT = (SELECT TOP 1 Id FROM MEDICOS WHERE Matricula = 'MN-00001');
-    DECLARE @idClinicaMedica INT = (SELECT TOP 1 Id FROM ESPECIALIDADES WHERE Descripcion LIKE '%Cl%nica%');
-    DECLARE @idCardiologia INT = (SELECT TOP 1 Id FROM ESPECIALIDADES WHERE Descripcion LIKE '%Cardio%');
-
-    IF @idHouse IS NOT NULL AND @idClinicaMedica IS NOT NULL
-        INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (@idHouse, @idClinicaMedica);
-
-    IF @idFavaloro IS NOT NULL AND @idCardiologia IS NOT NULL
-        INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (@idFavaloro, @idCardiologia);
-END
-GO
-
 IF NOT EXISTS (SELECT * FROM PACIENTES)
 BEGIN
     INSERT INTO PACIENTES (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo)
@@ -446,3 +343,4 @@ BEGIN
     VALUES ('María', 'Gómez', '40333444', '19971020', 'maria.gomez@email.com', '261-555-5678', 'Belgrano 456', 1);
 END
 GO
+
