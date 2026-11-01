@@ -9,27 +9,19 @@ namespace negocio
 {
     public class MedicoNegocio
     {
-        /// Busca un médico por Id con su turno de trabajo y sus especialidades.
-        /// Devuelve null si no existe.
-        public Medico buscarPorId(int id)
+        public List<Medico> listarConDetalle()
         {
-            Medico medico = null;
+            List<Medico> lista = new List<Medico>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(
-                    "SELECT M.Id, M.Nombre, M.Apellido, M.Matricula, M.Email, M.Telefono, M.IdUsuario, M.Activo, " +
-                    "       TT.Id AS IdTurnoTrabajo, TT.Nombre AS TurnoNombre, TT.HoraEntrada, TT.HoraSalida " +
-                    "FROM MEDICOS M " +
-                    "INNER JOIN TURNOS_TRABAJO TT ON TT.Id = M.IdTurnoTrabajo " +
-                    "WHERE M.Id = @id");
-                datos.setearParametro("@id", id);
+                datos.setearProcedimiento("storedListarMedicosConDetalle");
                 datos.ejecutarLectura();
 
-                if (datos.Lector.Read())
+                while (datos.Lector.Read())
                 {
-                    medico = new Medico();
+                    Medico medico = new Medico();
                     medico.Id = (int)datos.Lector["Id"];
                     medico.Nombre = (string)datos.Lector["Nombre"];
                     medico.Apellido = (string)datos.Lector["Apellido"];
@@ -47,55 +39,14 @@ namespace negocio
 
                     medico.TurnoTrabajo = new TurnoTrabajo();
                     medico.TurnoTrabajo.Id = (int)datos.Lector["IdTurnoTrabajo"];
-                    medico.TurnoTrabajo.Nombre = (string)datos.Lector["TurnoNombre"];
+                    medico.TurnoTrabajo.Nombre = (string)datos.Lector["TurnoTrabajoNombre"];
                     medico.TurnoTrabajo.HoraEntrada = (int)datos.Lector["HoraEntrada"];
                     medico.TurnoTrabajo.HoraSalida = (int)datos.Lector["HoraSalida"];
-                }
-            }
-            catch (Exception ex) 
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
 
-            if (medico != null)
-                medico.Especialidades = listarEspecialidades(medico.Id);
-
-            return medico;
-        }
-
-        /// Lista los médicos ordenados por apellido (para combos y filtros).
-        /// No trae especialidades ni turno de trabajo.
-        public List<Medico> listar(bool soloActivos = false)
-        {
-            List<Medico> lista = new List<Medico>();
-            AccesoDatos datos = new AccesoDatos();
-
-            try
-            {
-                datos.setearConsulta(
-                    "SELECT Id, Nombre, Apellido, Matricula, Activo FROM MEDICOS " +
-                    (soloActivos ? "WHERE Activo = 1 " : "") +
-                    "ORDER BY Apellido, Nombre");
-                datos.ejecutarLectura();
-
-                while (datos.Lector.Read())
-                {
-                    Medico medico = new Medico();
-                    medico.Id = (int)datos.Lector["Id"];
-                    medico.Nombre = (string)datos.Lector["Nombre"];
-                    medico.Apellido = (string)datos.Lector["Apellido"];
-                    medico.Matricula = (string)datos.Lector["Matricula"];
-                    medico.Activo = (bool)datos.Lector["Activo"];
                     lista.Add(medico);
                 }
-
-                return lista;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -103,9 +54,29 @@ namespace negocio
             {
                 datos.cerrarConexion();
             }
+
+            foreach (Medico m in lista)
+            {
+                m.Especialidades = listarEspecialidades(m.Id);
+            }
+
+            return lista;
         }
 
-        /// Especialidades asignadas a un médico (tabla MEDICOS_ESPECIALIDADES).
+        public Medico buscarPorId(int id)
+        {
+            List<Medico> lista = listarConDetalle();
+            return lista.FirstOrDefault(m => m.Id == id);
+        }
+
+        public List<Medico> listar(bool soloActivos = false)
+        {
+            List<Medico> lista = listarConDetalle();
+            if (soloActivos)
+                return lista.Where(m => m.Activo).ToList();
+            return lista;
+        }
+
         public List<Especialidad> listarEspecialidades(int idMedico)
         {
             List<Especialidad> lista = new List<Especialidad>();
@@ -113,13 +84,8 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta(
-                    "SELECT E.Id, E.Descripcion, E.Activo " +
-                    "FROM MEDICOS_ESPECIALIDADES ME " +
-                    "INNER JOIN ESPECIALIDADES E ON E.Id = ME.IdEspecialidad " +
-                    "WHERE ME.IdMedico = @idMedico " +
-                    "ORDER BY E.Descripcion");
-                datos.setearParametro("@idMedico", idMedico);
+                datos.setearProcedimiento("storedListarEspecialidadesPorMedico");
+                datos.setearParametro("@IdMedico", idMedico);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -133,7 +99,80 @@ namespace negocio
 
                 return lista;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void agregar(Medico nuevo, int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedAltaMedico");
+                datos.setearParametro("@Nombre", nuevo.Nombre);
+                datos.setearParametro("@Apellido", nuevo.Apellido);
+                datos.setearParametro("@Matricula", nuevo.Matricula);
+                datos.setearParametro("@Email", string.IsNullOrEmpty(nuevo.Email) ? (object)DBNull.Value : nuevo.Email);
+                datos.setearParametro("@Telefono", string.IsNullOrEmpty(nuevo.Telefono) ? (object)DBNull.Value : nuevo.Telefono);
+                datos.setearParametro("@IdTurnoTrabajo", nuevo.TurnoTrabajo != null ? nuevo.TurnoTrabajo.Id : 1);
+                datos.setearParametro("@IdEspecialidad", idEspecialidad > 0 ? (object)idEspecialidad : DBNull.Value);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void modificar(Medico mod, int idEspecialidad)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedModificarMedico");
+                datos.setearParametro("@Id", mod.Id);
+                datos.setearParametro("@Nombre", mod.Nombre);
+                datos.setearParametro("@Apellido", mod.Apellido);
+                datos.setearParametro("@Matricula", mod.Matricula);
+                datos.setearParametro("@Email", string.IsNullOrEmpty(mod.Email) ? (object)DBNull.Value : mod.Email);
+                datos.setearParametro("@Telefono", string.IsNullOrEmpty(mod.Telefono) ? (object)DBNull.Value : mod.Telefono);
+                datos.setearParametro("@IdTurnoTrabajo", mod.TurnoTrabajo != null ? mod.TurnoTrabajo.Id : 1);
+                datos.setearParametro("@IdEspecialidad", idEspecialidad > 0 ? (object)idEspecialidad : DBNull.Value);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminar(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedEliminarMedico");
+                datos.setearParametro("@Id", id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

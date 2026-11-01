@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    Clínica - Administración y Recepción
    Estilos de AdminRecep.Master y de sus páginas.
    Se carga DESPUÉS de Bootstrap para poder sobrescribir sus variables.
@@ -930,4 +930,93 @@ body {
         margin-left: 0;
         padding-top: 0;
     }
+}
+
+/* =========================================================
+   SOBRESCRITURAS DE TEMA & PAGINACIÓN (Paleta Teal/Navy)
+   ========================================================= */
+
+.btn-primary {
+    background-color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--cl-teal-hover) !important;
+    border-color: var(--cl-teal-hover) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-primary {
+    color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+    background-color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+    color: #ffffff !important;
+}
+
+.text-primary {
+    color: var(--cl-teal-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--cl-teal-primary) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--cl-teal-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(14, 124, 134, 0.15) !important;
+}
+
+/* Paginación de GridView */
+.pagination-container table {
+    margin: 0 auto !important;
+    border-collapse: separate;
+    border-spacing: 6px;
+}
+
+.pagination-container td {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.pagination-container a, 
+.pagination-container span {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-align: center;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    transition: all 0.15s ease-in-out;
+}
+
+.pagination-container a {
+    background-color: #ffffff !important;
+    color: var(--cl-text-secondary) !important;
+    border: 1px solid rgba(229, 237, 250, 0.9) !important;
+}
+
+.pagination-container a:hover {
+    background-color: var(--cl-surface-low) !important;
+    color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+}
+
+.pagination-container span {
+    background-color: var(--cl-teal-primary) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--cl-teal-primary) !important;
+    box-shadow: 0 2px 6px rgba(14, 124, 134, 0.3);
 }
