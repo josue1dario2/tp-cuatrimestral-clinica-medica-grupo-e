@@ -29,11 +29,6 @@
         </div>
 
         <div class="d-flex align-items-center justify-content-end gap-2 mt-3 pt-2">
-            <asp:LinkButton ID="btnLimpiar" runat="server" OnClick="btnLimpiar_Click"
-                CssClass="btn-limpiar btn btn-light d-flex align-items-center gap-1 border text-secondary px-3">
-                <span class="material-symbols-outlined icon-18">restart_alt</span>
-                <span>Limpiar filtros</span>
-            </asp:LinkButton>
             <asp:LinkButton ID="btnBuscar" runat="server" OnClick="btnBuscar_Click"
                 CssClass="btn btn-teal d-flex align-items-center gap-1 px-4 fw-semibold shadow-sm fs-13">
                 <span class="material-symbols-outlined icon-18">search</span>
@@ -64,6 +59,7 @@
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
+                <PagerSettings Mode="NextPreviousNumeric" PreviousPageText="&lt;" NextPageText="&gt;" Position="Bottom" />
                 <PagerStyle CssClass="pagination-container" HorizontalAlign="Right" />
             </asp:GridView>
         </div>

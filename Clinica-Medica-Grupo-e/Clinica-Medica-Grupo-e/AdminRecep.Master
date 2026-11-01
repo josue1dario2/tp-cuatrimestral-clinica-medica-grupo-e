@@ -20,6 +20,68 @@
     <!-- Estilos propios (siempre después de Bootstrap) -->
     <link href="~/Content/admin.css" rel="stylesheet" />
 
+    <style>
+        /* Paginación de GridView idéntica a .btn-page teal */
+        .pagination-container {
+            padding: 12px 18px !important;
+            background-color: #ffffff !important;
+            border-top: 1px solid rgba(229, 237, 250, 0.9) !important;
+        }
+        .table > tbody > tr.pagination-container > td,
+        tr.pagination-container td {
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .pagination-container table {
+            margin: 0 0 0 auto !important;
+            border-collapse: separate !important;
+            border-spacing: 4px !important;
+            background: transparent !important;
+        }
+        .pagination-container table td {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            vertical-align: middle !important;
+        }
+        .pagination-container a, 
+        .pagination-container span {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 32px !important;
+            height: 32px !important;
+            padding: 0 8px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            line-height: 1 !important;
+            text-align: center !important;
+            text-decoration: none !important;
+            border-radius: 6px !important;
+            transition: all 0.15s ease-in-out !important;
+            box-sizing: border-box !important;
+        }
+        .pagination-container a {
+            background-color: transparent !important;
+            color: #475569 !important;
+            border: 1px solid transparent !important;
+        }
+        .pagination-container a:hover {
+            background-color: #e2e8f0 !important;
+            color: #0b1c30 !important;
+            border-color: #cbd5e1 !important;
+        }
+        .pagination-container span {
+            background-color: #0E7C86 !important;
+            color: #ffffff !important;
+            border: 1px solid #0E7C86 !important;
+            box-shadow: 0 1px 3px rgba(14, 124, 134, 0.35) !important;
+        }
+    </style>
+
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>

@@ -81,6 +81,7 @@
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
+                <PagerSettings Mode="NextPreviousNumeric" PreviousPageText="&lt;" NextPageText="&gt;" Position="Bottom" />
                 <PagerStyle CssClass="pagination-container" HorizontalAlign="Right" />
             </asp:GridView>
         </div>
