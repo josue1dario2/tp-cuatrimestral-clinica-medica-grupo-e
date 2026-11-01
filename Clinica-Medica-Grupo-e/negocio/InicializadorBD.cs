@@ -19,7 +19,6 @@ namespace negocio
                 {
                     conexion.Open();
 
-                    // 1. Asegurar tabla ESPECIALIDADES y columna Activo
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.ESPECIALIDADES', 'U') IS NULL
                         BEGIN
@@ -34,7 +33,6 @@ namespace negocio
                             ALTER TABLE [dbo].[ESPECIALIDADES] ADD [Activo] [bit] NOT NULL CONSTRAINT [DF_ESPECIALIDADES_Activo] DEFAULT 1;
                         END");
 
-                    // 2. TURNOS_TRABAJO
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.TURNOS_TRABAJO', 'U') IS NULL
                         BEGIN
@@ -46,7 +44,6 @@ namespace negocio
                             );
                         END");
 
-                    // 3. USUARIOS
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.USUARIOS', 'U') IS NULL
                         BEGIN
@@ -59,7 +56,6 @@ namespace negocio
                             );
                         END");
 
-                    // 4. MEDICOS
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.MEDICOS', 'U') IS NULL
                         BEGIN
@@ -76,7 +72,6 @@ namespace negocio
                             );
                         END");
 
-                    // 5. MEDICOS_ESPECIALIDADES
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.MEDICOS_ESPECIALIDADES', 'U') IS NULL
                         BEGIN
@@ -87,7 +82,6 @@ namespace negocio
                             );
                         END");
 
-                    // 6. PACIENTES
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.PACIENTES', 'U') IS NULL
                         BEGIN
@@ -104,7 +98,6 @@ namespace negocio
                             );
                         END");
 
-                    // 7. TURNOS
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.TURNOS', 'U') IS NULL
                         BEGIN
@@ -121,7 +114,6 @@ namespace negocio
                             );
                         END");
 
-                    // 8. Stored Procedures
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarEspecialidades', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarEspecialidades]");
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedListarEspecialidades] AS
@@ -150,7 +142,6 @@ namespace negocio
                             UPDATE ESPECIALIDADES SET Activo = 0 WHERE Id = @Id;
                         END");
 
-                    // 9. Carga de datos base (si las tablas están vacías)
                     EjecutarComando(conexion, @"
                         IF NOT EXISTS (SELECT * FROM TURNOS_TRABAJO)
                         BEGIN

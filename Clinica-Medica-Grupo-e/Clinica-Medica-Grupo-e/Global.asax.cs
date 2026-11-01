@@ -13,15 +13,12 @@ namespace Clinica_Medica_Grupo_e
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            // Auto-inicialización: Si las tablas o procedimientos no existen en la BD local, se crean automáticamente
             InicializadorBD.AsegurarEstructura();
         }
 
         void Application_Error(object sender, EventArgs e)
         {
-            // Exception exc = Server.GetLastError();
-            // Session.Add("error", exc.ToString());
-            // Server.Transfer("Error.aspx");
+
         }
     }
 }
