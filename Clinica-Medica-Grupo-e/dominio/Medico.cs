@@ -24,6 +24,26 @@ namespace dominio
             get { return Apellido + ", " + Nombre; }
         }
 
+        public string EspecialidadesTexto
+        {
+            get
+            {
+                if (Especialidades != null && Especialidades.Count > 0)
+                    return string.Join(", ", Especialidades.Select(e => e.Descripcion));
+                return "Sin asignar";
+            }
+        }
+
+        public int EspecialidadPrincipalId
+        {
+            get
+            {
+                if (Especialidades != null && Especialidades.Count > 0)
+                    return Especialidades[0].Id;
+                return 0;
+            }
+        }
+
         public override string ToString()
         {
             return Apellido + ", " + Nombre;

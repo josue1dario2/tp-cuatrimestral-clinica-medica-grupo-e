@@ -72,6 +72,7 @@
     <Content Include="Especialidades.aspx" />
     <Content Include="EspecialidadesLista.aspx" />
     <Content Include="FormularioEspecialidad.aspx" />
+    <Content Include="FormularioMedico.aspx" />
     <Content Include="Estadisticas.aspx" />
     <Content Include="GestionUsuariosAdmin.aspx" />
     <Content Include="Global.asax" />
@@ -149,6 +150,13 @@
     </Compile>
     <Compile Include="FormularioEspecialidad.aspx.designer.cs">
       <DependentUpon>FormularioEspecialidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioMedico.aspx.cs">
+      <DependentUpon>FormularioMedico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormularioMedico.aspx.designer.cs">
+      <DependentUpon>FormularioMedico.aspx</DependentUpon>
     </Compile>
     <Compile Include="Seguridad.cs" />
     <Compile Include="MasterInicio.Master.cs">

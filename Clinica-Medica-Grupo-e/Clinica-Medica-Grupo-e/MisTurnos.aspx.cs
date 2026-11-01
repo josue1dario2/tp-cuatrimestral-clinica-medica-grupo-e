@@ -119,7 +119,7 @@ namespace Clinica_Medica_Grupo_e
             lblMetricaJornada.Text = "Jornada " + horario;
             lblModalMedico.Text = medico.NombreCompleto;
 
-            Clinica_Medica_Grupo_e.Medico master = Master as Clinica_Medica_Grupo_e.Medico;
+            Clinica_Medica_Grupo_e.MedicoMaster master = Master as Clinica_Medica_Grupo_e.MedicoMaster;
             if (master != null)
                 master.MostrarMedico(medico.NombreCompleto, especialidades);
         }

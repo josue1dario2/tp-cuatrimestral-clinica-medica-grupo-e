@@ -23,6 +23,9 @@ namespace Clinica_Medica_Grupo_e
         private void MarcarLinkActivo()
         {
             string paginaActual = Path.GetFileName(Request.Path);
+            if (string.IsNullOrEmpty(paginaActual))
+                return;
+
             HyperLink[] links =
             {
                 lnkNavInicio, lnkNavTurnos, lnkNavNuevoTurno, lnkNavPacientes, lnkNavMedicos,
@@ -31,9 +34,29 @@ namespace Clinica_Medica_Grupo_e
 
             foreach (HyperLink link in links)
             {
+                link.CssClass = "nav-item-custom";
+            }
+
+            if (paginaActual.IndexOf("Especialidad", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                lnkNavEspecialidades.CssClass = "nav-item-custom active";
+                return;
+            }
+
+            if (paginaActual.IndexOf("Medico", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                lnkNavMedicos.CssClass = "nav-item-custom active";
+                return;
+            }
+
+            foreach (HyperLink link in links)
+            {
                 string paginaLink = Path.GetFileName(link.NavigateUrl);
                 if (string.Equals(paginaLink, paginaActual, StringComparison.OrdinalIgnoreCase))
+                {
                     link.CssClass = "nav-item-custom active";
+                    break;
+                }
             }
         }
 

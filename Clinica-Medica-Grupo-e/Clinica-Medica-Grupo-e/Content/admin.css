@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    Clínica - Administración y Recepción
    Estilos de AdminRecep.Master y de sus páginas.
    Se carga DESPUÉS de Bootstrap para poder sobrescribir sus variables.
@@ -930,4 +930,120 @@ body {
         margin-left: 0;
         padding-top: 0;
     }
+}
+
+/* =========================================================
+   SOBRESCRITURAS DE TEMA & PAGINACIÓN (Paleta Teal/Navy)
+   ========================================================= */
+
+.btn-primary {
+    background-color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--cl-teal-hover) !important;
+    border-color: var(--cl-teal-hover) !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-primary {
+    color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+    background-color: transparent !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active {
+    background-color: var(--cl-teal-primary) !important;
+    border-color: var(--cl-teal-primary) !important;
+    color: #ffffff !important;
+}
+
+.text-primary {
+    color: var(--cl-teal-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--cl-teal-primary) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--cl-teal-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(14, 124, 134, 0.15) !important;
+}
+
+/* Paginación de GridView idéntica a .btn-page teal */
+.table > tbody > tr.pagination-container > td,
+.table tr.pagination-container td,
+tr.pagination-container td {
+    padding: 12px 18px !important;
+    background-color: #ffffff !important;
+    border-top: 1px solid rgba(229, 237, 250, 0.9) !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.pagination-container table {
+    margin: 0 0 0 auto !important;
+    border-collapse: separate !important;
+    border-spacing: 6px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.pagination-container table td {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    vertical-align: middle !important;
+}
+
+.table .pagination-container a, 
+.table .pagination-container span,
+.pagination-container a, 
+.pagination-container span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    padding: 0 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+/* Páginas no activas */
+.table .pagination-container a,
+.pagination-container a {
+    background-color: #ffffff !important;
+    color: #12263F !important;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+.table .pagination-container a:hover,
+.pagination-container a:hover {
+    background-color: #e5eeff !important;
+    color: #0E7C86 !important;
+    border-color: #cbd5e1 !important;
+    text-decoration: none !important;
+}
+
+/* Página activa: botón teal con texto blanco */
+.table .pagination-container span,
+.pagination-container span {
+    background-color: #0E7C86 !important;
+    color: #ffffff !important;
+    border: 1px solid #0E7C86 !important;
+    box-shadow: 0 2px 4px rgba(14, 124, 134, 0.35) !important;
+    cursor: default !important;
 }

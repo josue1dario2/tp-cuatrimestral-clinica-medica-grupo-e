@@ -1,4 +1,4 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="Clinica_Medica_Grupo_e.Medico" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="Clinica_Medica_Grupo_e.MedicoMaster" %>
 
 <!DOCTYPE html>
 <html lang="es">

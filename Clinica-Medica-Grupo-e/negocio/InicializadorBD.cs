@@ -142,6 +142,124 @@ namespace negocio
                             UPDATE ESPECIALIDADES SET Activo = 0 WHERE Id = @Id;
                         END");
 
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarTurnosTrabajo', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarTurnosTrabajo]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedListarTurnosTrabajo] AS
+                        BEGIN
+                            SELECT Id, Nombre, HoraEntrada, HoraSalida FROM TURNOS_TRABAJO ORDER BY HoraEntrada ASC;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarMedicosConDetalle', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarMedicosConDetalle]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedListarMedicosConDetalle] AS
+                        BEGIN
+                            SELECT 
+                                M.Id, M.Nombre, M.Apellido, M.Matricula, M.Email, M.Telefono,
+                                M.IdTurnoTrabajo, T.Nombre AS TurnoTrabajoNombre, T.HoraEntrada, T.HoraSalida,
+                                M.IdUsuario, M.Activo
+                            FROM MEDICOS M
+                            INNER JOIN TURNOS_TRABAJO T ON M.IdTurnoTrabajo = T.Id
+                            WHERE M.Activo = 1
+                            ORDER BY M.Apellido, M.Nombre ASC;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarEspecialidadesPorMedico', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarEspecialidadesPorMedico]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedListarEspecialidadesPorMedico] @IdMedico INT AS
+                        BEGIN
+                            SELECT E.Id, E.Descripcion, E.Activo
+                            FROM ESPECIALIDADES E
+                            INNER JOIN MEDICOS_ESPECIALIDADES ME ON E.Id = ME.IdEspecialidad
+                            WHERE ME.IdMedico = @IdMedico AND E.Activo = 1;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedAltaMedico', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedAltaMedico]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedAltaMedico]
+                            @Nombre VARCHAR(50),
+                            @Apellido VARCHAR(50),
+                            @Matricula VARCHAR(20),
+                            @Email VARCHAR(50) = NULL,
+                            @Telefono VARCHAR(30) = NULL,
+                            @IdTurnoTrabajo INT,
+                            @IdEspecialidad INT = NULL
+                        AS
+                        BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;
+
+                            IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula)
+                            BEGIN
+                                RAISERROR('Ya existe un médico registrado con la matrícula ingresada.', 16, 1);
+                                RETURN;
+                            END
+
+                            BEGIN TRANSACTION;
+
+                            INSERT INTO MEDICOS (Nombre, Apellido, Matricula, Email, Telefono, IdTurnoTrabajo, Activo)
+                            VALUES (@Nombre, @Apellido, @Matricula, @Email, @Telefono, @IdTurnoTrabajo, 1);
+
+                            DECLARE @IdMedicoNuevo INT = SCOPE_IDENTITY();
+
+                            IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0 AND @IdMedicoNuevo IS NOT NULL
+                            BEGIN
+                                INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
+                                VALUES (@IdMedicoNuevo, @IdEspecialidad);
+                            END
+
+                            COMMIT TRANSACTION;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedModificarMedico', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedModificarMedico]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedModificarMedico]
+                            @Id INT,
+                            @Nombre VARCHAR(50),
+                            @Apellido VARCHAR(50),
+                            @Matricula VARCHAR(20),
+                            @Email VARCHAR(50) = NULL,
+                            @Telefono VARCHAR(30) = NULL,
+                            @IdTurnoTrabajo INT,
+                            @IdEspecialidad INT = NULL
+                        AS
+                        BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;
+
+                            IF EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = @Matricula AND Id <> @Id)
+                            BEGIN
+                                RAISERROR('La matrícula ingresada ya pertenece a otro médico.', 16, 1);
+                                RETURN;
+                            END
+
+                            BEGIN TRANSACTION;
+
+                            UPDATE MEDICOS
+                            SET Nombre = @Nombre,
+                                Apellido = @Apellido,
+                                Matricula = @Matricula,
+                                Email = @Email,
+                                Telefono = @Telefono,
+                                IdTurnoTrabajo = @IdTurnoTrabajo
+                            WHERE Id = @Id;
+
+                            IF @IdEspecialidad IS NOT NULL AND @IdEspecialidad > 0
+                            BEGIN
+                                DELETE FROM MEDICOS_ESPECIALIDADES WHERE IdMedico = @Id;
+                                INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
+                                VALUES (@Id, @IdEspecialidad);
+                            END
+
+                            COMMIT TRANSACTION;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedEliminarMedico', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedEliminarMedico]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedEliminarMedico] @Id INT AS
+                        BEGIN
+                            UPDATE MEDICOS SET Activo = 0 WHERE Id = @Id;
+                        END");
+
                     EjecutarComando(conexion, @"
                         IF NOT EXISTS (SELECT * FROM TURNOS_TRABAJO)
                         BEGIN
@@ -168,6 +286,29 @@ namespace negocio
                             VALUES ('Gregory', 'House', 'MN-10455', 'house@clinica.com', '11-4455-6677', @idTurnoManana, @idUserHouse, 1),
                                    ('René', 'Favaloro', 'MN-00001', 'favaloro@clinica.com', '11-9988-7766', @idTurnoTarde, NULL, 1);
                         END");
+
+                    EjecutarComando(conexion, @"
+                        IF NOT EXISTS (SELECT * FROM MEDICOS_ESPECIALIDADES)
+                        BEGIN
+                            DECLARE @idHouse INT = (SELECT TOP 1 Id FROM MEDICOS WHERE Matricula = 'MN-10455');
+                            DECLARE @idFavaloro INT = (SELECT TOP 1 Id FROM MEDICOS WHERE Matricula = 'MN-00001');
+                            DECLARE @idClinicaMedica INT = (SELECT TOP 1 Id FROM ESPECIALIDADES WHERE Descripcion LIKE '%Cl%nica%');
+                            DECLARE @idCardiologia INT = (SELECT TOP 1 Id FROM ESPECIALIDADES WHERE Descripcion LIKE '%Cardio%');
+
+                            IF @idHouse IS NOT NULL AND @idClinicaMedica IS NOT NULL
+                                INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (@idHouse, @idClinicaMedica);
+
+                            IF @idFavaloro IS NOT NULL AND @idCardiologia IS NOT NULL
+                                INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad) VALUES (@idFavaloro, @idCardiologia);
+                        END");
+
+                    EjecutarComando(conexion, @"
+                        -- Asegurar que cualquier médico existente tenga al menos una especialidad vinculada
+                        INSERT INTO MEDICOS_ESPECIALIDADES (IdMedico, IdEspecialidad)
+                        SELECT M.Id, (SELECT TOP 1 Id FROM ESPECIALIDADES WHERE Activo = 1)
+                        FROM MEDICOS M
+                        WHERE NOT EXISTS (SELECT 1 FROM MEDICOS_ESPECIALIDADES ME WHERE ME.IdMedico = M.Id)
+                        AND EXISTS (SELECT 1 FROM ESPECIALIDADES WHERE Activo = 1);");
 
                     EjecutarComando(conexion, @"
                         IF NOT EXISTS (SELECT * FROM PACIENTES)

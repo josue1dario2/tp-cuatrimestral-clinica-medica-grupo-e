@@ -11,7 +11,7 @@ namespace Clinica_Medica_Grupo_e
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Response.Redirect("EspecialidadesLista.aspx", false);
         }
     }
 }
