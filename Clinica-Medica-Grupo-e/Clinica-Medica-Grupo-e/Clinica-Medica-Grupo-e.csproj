@@ -67,7 +67,11 @@
     <Content Include="Content\admin.css" />
     <Content Include="Content\medico.css" />
     <Content Include="AdminRecep.Master" />
+    <Content Include="Master.Master" />
+    <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
+    <Content Include="EspecialidadesLista.aspx" />
+    <Content Include="FormularioEspecialidad.aspx" />
     <Content Include="Estadisticas.aspx" />
     <Content Include="GestionUsuariosAdmin.aspx" />
     <Content Include="Global.asax" />
@@ -118,6 +122,35 @@
     <Compile Include="AdminRecep.Master.designer.cs">
       <DependentUpon>AdminRecep.Master</DependentUpon>
     </Compile>
+    <Compile Include="Master.Master.cs">
+      <DependentUpon>Master.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Master.Master.designer.cs">
+      <DependentUpon>Master.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EspecialidadesLista.aspx.cs">
+      <DependentUpon>EspecialidadesLista.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EspecialidadesLista.aspx.designer.cs">
+      <DependentUpon>EspecialidadesLista.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioEspecialidad.aspx.cs">
+      <DependentUpon>FormularioEspecialidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormularioEspecialidad.aspx.designer.cs">
+      <DependentUpon>FormularioEspecialidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Seguridad.cs" />
     <Compile Include="MasterInicio.Master.cs">
       <DependentUpon>MasterInicio.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
