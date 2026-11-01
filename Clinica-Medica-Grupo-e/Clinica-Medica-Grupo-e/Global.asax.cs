@@ -5,14 +5,16 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.UI; 
+using negocio;
+
 namespace Clinica_Medica_Grupo_e
 {
     public class Global : System.Web.HttpApplication
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            // Opcional: Aquí el profesor inicializa el mapeo de jQuery para validaciones web.
-            // Si no usas validadores de control de ASP.NET, puedes dejarlo vacío.
+            // Auto-inicialización: Si las tablas o procedimientos no existen en la BD local, se crean automáticamente
+            InicializadorBD.AsegurarEstructura();
         }
 
         void Application_Error(object sender, EventArgs e)

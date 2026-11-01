@@ -23,8 +23,8 @@ namespace Clinica_Medica_Grupo_e
             try
             {
                 List<Especialidad> lista = negocio.listar();
-                dgvEspecialidades.DataSource = lista;
-                dgvEspecialidades.DataBind();
+                Session["listaEspecialidades"] = lista;
+                aplicarFiltro();
             }
             catch (Exception ex)
             {
@@ -33,10 +33,27 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
+        private void aplicarFiltro()
+        {
+            if (Session["listaEspecialidades"] != null)
+            {
+                List<Especialidad> lista = (List<Especialidad>)Session["listaEspecialidades"];
+                string filtro = txtFiltro.Text.Trim();
+
+                if (!string.IsNullOrEmpty(filtro))
+                {
+                    lista = lista.FindAll(x => x.Descripcion.ToUpper().Contains(filtro.ToUpper()));
+                }
+
+                dgvEspecialidades.DataSource = lista;
+                dgvEspecialidades.DataBind();
+            }
+        }
+
         protected void dgvEspecialidades_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             dgvEspecialidades.PageIndex = e.NewPageIndex;
-            cargarGrilla();
+            aplicarFiltro();
         }
 
         protected void dgvEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
@@ -53,10 +70,22 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
+        protected void txtFiltro_TextChanged(object sender, EventArgs e)
+        {
+            dgvEspecialidades.PageIndex = 0;
+            aplicarFiltro();
+        }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            txtFiltro.Text = string.Empty;
+            dgvEspecialidades.PageIndex = 0;
+            aplicarFiltro();
+        }
+
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
             Response.Redirect("FormularioEspecialidad.aspx", false);
         }
     }
 }
-
