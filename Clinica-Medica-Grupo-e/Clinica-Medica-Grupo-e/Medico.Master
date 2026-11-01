@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="Clinica_Medica_Grupo_e.Medico" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Medico.Master.cs" Inherits="Clinica_Medica_Grupo_e.Medico" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -49,6 +49,10 @@
                     <asp:HyperLink ID="lnkNavMisTurnos" runat="server" NavigateUrl="~/MisTurnos.aspx" CssClass="cl-nav-link">
                         <i class="bi bi-calendar3 fs-5"></i>
                         <span>Mis turnos</span>
+                    </asp:HyperLink>
+                    <asp:HyperLink ID="lnkNavEspecialidades" runat="server" NavigateUrl="~/EspecialidadesLista.aspx" CssClass="cl-nav-link">
+                        <i class="bi bi-tags-fill fs-5"></i>
+                        <span>Especialidades</span>
                     </asp:HyperLink>
                 </nav>
             </div>
