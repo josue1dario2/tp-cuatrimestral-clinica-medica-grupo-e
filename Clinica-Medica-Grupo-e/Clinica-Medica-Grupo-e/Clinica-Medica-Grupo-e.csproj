@@ -84,7 +84,9 @@
     <Content Include="MisTurnos.aspx" />
     <Content Include="NuevoTurno.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="ReprogramarTurno.aspx" />
     <Content Include="Scripts\inicio-medico.js" />
+    <Content Include="Scripts\reprogramar-turno.js" />
     <Content Include="Scripts\mis-turnos.js" />
     <Content Include="Scripts\turnos.js" />
     <Content Include="Turnos.aspx" />
@@ -157,6 +159,13 @@
     </Compile>
     <Compile Include="FormularioMedico.aspx.designer.cs">
       <DependentUpon>FormularioMedico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReprogramarTurno.aspx.cs">
+      <DependentUpon>ReprogramarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReprogramarTurno.aspx.designer.cs">
+      <DependentUpon>ReprogramarTurno.aspx</DependentUpon>
     </Compile>
     <Compile Include="Seguridad.cs" />
     <Compile Include="MasterInicio.Master.cs">

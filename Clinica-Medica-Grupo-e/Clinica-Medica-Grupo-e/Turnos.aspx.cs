@@ -420,7 +420,7 @@ namespace Clinica_Medica_Grupo_e
                     break;
 
                 case "Reprogramar":
-                    // TODO: redirigir a la pantalla de reprogramación (ej: ReprogramarTurno.aspx?id=...).
+                    Response.Redirect("~/ReprogramarTurno.aspx?id=" + idTurno);
                     break;
 
                 case "Cancelar":
