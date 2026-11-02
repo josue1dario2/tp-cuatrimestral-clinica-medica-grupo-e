@@ -5,12 +5,12 @@
 
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="reprogramar-turno">
-        <%-- Id del turno que se está reprogramando (lo carga el code-behind) --%>
+        
         <asp:HiddenField ID="hfIdTurno" runat="server" />
 
-        <%-- ===== PEGAR AQUÍ el contenido copiado del HTML (paso 3.0) ===== --%>
+        
         <div class="d-flex flex-column w-100">
-            <!-- 1. Breadcrumb y Encabezado Superior -->
+        
             <div class="d-flex flex-column gap-2 pt-3 mb-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-1" style="font-size: 12px;">

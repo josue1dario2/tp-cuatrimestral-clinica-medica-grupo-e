@@ -1512,3 +1512,129 @@ tr.pagination-container td {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+
+/* =========================================================
+   TURNO CONFIRMADO (TurnoConfirmado.aspx)
+   Todo va dentro de .turno-confirmado: así las variables y la clase
+   .card-custom (que ya existe arriba con otro estilo) solo cambian
+   dentro de esta página.
+   ========================================================= */
+
+.turno-confirmado {
+    --cl-primary: #0E7C86;
+    --cl-primary-dark: #00626A;
+    --cl-primary-light: #E0F5F7;
+    --cl-navy-sidebar: #12263F;
+    --cl-navy-sidebar-dark: #0B1C30;
+    --cl-bg: #F8F9FF;
+    --cl-surface: #FFFFFF;
+    --cl-surface-muted: #EFF4FF;
+    --cl-surface-container: #E5EEFF;
+    --cl-border: #DCE9FF;
+    --cl-text-main: #0B1C30;
+    --cl-text-secondary: #4D5F7B;
+    --cl-text-muted: #6E797A;
+    --cl-success: #00662A;
+    --cl-success-light: #E7F8ED;
+    --cl-error: #BA1A1A;
+    --cl-error-light: #FFDAD6;
+    --cl-radius-default: 0.75rem; /* 12px */
+}
+
+    .turno-confirmado .card-custom {
+        border: none;
+        border-radius: var(--cl-radius-default);
+        background-color: var(--cl-surface);
+        box-shadow: 0 2px 6px rgba(11, 28, 48, 0.04);
+    }
+
+    .turno-confirmado .btn-teal-primary {
+        background-color: var(--cl-primary);
+        color: #FFFFFF;
+        border: none;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1.25rem;
+        transition: background-color 0.15s ease-in-out;
+    }
+
+        .turno-confirmado .btn-teal-primary:hover {
+            background-color: var(--cl-primary-dark);
+            color: #FFFFFF;
+        }
+
+    .turno-confirmado .btn-secondary-light {
+        background-color: var(--cl-surface-container);
+        color: var(--cl-text-main);
+        font-weight: 600;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+        .turno-confirmado .btn-secondary-light:hover {
+            background-color: var(--cl-border);
+            color: var(--cl-text-main);
+        }
+
+/* Rebote del ícono de éxito */
+@keyframes subtleBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.turno-confirmado .animate-badge-bounce {
+    animation: subtleBounce 0.9s ease-in-out 2;
+}
+
+/* Aviso flotante (toast) */
+.turno-confirmado #toastNotification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1060;
+    background-color: #213145;
+    color: #EAF1FF;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+}
+
+    .turno-confirmado #toastNotification.show {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+/* Impresión del comprobante */
+@media print {
+    .turno-confirmado .card-custom {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+}
+
+/* La casilla de asp:CheckBox no puede llevar la clase form-check-input: se le da el mismo lugar y color */
+.turno-confirmado .form-check input[type="checkbox"] {
+    float: left;
+    width: 1em;
+    height: 1em;
+    margin-left: -1.5em;
+    margin-top: 0.25em;
+    accent-color: var(--cl-primary);
+}

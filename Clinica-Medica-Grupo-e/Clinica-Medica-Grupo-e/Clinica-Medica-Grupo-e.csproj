@@ -88,7 +88,9 @@
     <Content Include="Scripts\inicio-medico.js" />
     <Content Include="Scripts\reprogramar-turno.js" />
     <Content Include="Scripts\mis-turnos.js" />
+    <Content Include="Scripts\turno-confirmado.js" />
     <Content Include="Scripts\turnos.js" />
+    <Content Include="TurnoConfirmado.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="TurnosTrabajo.aspx" />
     <Content Include="Web.config" />
@@ -223,6 +225,13 @@
     </Compile>
     <Compile Include="Pacientes.aspx.designer.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TurnoConfirmado.aspx.cs">
+      <DependentUpon>TurnoConfirmado.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TurnoConfirmado.aspx.designer.cs">
+      <DependentUpon>TurnoConfirmado.aspx</DependentUpon>
     </Compile>
     <Compile Include="Turnos.aspx.cs">
       <DependentUpon>Turnos.aspx</DependentUpon>
