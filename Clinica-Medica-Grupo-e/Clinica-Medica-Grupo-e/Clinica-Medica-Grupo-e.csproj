@@ -91,6 +91,7 @@
     <Content Include="Scripts\mis-turnos.js" />
     <Content Include="Scripts\turno-confirmado.js" />
     <Content Include="Scripts\turnos.js" />
+    <Content Include="Scripts\turnos-trabajo.js" />
     <Content Include="TurnoConfirmado.aspx" />
     <Content Include="Turnos.aspx" />
     <Content Include="TurnosTrabajo.aspx" />

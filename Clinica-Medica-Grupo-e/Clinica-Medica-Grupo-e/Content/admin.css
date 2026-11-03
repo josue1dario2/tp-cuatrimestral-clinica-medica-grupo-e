@@ -1638,3 +1638,242 @@ tr.pagination-container td {
     margin-top: 0.25em;
     accent-color: var(--cl-primary);
 }
+
+/* =========================================================
+   TURNOS DE TRABAJO (TurnosTrabajo.aspx)
+   Todo va dentro de .turnos-trabajo para no afectar otras páginas.
+   ========================================================= */
+
+.turnos-trabajo .tt-tag {
+    background-color: #cbdeff;
+    color: #354862;
+    font-size: 11px;
+}
+
+.turnos-trabajo .tt-subtitulo {
+    max-width: 48rem;
+}
+
+.turnos-trabajo .tt-btn-soft {
+    background-color: var(--cl-surface-low);
+    color: var(--cl-text-secondary);
+    border: none;
+}
+
+    .turnos-trabajo .tt-btn-soft:hover {
+        background-color: var(--cl-surface-container);
+        color: var(--cl-text-primary);
+    }
+
+/* Tarjetas KPI */
+.turnos-trabajo .tt-kpi-valor {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--cl-text-primary);
+}
+
+.turnos-trabajo .tt-kpi-icono {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.turnos-trabajo .tt-icono-chico {
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+.turnos-trabajo .tt-kpi-icono-teal {
+    background-color: rgba(14, 124, 134, 0.1);
+    color: var(--cl-teal-primary);
+}
+
+.turnos-trabajo .tt-kpi-icono-azul {
+    background-color: rgba(203, 222, 255, 0.4);
+    color: var(--cl-text-secondary);
+}
+
+.turnos-trabajo .tt-kpi-icono-verde {
+    background-color: rgba(98, 223, 125, 0.2);
+    color: var(--cl-success);
+}
+
+.turnos-trabajo .tt-kpi-icono-celeste {
+    background-color: rgba(152, 240, 251, 0.4);
+    color: var(--cl-teal-container);
+}
+
+.turnos-trabajo .tt-icon-15 {
+    font-size: 15px;
+}
+
+.turnos-trabajo .tt-progress {
+    height: 6px;
+    background-color: var(--cl-surface-low);
+}
+
+.turnos-trabajo .tt-bar-teal {
+    background-color: var(--cl-teal-primary);
+}
+
+.turnos-trabajo .tt-bar-gris {
+    background-color: var(--cl-text-secondary);
+}
+
+/* Búsqueda y pestañas de estado */
+.turnos-trabajo .tt-buscador {
+    max-width: 26rem;
+}
+
+.turnos-trabajo .tt-tab {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 13px;
+    color: var(--cl-text-secondary);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .turnos-trabajo .tt-tab:hover {
+        color: var(--cl-text-primary);
+    }
+
+.turnos-trabajo .tt-tab-activa {
+    background-color: #ffffff;
+    color: var(--cl-teal-primary);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Tabla */
+.turnos-trabajo .tt-table th {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--cl-text-secondary);
+    background-color: var(--cl-surface-low);
+    border-bottom: none;
+    white-space: nowrap;
+}
+
+.turnos-trabajo .tt-table td {
+    font-size: 14px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--cl-surface-low);
+}
+
+/* Color de cada turno: punto y barra de bloques */
+.turnos-trabajo .tt-color-1 { --tt-color: #0e7c86; }
+.turnos-trabajo .tt-color-2 { --tt-color: #4d5f7b; }
+.turnos-trabajo .tt-color-3 { --tt-color: #213145; }
+.turnos-trabajo .tt-color-4 { --tt-color: #00662a; }
+.turnos-trabajo .tt-color-5 { --tt-color: #62c6d0; }
+
+.turnos-trabajo .tt-punto {
+    width: 0.65rem;
+    height: 0.65rem;
+    background-color: var(--tt-color, #0e7c86);
+}
+
+.turnos-trabajo .tt-barra-bloques {
+    width: 6rem;
+    height: 0.65rem;
+}
+
+.turnos-trabajo .tt-segmento {
+    background-color: var(--tt-color, #0e7c86);
+}
+
+/* Médicos asignados (iniciales superpuestas) */
+.turnos-trabajo .tt-avatar-grupo {
+    display: flex;
+    align-items: center;
+}
+
+.turnos-trabajo .tt-avatar {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    margin-left: -0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--cl-teal-container);
+}
+
+    .turnos-trabajo .tt-avatar:first-child {
+        margin-left: 0;
+    }
+
+    .turnos-trabajo .tt-avatar:nth-child(2) {
+        background-color: var(--cl-text-secondary);
+    }
+
+    .turnos-trabajo .tt-avatar:nth-child(3) {
+        background-color: #213145;
+    }
+
+.turnos-trabajo .tt-badge-activo {
+    background-color: #dcfce7;
+    color: #16a34a;
+    font-weight: 600;
+    font-size: 12px;
+    border-radius: 50rem;
+    padding: 0.25rem 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.turnos-trabajo .tt-badge-punto {
+    width: 6px;
+    height: 6px;
+    background-color: #16a34a;
+}
+
+.turnos-trabajo .tt-info {
+    background-color: var(--cl-surface-low);
+}
+
+/* Formulario de la derecha */
+.turnos-trabajo .tt-formulario {
+    position: sticky;
+    top: 5rem;
+}
+
+.turnos-trabajo .tt-preview {
+    background-color: var(--cl-surface-low);
+    border-color: var(--cl-surface-high) !important;
+}
+
+.turnos-trabajo .tt-badge-teal {
+    background-color: rgba(14, 124, 134, 0.1);
+    color: var(--cl-teal-primary);
+    font-size: 11px;
+}
+
+.turnos-trabajo .tt-mini-bloque {
+    border: 1px solid rgba(14, 124, 134, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+/* La casilla de asp:CheckBox no puede llevar la clase form-check-input: se le da el mismo lugar y color */
+.turnos-trabajo .form-check input[type="checkbox"] {
+    float: left;
+    width: 1em;
+    height: 1em;
+    margin-left: -1.5em;
+    margin-top: 0.25em;
+    accent-color: var(--cl-teal-primary);
+}
