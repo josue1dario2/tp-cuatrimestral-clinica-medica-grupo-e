@@ -294,6 +294,95 @@ END
 GO
 
 -- 9. Datos iniciales
+IF OBJECT_ID('storedListarPacientes', 'P') IS NOT NULL
+    DROP PROCEDURE storedListarPacientes
+GO
+CREATE PROCEDURE storedListarPacientes
+AS
+BEGIN
+    SELECT Id, Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo
+    FROM PACIENTES
+    WHERE Activo = 1
+    ORDER BY Apellido, Nombre ASC;
+END
+GO
+
+IF OBJECT_ID('storedAltaPaciente', 'P') IS NOT NULL
+    DROP PROCEDURE storedAltaPaciente
+GO
+CREATE PROCEDURE storedAltaPaciente
+    @Nombre VARCHAR(50),
+    @Apellido VARCHAR(50),
+    @Dni VARCHAR(15),
+    @FechaNacimiento SMALLDATETIME,
+    @Email VARCHAR(50),
+    @Telefono VARCHAR(30) = NULL,
+    @Direccion VARCHAR(100) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF EXISTS (SELECT 1 FROM PACIENTES WHERE Dni = @Dni)
+    BEGIN
+        RAISERROR('Ya existe un paciente registrado con el DNI ingresado.', 16, 1);
+        RETURN;
+    END
+
+    INSERT INTO PACIENTES (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo)
+    VALUES (@Nombre, @Apellido, @Dni, @FechaNacimiento, @Email, @Telefono, @Direccion, 1);
+END
+GO
+
+IF OBJECT_ID('storedModificarPaciente', 'P') IS NOT NULL
+    DROP PROCEDURE storedModificarPaciente
+GO
+CREATE PROCEDURE storedModificarPaciente
+    @Id INT,
+    @Nombre VARCHAR(50),
+    @Apellido VARCHAR(50),
+    @Dni VARCHAR(15),
+    @FechaNacimiento SMALLDATETIME,
+    @Email VARCHAR(50),
+    @Telefono VARCHAR(30) = NULL,
+    @Direccion VARCHAR(100) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    IF EXISTS (SELECT 1 FROM PACIENTES WHERE Dni = @Dni AND Id <> @Id)
+    BEGIN
+        RAISERROR('El DNI ingresado ya pertenece a otro paciente.', 16, 1);
+        RETURN;
+    END
+
+    UPDATE PACIENTES
+    SET Nombre = @Nombre,
+        Apellido = @Apellido,
+        Dni = @Dni,
+        FechaNacimiento = @FechaNacimiento,
+        Email = @Email,
+        Telefono = @Telefono,
+        Direccion = @Direccion
+    WHERE Id = @Id;
+END
+GO
+
+IF OBJECT_ID('storedEliminarPaciente', 'P') IS NOT NULL
+    DROP PROCEDURE storedEliminarPaciente
+GO
+CREATE PROCEDURE storedEliminarPaciente
+    @Id INT
+AS
+BEGIN
+    UPDATE PACIENTES
+    SET Activo = 0
+    WHERE Id = @Id;
+END
+GO
+
+-- 10. Datos iniciales
 IF NOT EXISTS (SELECT * FROM TURNOS_TRABAJO)
 BEGIN
     INSERT INTO TURNOS_TRABAJO (Nombre, HoraEntrada, HoraSalida) VALUES ('Mañana', 8, 14);

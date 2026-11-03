@@ -73,6 +73,7 @@
     <Content Include="EspecialidadesLista.aspx" />
     <Content Include="FormularioEspecialidad.aspx" />
     <Content Include="FormularioMedico.aspx" />
+    <Content Include="FormularioPaciente.aspx" />
     <Content Include="Estadisticas.aspx" />
     <Content Include="GestionUsuariosAdmin.aspx" />
     <Content Include="Global.asax" />
@@ -161,6 +162,13 @@
     </Compile>
     <Compile Include="FormularioMedico.aspx.designer.cs">
       <DependentUpon>FormularioMedico.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioPaciente.aspx.cs">
+      <DependentUpon>FormularioPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormularioPaciente.aspx.designer.cs">
+      <DependentUpon>FormularioPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReprogramarTurno.aspx.cs">
       <DependentUpon>ReprogramarTurno.aspx</DependentUpon>

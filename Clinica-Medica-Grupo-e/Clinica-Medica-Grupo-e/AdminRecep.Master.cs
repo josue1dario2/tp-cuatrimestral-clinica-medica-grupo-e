@@ -49,6 +49,12 @@ namespace Clinica_Medica_Grupo_e
                 return;
             }
 
+            if (paginaActual.IndexOf("Paciente", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                lnkNavPacientes.CssClass = "nav-item-custom active";
+                return;
+            }
+
             foreach (HyperLink link in links)
             {
                 string paginaLink = Path.GetFileName(link.NavigateUrl);

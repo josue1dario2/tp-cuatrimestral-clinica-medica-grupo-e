@@ -260,6 +260,86 @@ namespace negocio
                             UPDATE MEDICOS SET Activo = 0 WHERE Id = @Id;
                         END");
 
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarPacientes', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarPacientes]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedListarPacientes] AS
+                        BEGIN
+                            SELECT Id, Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo
+                            FROM PACIENTES
+                            WHERE Activo = 1
+                            ORDER BY Apellido, Nombre ASC;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedAltaPaciente', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedAltaPaciente]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedAltaPaciente]
+                            @Nombre VARCHAR(50),
+                            @Apellido VARCHAR(50),
+                            @Dni VARCHAR(15),
+                            @FechaNacimiento SMALLDATETIME,
+                            @Email VARCHAR(50),
+                            @Telefono VARCHAR(30) = NULL,
+                            @Direccion VARCHAR(100) = NULL
+                        AS
+                        BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;
+
+                            IF EXISTS (SELECT 1 FROM PACIENTES WHERE Dni = @Dni)
+                            BEGIN
+                                RAISERROR('Ya existe un paciente registrado con el DNI ingresado.', 16, 1);
+                                RETURN;
+                            END
+
+                            INSERT INTO PACIENTES (Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo)
+                            VALUES (@Nombre, @Apellido, @Dni, @FechaNacimiento, @Email, @Telefono, @Direccion, 1);
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedModificarPaciente', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedModificarPaciente]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedModificarPaciente]
+                            @Id INT,
+                            @Nombre VARCHAR(50),
+                            @Apellido VARCHAR(50),
+                            @Dni VARCHAR(15),
+                            @FechaNacimiento SMALLDATETIME,
+                            @Email VARCHAR(50),
+                            @Telefono VARCHAR(30) = NULL,
+                            @Direccion VARCHAR(100) = NULL
+                        AS
+                        BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;
+
+                            IF EXISTS (SELECT 1 FROM PACIENTES WHERE Dni = @Dni AND Id <> @Id)
+                            BEGIN
+                                RAISERROR('El DNI ingresado ya pertenece a otro paciente.', 16, 1);
+                                RETURN;
+                            END
+
+                            UPDATE PACIENTES
+                            SET Nombre = @Nombre,
+                                Apellido = @Apellido,
+                                Dni = @Dni,
+                                FechaNacimiento = @FechaNacimiento,
+                                Email = @Email,
+                                Telefono = @Telefono,
+                                Direccion = @Direccion
+                            WHERE Id = @Id;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedEliminarPaciente', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedEliminarPaciente]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedEliminarPaciente] @Id INT AS
+                        BEGIN
+                            UPDATE PACIENTES SET Activo = 0 WHERE Id = @Id;
+                        END");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedEliminarMedico] @Id INT AS
+                        BEGIN
+                            UPDATE MEDICOS SET Activo = 0 WHERE Id = @Id;
+                        END");
+
                     EjecutarComando(conexion, @"
                         IF NOT EXISTS (SELECT * FROM TURNOS_TRABAJO)
                         BEGIN
