@@ -129,14 +129,21 @@
             <div class="col-12 col-lg-7 col-xl-8">
                 <div class="card-custom p-3 p-lg-4">
 
+                    <!-- Mensaje de resultado (lo muestra el code-behind) -->
+                    <asp:Panel ID="pnlMensaje" runat="server" Visible="false" CssClass="alert alert-success d-flex align-items-center gap-2 py-2 mb-3">
+                        <span class="material-symbols-outlined icon-20">info</span>
+                        <asp:Label ID="lblMensaje" runat="server"></asp:Label>
+                    </asp:Panel>
+
                     <!-- Búsqueda y filtros -->
+
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 pb-3">
                         <div class="input-group tt-buscador">
                             <span class="input-group-text bg-light border-0"><span class="material-symbols-outlined text-muted icon-18">search</span></span>
                             <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control bg-light border-0 fs-14" placeholder="Buscar turno por nombre u horario..."></asp:TextBox>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <%-- Estado: la tabla TURNOS_TRABAJO todavía no tiene columna Activo (CommandArgument = Activos | Inactivos | Todos) --%>
+                            <%-- Estado (columna Activo). CommandArgument = Activos | Inactivos | Todos --%>
                             <div class="tt-tabs d-flex p-1 bg-light rounded-3" role="group">
                                 <asp:LinkButton ID="btnTabActivos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Activos" CssClass="tt-tab tt-tab-activa">
                                     <span>Activos (<asp:Label ID="lblCantActivos" runat="server" Text="5"></asp:Label>)</span>
@@ -162,8 +169,9 @@
                               ColorCss (tt-color-1 … tt-color-5), Entrada ("08:00 hs"), Salida ("14:00 hs"),
                               CantidadBloques (6), Bloques (lista con un elemento por bloque, para dibujar la barrita),
                               Medicos (lista de iniciales, máximo 3), MedicosTexto ("+8 méd." o "3 méd."),
-                              EstadoTexto ("Activo")
-                            Detalle y Estado no están en la base: por ahora son texto de ejemplo.
+                              EstadoTexto ("Activo" | "Inactivo"), EstadoCss (tt-badge-activo | tt-badge-activo tt-badge-inactivo),
+                              AccionEstadoTexto ("Dar de baja" | "Reactivar"), AccionEstadoIcono, ConfirmarScript
+                            Detalle (días y consultorios) no está en la base: el code-behind muestra las horas de atención.
                         --%>
                         <asp:Repeater ID="rptTurnosTrabajo" runat="server" OnItemCommand="rptTurnosTrabajo_ItemCommand">
                             <HeaderTemplate>
@@ -182,59 +190,64 @@
                                     <tbody>
                             </HeaderTemplate>
                             <ItemTemplate>
-                                        <tr class='<%# Eval("ColorCss") %>'>
-                                            <td class="py-3 px-3">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <span class="tt-punto rounded-circle flex-shrink-0"></span>
-                                                    <div>
-                                                        <div class="fw-semibold text-dark"><%#: Eval("Nombre") %></div>
-                                                        <div class="fs-13 text-muted"><%#: Eval("Detalle") %></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 px-2"><span class="badge bg-light text-dark fw-semibold p-2 font-monospace"><%#: Eval("Entrada") %></span></td>
-                                            <td class="py-3 px-2"><span class="badge bg-light text-dark fw-semibold p-2 font-monospace"><%#: Eval("Salida") %></span></td>
-                                            <td class="py-3 px-2">
-                                                <div class="fs-13 fw-semibold text-secondary mb-1"><%#: Eval("CantidadBloques") %> bloques (60 min)</div>
-                                                <div class="tt-barra-bloques d-flex gap-1 p-1 bg-light rounded-pill">
-                                                    <asp:Repeater ID="rptSegmentos" runat="server" DataSource='<%# Eval("Bloques") %>'>
-                                                        <ItemTemplate><span class="tt-segmento flex-fill rounded"></span></ItemTemplate>
-                                                    </asp:Repeater>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 px-2">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="tt-avatar-grupo">
-                                                        <asp:Repeater ID="rptMedicos" runat="server" DataSource='<%# Eval("Medicos") %>'>
-                                                            <ItemTemplate><span class="tt-avatar"><%#: Container.DataItem %></span></ItemTemplate>
-                                                        </asp:Repeater>
-                                                    </div>
-                                                    <span class="fs-13 fw-semibold text-secondary text-nowrap"><%#: Eval("MedicosTexto") %></span>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 px-2 text-center">
-                                                <span class="tt-badge-activo"><span class="tt-badge-punto rounded-circle"></span> <%#: Eval("EstadoTexto") %></span>
-                                            </td>
-                                            <td class="py-3 px-3 text-end">
-                                                <div class="d-inline-flex">
-                                                    <asp:LinkButton ID="btnEditar" runat="server" CommandName="Editar" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
-                                                        CssClass="btn btn-link text-secondary p-1" ToolTip="Editar turno">
+                                <tr class='<%# Eval("ColorCss") %>'>
+                                    <td class="py-3 px-3">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="tt-punto rounded-circle flex-shrink-0"></span>
+                                            <div>
+                                                <div class="fw-semibold text-dark"><%#: Eval("Nombre") %></div>
+                                                <div class="fs-13 text-muted"><%#: Eval("Detalle") %></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-2"><span class="badge bg-light text-dark fw-semibold p-2 font-monospace"><%#: Eval("Entrada") %></span></td>
+                                    <td class="py-3 px-2"><span class="badge bg-light text-dark fw-semibold p-2 font-monospace"><%#: Eval("Salida") %></span></td>
+                                    <td class="py-3 px-2">
+                                        <div class="fs-13 fw-semibold text-secondary mb-1"><%#: Eval("CantidadBloques") %> bloques (60 min)</div>
+                                        <div class="tt-barra-bloques d-flex gap-1 p-1 bg-light rounded-pill">
+                                            <asp:Repeater ID="rptSegmentos" runat="server" DataSource='<%# Eval("Bloques") %>'>
+                                                <ItemTemplate><span class="tt-segmento flex-fill rounded"></span></ItemTemplate>
+                                            </asp:Repeater>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="tt-avatar-grupo">
+                                                <asp:Repeater ID="rptMedicos" runat="server" DataSource='<%# Eval("Medicos") %>'>
+                                                    <ItemTemplate><span class="tt-avatar"><%#: Container.DataItem %></span></ItemTemplate>
+                                                </asp:Repeater>
+                                            </div>
+                                            <span class="fs-13 fw-semibold text-secondary text-nowrap"><%#: Eval("MedicosTexto") %></span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-2 text-center">
+                                        <span class='<%# Eval("EstadoCss") %>'><span class="tt-badge-punto rounded-circle"></span><%#: Eval("EstadoTexto") %></span>
+                                    </td>
+                                    <td class="py-3 px-3 text-end">
+                                        <div class="d-inline-flex">
+                                            <asp:LinkButton ID="btnEditar" runat="server" CommandName="Editar" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
+                                                CssClass="btn btn-link text-secondary p-1" ToolTip="Editar turno">
                                                         <span class="material-symbols-outlined icon-18">edit</span>
-                                                    </asp:LinkButton>
-                                                    <asp:LinkButton ID="btnVerMedicos" runat="server" CommandName="VerMedicos" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
-                                                        CssClass="btn btn-link text-secondary p-1" ToolTip="Ver médicos asignados">
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="btnVerMedicos" runat="server" CommandName="VerMedicos" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
+                                                CssClass="btn btn-link text-secondary p-1" ToolTip="Ver médicos asignados">
                                                         <span class="material-symbols-outlined icon-18">groups</span>
-                                                    </asp:LinkButton>
-                                                    <asp:LinkButton ID="btnDuplicar" runat="server" CommandName="Duplicar" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
-                                                        CssClass="btn btn-link text-secondary p-1" ToolTip="Duplicar franja">
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="btnDuplicar" runat="server" CommandName="Duplicar" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
+                                                CssClass="btn btn-link text-secondary p-1" ToolTip="Duplicar franja">
                                                         <span class="material-symbols-outlined icon-18">content_copy</span>
-                                                    </asp:LinkButton>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                            </asp:LinkButton>
+                                            <asp:LinkButton ID="btnCambiarEstado" runat="server" CommandName="CambiarEstado" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
+                                                CssClass="btn btn-link text-secondary p-1" ToolTip='<%# Eval("AccionEstadoTexto") %>' OnClientClick='<%# Eval("ConfirmarScript") %>'>
+                                                        <span class="material-symbols-outlined icon-18"><%#: Eval("AccionEstadoIcono") %></span>
+                                            </asp:LinkButton>
+
+                                        </div>
+                                    </td>
+                                </tr>
                             </ItemTemplate>
                             <FooterTemplate>
-                                    </tbody>
+                                </tbody>
                                 </table>
                             </FooterTemplate>
                         </asp:Repeater>
@@ -247,9 +260,11 @@
                     <!-- Paginación -->
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 pt-3 border-top mt-3 fs-13 text-muted">
                         <div class="d-flex align-items-center gap-3">
-                            <span>
-                                Mostrando <asp:Label ID="lblRangoMostrado" runat="server" CssClass="fw-bold text-dark" Text="1 - 5"></asp:Label>
-                                de <asp:Label ID="lblTotalRegistros" runat="server" CssClass="fw-bold text-dark" Text="5"></asp:Label> turnos registrados
+                            <span>Mostrando
+                                <asp:Label ID="lblRangoMostrado" runat="server" CssClass="fw-bold text-dark" Text="1 - 5"></asp:Label>
+                                de
+                                <asp:Label ID="lblTotalRegistros" runat="server" CssClass="fw-bold text-dark" Text="5"></asp:Label>
+                                turnos registrados
                             </span>
                             <div class="d-flex align-items-center gap-1">
                                 <asp:Label ID="lblPorPagina" runat="server" AssociatedControlID="ddlPorPagina" Text="Filas:"></asp:Label>
@@ -323,13 +338,15 @@
                             <div class="col-6">
                                 <asp:Label ID="lblHoraEntrada" runat="server" AssociatedControlID="ddlHoraEntrada" CssClass="form-label fw-semibold fs-13">Hora de entrada <span class="text-danger">*</span></asp:Label>
                                 <asp:DropDownList ID="ddlHoraEntrada" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlHora_SelectedIndexChanged"
-                                    CssClass="form-select form-select-sm font-monospace"></asp:DropDownList>
+                                    CssClass="form-select form-select-sm font-monospace">
+                                </asp:DropDownList>
                                 <span class="text-muted fs-12">Inicio de atención</span>
                             </div>
                             <div class="col-6">
                                 <asp:Label ID="lblHoraSalida" runat="server" AssociatedControlID="ddlHoraSalida" CssClass="form-label fw-semibold fs-13">Hora de salida <span class="text-danger">*</span></asp:Label>
                                 <asp:DropDownList ID="ddlHoraSalida" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlHora_SelectedIndexChanged"
-                                    CssClass="form-select form-select-sm font-monospace"></asp:DropDownList>
+                                    CssClass="form-select form-select-sm font-monospace">
+                                </asp:DropDownList>
                                 <span class="text-muted fs-12">Cierre de agenda</span>
                             </div>
                         </div>
@@ -339,7 +356,8 @@
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="fw-semibold fs-13 d-flex align-items-center gap-1 text-dark">
                                     <span class="material-symbols-outlined icon-18 text-cl-primary">view_timeline</span>
-                                    <span>Vista previa de la franja (<asp:Label ID="lblPreviewCantidad" runat="server" Text="6"></asp:Label> bloques de 1 hora)</span>
+                                    <span>Vista previa de la franja (<asp:Label ID="lblPreviewCantidad" runat="server" Text="6"></asp:Label>
+                                        bloques de 1 hora)</span>
                                 </span>
                                 <span class="badge rounded-pill tt-badge-teal">60 min c/u</span>
                             </div>
@@ -358,7 +376,8 @@
                             </div>
                             <div class="d-flex align-items-center gap-1 pt-1 fs-12 text-muted">
                                 <span class="material-symbols-outlined text-success icon-16">speed</span>
-                                <span><strong>Duración total:</strong> <asp:Label ID="lblPreviewDuracion" runat="server" Text="6 horas continuas"></asp:Label></span>
+                                <span><strong>Duración total:</strong>
+                                    <asp:Label ID="lblPreviewDuracion" runat="server" Text="6 horas continuas"></asp:Label></span>
                             </div>
                         </div>
 
@@ -366,7 +385,7 @@
                         <asp:Panel ID="pnlErrorHorario" runat="server" Visible="false" CssClass="alert alert-danger d-flex align-items-start gap-2 p-2 mb-0 rounded-3">
                             <span class="material-symbols-outlined text-danger icon-20">error</span>
                             <div class="fs-13">
-                                <div class="fw-bold text-danger">Validación de inconsistencia horaria</div>
+                                <asp:Label ID="lblErrorTitulo" runat="server" CssClass="fw-bold text-danger d-block" Text="Validación de inconsistencia horaria"></asp:Label>
                                 <asp:Label ID="lblErrorHorario" runat="server" Text="La hora de salida debe ser posterior a la de entrada."></asp:Label>
                             </div>
                         </asp:Panel>

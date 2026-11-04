@@ -40,9 +40,15 @@ namespace negocio
                                 [Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
                                 [Nombre] [varchar](50) NOT NULL,
                                 [HoraEntrada] [int] NOT NULL,
-                                [HoraSalida] [int] NOT NULL
+                                [HoraSalida] [int] NOT NULL,
+                                [Activo] [bit] NOT NULL DEFAULT 1
                             );
+                        END
+                        ELSE IF COL_LENGTH('dbo.TURNOS_TRABAJO', 'Activo') IS NULL
+                        BEGIN
+                            ALTER TABLE [dbo].[TURNOS_TRABAJO] ADD [Activo] [bit] NOT NULL CONSTRAINT [DF_TURNOS_TRABAJO_Activo] DEFAULT 1;
                         END");
+
 
                     EjecutarComando(conexion, @"
                         IF OBJECT_ID('dbo.USUARIOS', 'U') IS NULL
@@ -146,8 +152,48 @@ namespace negocio
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedListarTurnosTrabajo] AS
                         BEGIN
-                            SELECT Id, Nombre, HoraEntrada, HoraSalida FROM TURNOS_TRABAJO ORDER BY HoraEntrada ASC;
+                            SELECT Id, Nombre, HoraEntrada, HoraSalida FROM TURNOS_TRABAJO WHERE Activo = 1 ORDER BY HoraEntrada ASC;
                         END");
+
+                    // ----- ABM de Turnos de Trabajo -----
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarTurnosTrabajoGestion', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarTurnosTrabajoGestion]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedListarTurnosTrabajoGestion] AS
+                        BEGIN
+                            SELECT T.Id, T.Nombre, T.HoraEntrada, T.HoraSalida, T.Activo,
+                                   (SELECT COUNT(*) FROM MEDICOS M WHERE M.IdTurnoTrabajo = T.Id AND M.Activo = 1) AS CantidadMedicos
+                            FROM TURNOS_TRABAJO T
+                            ORDER BY T.HoraEntrada ASC, T.Nombre ASC;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedAltaTurnoTrabajo', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedAltaTurnoTrabajo]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedAltaTurnoTrabajo] @Nombre VARCHAR(50), @HoraEntrada INT, @HoraSalida INT AS
+                        BEGIN
+                            INSERT INTO TURNOS_TRABAJO (Nombre, HoraEntrada, HoraSalida, Activo) VALUES (@Nombre, @HoraEntrada, @HoraSalida, 1);
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedModificarTurnoTrabajo', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedModificarTurnoTrabajo]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedModificarTurnoTrabajo] @Id INT, @Nombre VARCHAR(50), @HoraEntrada INT, @HoraSalida INT AS
+                        BEGIN
+                            UPDATE TURNOS_TRABAJO SET Nombre = @Nombre, HoraEntrada = @HoraEntrada, HoraSalida = @HoraSalida WHERE Id = @Id;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedEliminarTurnoTrabajo', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedEliminarTurnoTrabajo]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedEliminarTurnoTrabajo] @Id INT AS
+                        BEGIN
+                            UPDATE TURNOS_TRABAJO SET Activo = 0 WHERE Id = @Id;
+                        END");
+
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedReactivarTurnoTrabajo', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedReactivarTurnoTrabajo]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedReactivarTurnoTrabajo] @Id INT AS
+                        BEGIN
+                            UPDATE TURNOS_TRABAJO SET Activo = 1 WHERE Id = @Id;
+                        END");
+
 
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarMedicosConDetalle', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarMedicosConDetalle]");
                     EjecutarComando(conexion, @"
@@ -333,11 +379,6 @@ namespace negocio
                         CREATE PROCEDURE [dbo].[storedEliminarPaciente] @Id INT AS
                         BEGIN
                             UPDATE PACIENTES SET Activo = 0 WHERE Id = @Id;
-                        END");
-                    EjecutarComando(conexion, @"
-                        CREATE PROCEDURE [dbo].[storedEliminarMedico] @Id INT AS
-                        BEGIN
-                            UPDATE MEDICOS SET Activo = 0 WHERE Id = @Id;
                         END");
 
                     EjecutarComando(conexion, @"

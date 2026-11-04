@@ -1767,11 +1767,25 @@ tr.pagination-container td {
 }
 
 /* Color de cada turno: punto y barra de bloques */
-.turnos-trabajo .tt-color-1 { --tt-color: #0e7c86; }
-.turnos-trabajo .tt-color-2 { --tt-color: #4d5f7b; }
-.turnos-trabajo .tt-color-3 { --tt-color: #213145; }
-.turnos-trabajo .tt-color-4 { --tt-color: #00662a; }
-.turnos-trabajo .tt-color-5 { --tt-color: #62c6d0; }
+.turnos-trabajo .tt-color-1 {
+    --tt-color: #0e7c86;
+}
+
+.turnos-trabajo .tt-color-2 {
+    --tt-color: #4d5f7b;
+}
+
+.turnos-trabajo .tt-color-3 {
+    --tt-color: #213145;
+}
+
+.turnos-trabajo .tt-color-4 {
+    --tt-color: #00662a;
+}
+
+.turnos-trabajo .tt-color-5 {
+    --tt-color: #62c6d0;
+}
 
 .turnos-trabajo .tt-punto {
     width: 0.65rem;
@@ -1837,6 +1851,25 @@ tr.pagination-container td {
     width: 6px;
     height: 6px;
     background-color: #16a34a;
+}
+
+/* Turno de trabajo inactivo (ABM) */
+.turnos-trabajo .tt-badge-inactivo {
+    background-color: var(--cl-surface-container);
+    color: var(--cl-text-secondary);
+}
+
+    .turnos-trabajo .tt-badge-inactivo .tt-badge-punto {
+        background-color: var(--cl-text-muted);
+    }
+
+.turnos-trabajo .tt-fila-inactiva td {
+    color: var(--cl-text-muted);
+}
+
+.turnos-trabajo .tt-fila-inactiva .tt-segmento,
+.turnos-trabajo .tt-fila-inactiva .tt-punto {
+    background-color: var(--cl-text-subtle);
 }
 
 .turnos-trabajo .tt-info {

@@ -42,6 +42,8 @@ CREATE TABLE [dbo].[TURNOS_TRABAJO](
     [Nombre] [varchar](50) NOT NULL,
     [HoraEntrada] [int] NOT NULL, -- Ej: 8 (08:00 hs)
     [HoraSalida] [int] NOT NULL,  -- Ej: 14 (14:00 hs)
+    [Activo] [bit] NOT NULL DEFAULT 1,
+
  CONSTRAINT [PK_TURNOS_TRABAJO] PRIMARY KEY CLUSTERED ([Id] ASC)
 ) ON [PRIMARY]
 GO
