@@ -19,7 +19,7 @@
         </asp:LinkButton>
     </div>
 
-    <!-- ===================== FILTROS DE BÚSQUEDA ===================== -->
+    <!--  FILTROS DE BÚSQUEDA  -->
     <asp:Panel ID="pnlFiltros" runat="server" DefaultButton="btnBuscar" CssClass="card-custom p-3 p-xl-4 mb-4">
         <div class="row g-3">
             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
@@ -47,7 +47,7 @@
         </div>
     </asp:Panel>
 
-    <!-- ===================== TABLA DE MÉDICOS ===================== -->
+    <!--  TABLA DE MÉDICOS  -->
     <div class="card-custom overflow-hidden mb-4 shadow-sm border-0">
         <div class="table-responsive">
             <asp:GridView ID="dgvMedicos" runat="server"

@@ -44,9 +44,9 @@ namespace Clinica_Medica_Grupo_e
             ddlHoraSalida.SelectedValue = "20";
         }
 
-        // =====================================================================
+        
         // LISTADO (con búsqueda y pestañas de estado)
-        // =====================================================================
+        
 
         private void CargarTurnos()
         {
@@ -63,8 +63,8 @@ namespace Clinica_Medica_Grupo_e
             }
 
             // Cantidades de las pestañas (sobre todos los turnos, sin la búsqueda).
-            lblCantActivos.Text = todos.Count(t => t.Activo).ToString();
-            lblCantInactivos.Text = todos.Count(t => !t.Activo).ToString();
+            btnTabActivos.Text = "Activos (" + todos.Count(t => t.Activo) + ")";
+            btnTabInactivos.Text = "Inactivos (" + todos.Count(t => !t.Activo) + ")";
 
             // 1) Filtro por estado.
             IEnumerable<TurnoTrabajo> filtrados = todos;
@@ -149,9 +149,9 @@ namespace Clinica_Medica_Grupo_e
             CargarTurnos();
         }
 
-        // =====================================================================
+        
         // ACCIONES DE CADA FILA: modificar (cargar en el formulario) y baja / reactivación
-        // =====================================================================
+        
 
         protected void rptTurnosTrabajo_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
@@ -241,9 +241,9 @@ namespace Clinica_Medica_Grupo_e
             CargarTurnos();
         }
 
-        // =====================================================================
+        
         // ALTA Y MODIFICACIÓN (formulario de la derecha)
-        // =====================================================================
+        
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -312,9 +312,9 @@ namespace Clinica_Medica_Grupo_e
             // Fuera del alcance de este ABM: recalcular la vista previa de bloques.
         }
 
-        // =====================================================================
+        
         // MENSAJES
-        // =====================================================================
+        
 
         // Mensaje arriba de la tabla (verde si salió bien, rojo si hubo un error).
         private void MostrarMensaje(string texto, bool esError)
@@ -340,10 +340,9 @@ namespace Clinica_Medica_Grupo_e
             pnlErrorHorario.Visible = false;
         }
 
-        // =====================================================================
+        
         // Fuera del alcance de este ABM (quedan como estaban)
-        // =====================================================================
-
+        
         protected void btnExportar_Click(object sender, EventArgs e)
         {
             // TODO: exportar la grilla de turnos de trabajo.

@@ -20,7 +20,7 @@
         <%-- Todo el contenido de la agenda; se oculta si hay un error --%>
         <asp:PlaceHolder ID="phContenido" runat="server">
 
-        <!-- ===================== 1. ENCABEZADO DE SECCIÓN ===================== -->
+        <!--  1. ENCABEZADO DE SECCIÓN  -->
         <div class="cl-card p-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             <div class="d-flex align-items-start gap-3">
                 <div class="cl-section-icon rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <!-- ===================== 2. SEMANA EN CURSO ===================== -->
+        <!--  2. SEMANA EN CURSO  -->
         <div class="d-flex flex-column gap-2">
             <div class="d-flex align-items-center justify-content-between px-1">
                 <asp:Label ID="lblSemanaTitulo" runat="server" CssClass="cl-small-caps text-uppercase text-secondary fw-semibold" Text="Semana en curso • Mayo - Junio 2025"></asp:Label>
@@ -97,7 +97,7 @@
             </div>
         </div>
 
-        <!-- ===================== 3. MÉTRICAS DE LA JORNADA ===================== -->
+        <!--  3. MÉTRICAS DE LA JORNADA  -->
         <div class="row g-3">
             <div class="col-12 col-md-4">
                 <div class="cl-card p-4 h-100 d-flex align-items-center justify-content-between">
@@ -148,7 +148,7 @@
             </div>
         </div>
 
-        <!-- ===================== 4. FECHA, FILTRO Y BÚSQUEDA ===================== -->
+        <!--  4. FECHA, FILTRO Y BÚSQUEDA  -->
         <div class="cl-no-print cl-card p-3 d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-1 flex-wrap flex-sm-nowrap">
                 <asp:LinkButton ID="btnDiaAnterior" runat="server" OnClick="btnDiaAnterior_Click" ToolTip="Día anterior"
@@ -188,7 +188,7 @@
             </div>
         </div>
 
-        <!-- ===================== 5. TABLA DE TURNOS ===================== -->
+        <!--  5. TABLA DE TURNOS  -->
         <div class="cl-card overflow-hidden d-flex flex-column">
             <div class="table-responsive">
                 <%--
@@ -266,7 +266,7 @@
 
         </asp:PlaceHolder>
 
-        <!-- ===================== 6. MODAL: INICIAR ATENCIÓN ===================== -->
+        <!--  6. MODAL: INICIAR ATENCIÓN  -->
         <%-- Se abre desde el code-behind al presionar "Atender" en una fila (ver comentario en MisTurnos.aspx.cs) --%>
         <div class="modal fade" id="modalAtencion" tabindex="-1" aria-labelledby="modalAtencionLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">

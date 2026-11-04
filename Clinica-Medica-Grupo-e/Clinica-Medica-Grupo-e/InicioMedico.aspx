@@ -6,7 +6,7 @@
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="d-flex flex-column gap-4">
 
-        <!-- ===================== 1. BIENVENIDA ===================== -->
+        <!--  1. BIENVENIDA  -->
         <div class="cl-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div class="d-flex flex-column gap-1">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <!-- ===================== 2. INDICADORES ===================== -->
+        <!--  2. INDICADORES  -->
         <div class="row g-3">
 
             <!-- Turnos programados -->
@@ -129,7 +129,7 @@
             </div>
         </div>
 
-        <!-- ===================== 3. PRÓXIMO TURNO ===================== -->
+        <!--  3. PRÓXIMO TURNO  -->
         <asp:Panel ID="pnlProximoTurno" runat="server" CssClass="cl-card position-relative overflow-hidden shadow-sm">
             <div class="cl-accent-bar"></div>
             <div class="p-4">
@@ -220,7 +220,7 @@
             </div>
         </asp:Panel>
 
-        <!-- ===================== 4. AGENDA DEL DÍA ===================== -->
+        <!--  4. AGENDA DEL DÍA  -->
         <div class="cl-card p-4 d-flex flex-column gap-3">
 
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-2 border-bottom">

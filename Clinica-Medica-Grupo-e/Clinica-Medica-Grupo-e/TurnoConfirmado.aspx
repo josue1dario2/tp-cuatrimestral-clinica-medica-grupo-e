@@ -8,7 +8,7 @@
         <asp:HiddenField ID="hfIdTurno" runat="server" />
         
         <div class="container-fluid" style="max-width: 920px;">
-            <!-- Status & Nav Trail -->
+            <!-- Estado y Nav -->
             <div class="d-flex align-items-center justify-content-between mb-3 no-print">
                 <div class="d-flex align-items-center gap-2" style="font-size: 13px; font-weight: 500; color: var(--cl-text-secondary);">
                     <asp:HyperLink ID="lnkBreadcrumbTurnos" runat="server" NavigateUrl="~/Turnos.aspx" CssClass="text-decoration-none d-flex align-items-center gap-1" Style="color: var(--cl-text-secondary);">
@@ -26,11 +26,11 @@
                     <span>Transacción ID: #<asp:Label ID="lblTransaccion" runat="server" Text="SYS-882914-OK"></asp:Label></span>
                 </div>
             </div>
-            <!-- Main Central Success Card Container -->
+            <!-- Contenedor principal central para tarjetas -->
             <div class="d-flex flex-column gap-4">
-                <!-- Card Principal de Confirmación -->
+                <!-- Tarjeta Principal de Confirmación -->
                 <div class="card-custom p-4 p-md-5 text-center position-relative overflow-hidden">
-                    <!-- Glow ambiental sutil -->
+                    <!-- Brillo ambiental sutil -->
                     <div class="position-absolute top-0 start-50 translate-middle-x rounded-circle" style="width: 280px; height: 280px; background: rgba(0, 102, 42, 0.05); filter: blur(50px); pointer-events: none;"></div>
                     <!-- Icono de éxito animado -->
                     <div class="d-flex justify-content-center mb-3 position-relative">
@@ -46,7 +46,7 @@
                     <p class="mx-auto mb-4" style="max-width: 560px; font-size: 15px; color: var(--cl-text-secondary); line-height: 1.5;">
                         La cita médica ha sido agendada en el sistema asistencial y asignada en la agenda del profesional.
                     </p>
-                    <!-- Turno Identifier & Badge Area -->
+                    <!-- Área de identificadores y credenciales de turno -->
                     <div class="d-inline-flex flex-wrap align-items-center justify-content-center gap-2 px-3 py-2 rounded-3 mx-auto" style="background-color: var(--cl-surface-muted);">
                         <span class="text-uppercase text-muted" style="font-size: 11px; font-weight: 600; letter-spacing: 0.05em;">Código de Turno:</span>
                         <asp:Label ID="lblCodigoTurno" runat="server" ClientIDMode="Static" CssClass="font-monospace fw-bold px-1" Style="font-size: 18px; color: var(--cl-text-main); user-select: all;" Text="#1001"></asp:Label>
@@ -61,7 +61,7 @@
                         </span>
 
                     </div>
-                    <!-- Green Soft Success Notice Banner: se muestra solo si el paciente tiene email -->
+                    <!-- Banner de aviso de éxito de color verde: se muestra solo si el paciente tiene email -->
                     <asp:Panel ID="pnlEmailEnviado" runat="server" CssClass="d-flex align-items-center gap-2 p-3 mt-3 mx-auto rounded-3 text-start" Style="max-width: 680px; background-color: var(--cl-success-light); color: var(--cl-success);">
                         <span class="material-symbols-outlined flex-shrink-0" style="font-size: 22px; font-variation-settings: 'FILL' 1;">mark_email_read</span>
                         <div style="font-size: 13.5px;">
@@ -162,9 +162,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Action Buttons Bar -->
+                        <!-- Barra de botones de acción -->
                         <div class="mt-4 pt-3 w-100 d-flex flex-wrap align-items-center justify-content-between gap-2 border-top no-print" style="border-color: var(--cl-border) !important;">
-                            <!-- Left Quick Actions (WhatsApp / PDF) -->
+                            <!-- Acciones rápidas de la izquierda (WhatsApp / PDF) -->
                             <div class="d-flex align-items-center gap-2">
                                 <asp:LinkButton ID="btnEnviarWhatsApp" runat="server" OnClick="btnEnviarWhatsApp_Click" CssClass="btn btn-secondary-light d-flex align-items-center gap-1">
                                     <span class="material-symbols-outlined" style="font-size: 18px; color: var(--cl-success);">chat</span>
@@ -176,7 +176,7 @@
                                 </asp:LinkButton>
 
                             </div>
-                            <!-- Right Core Navigation Actions -->
+                            <!-- Acciones de navegación del panel central derecho -->
                             <div class="d-flex align-items-center gap-2">
                                 <asp:HyperLink ID="lnkVerTurnos" runat="server" NavigateUrl="~/Turnos.aspx" CssClass="btn btn-light d-flex align-items-center gap-1" Style="background: transparent; border: none; color: var(--cl-text-secondary); font-weight: 500;">
                                     <span class="material-symbols-outlined" style="font-size: 18px;">calendar_view_week</span>
@@ -212,7 +212,7 @@
                     </div>
                 </asp:Panel>
 
-                <!-- Instructions / Next Steps for Reception Desk (3 Column Cards) -->
+                <!-- Instrucciones / Próximos pasos para el mostrador de recepción (tarjetas de 3 columnas) -->
                 <div class="row g-3">
                     <div class="col-12 col-md-4">
                         <div class="card-custom p-3 h-100 d-flex align-items-start gap-3">
@@ -257,7 +257,7 @@
                 </div>
             </div>
         </div>
-        <!-- Bootstrap Modal for Email Update Demo -->
+        <!-- Demostración del modal de Bootstrap para la actualización del correo electrónico -->
         <div aria-hidden="true" aria-labelledby="emailModalLabel" class="modal fade" id="emailUpdateModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 card-custom shadow-lg">

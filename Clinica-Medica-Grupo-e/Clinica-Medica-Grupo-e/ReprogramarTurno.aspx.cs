@@ -22,9 +22,9 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
-        // =====================================================================
+        
         // TEMPORAL: datos de ejemplo (solo para ver el diseño)
-        // =====================================================================
+        
 
         private void CargarCalendarioDeEjemplo()
         {
@@ -113,9 +113,9 @@ namespace Clinica_Medica_Grupo_e
             rptHorarios.DataBind();
         }
 
-        // =====================================================================
+        
         // Eventos (vacíos: se completan en la etapa de lógica)
-        // =====================================================================
+        
 
         protected void ddlMedico_SelectedIndexChanged(object sender, EventArgs e)
         {

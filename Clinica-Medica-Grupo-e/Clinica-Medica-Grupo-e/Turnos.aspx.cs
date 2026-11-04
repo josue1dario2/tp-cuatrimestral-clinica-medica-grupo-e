@@ -13,9 +13,9 @@ namespace Clinica_Medica_Grupo_e
     {
         private static readonly CultureInfo Cultura = new CultureInfo("es-AR");
 
-        /// <summary>
+        
         /// Página actual de la tabla (empieza en 1). Se guarda en ViewState.
-        /// </summary>
+        
         private int PaginaActual
         {
             get { return ViewState["PaginaActual"] == null ? 1 : (int)ViewState["PaginaActual"]; }
@@ -42,9 +42,9 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
-        // =====================================================================
+        
         // Carga inicial
-        // =====================================================================
+        
 
         private void CargarCombos()
         {
@@ -61,9 +61,9 @@ namespace Clinica_Medica_Grupo_e
             ddlEspecialidad.DataBind();
         }
 
-        /// <summary>
+        
         /// Por defecto se muestran los turnos desde hoy en adelante.
-        /// </summary>
+        
         private void FiltrosPorDefecto()
         {
             txtFechaDesde.Text = DateTime.Today.ToString("yyyy-MM-dd");
@@ -75,9 +75,9 @@ namespace Clinica_Medica_Grupo_e
             txtNumeroTurno.Text = "";
         }
 
-        // =====================================================================
+        
         // Métricas (siempre del día de hoy, sin importar los filtros)
-        // =====================================================================
+        
 
         private void CargarMetricasDeHoy()
         {
@@ -111,13 +111,13 @@ namespace Clinica_Medica_Grupo_e
             return total == 0 ? "0%" : (parte * 100.0 / total).ToString("0.#", Cultura) + "%";
         }
 
-        // =====================================================================
+        
         // Búsqueda avanzada
-        // =====================================================================
+        
 
-        /// <summary>
+        
         /// Lee los filtros de la pantalla. Devuelve null (y muestra el motivo) si alguno es inválido.
-        /// </summary>
+        
         private FiltroTurnos LeerFiltros()
         {
             FiltroTurnos filtro = new FiltroTurnos();
@@ -176,9 +176,9 @@ namespace Clinica_Medica_Grupo_e
             return filtro;
         }
 
-        /// <summary>
+        
         /// Ejecuta la búsqueda con los filtros actuales y muestra la página actual.
-        /// </summary>
+        
         private void Buscar()
         {
             pnlError.Visible = false;
@@ -210,9 +210,9 @@ namespace Clinica_Medica_Grupo_e
             pnlError.Visible = true;
         }
 
-        // =====================================================================
+        
         // Tabla y paginación
-        // =====================================================================
+        
 
         private void MostrarResultados(List<Turno> turnos)
         {
@@ -236,9 +236,9 @@ namespace Clinica_Medica_Grupo_e
             MostrarPaginador(totalPaginas);
         }
 
-        /// <summary>
+        
         /// Muestra hasta 7 botones de página alrededor de la actual (siempre incluye la primera y la última).
-        /// </summary>
+        
         private void MostrarPaginador(int totalPaginas)
         {
             List<int> numeros = new List<int>();
@@ -256,9 +256,9 @@ namespace Clinica_Medica_Grupo_e
             btnPaginaSiguiente.Enabled = PaginaActual < totalPaginas;
         }
 
-        /// <summary>
+        
         /// Convierte un turno en los campos que espera el Repeater rptTurnos.
-        /// </summary>
+        
         private object ArmarFila(Turno turno)
         {
             string filaCss = "";
@@ -342,18 +342,18 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
-        /// <summary>
+        
         /// "35111222" -> "35.111.222".
-        /// </summary>
+        
         private static string FormatearDni(string dni)
         {
             long numero;
             return long.TryParse(dni, out numero) ? numero.ToString("#,0", Cultura) : dni;
         }
 
-        // =====================================================================
+        
         // Modal de detalle
-        // =====================================================================
+        
 
         private void MostrarDetalle(int idTurno)
         {
@@ -385,9 +385,9 @@ namespace Clinica_Medica_Grupo_e
                 "document.addEventListener('DOMContentLoaded', function () { abrirModal('modalDetalle'); });", true);
         }
 
-        // =====================================================================
+        
         // Eventos
-        // =====================================================================
+        
 
         protected void btnBuscarTurnos_Click(object sender, EventArgs e)
         {

@@ -17,9 +17,9 @@ namespace Clinica_Medica_Grupo_e
             //       y ocultar phMenuAdministracion si el rol es Recepción.
         }
 
-        /// <summary>
+        
         /// Marca como "active" el link del menú que corresponde a la página actual.
-        /// </summary>
+        
         private void MarcarLinkActivo()
         {
             string paginaActual = Path.GetFileName(Request.Path);

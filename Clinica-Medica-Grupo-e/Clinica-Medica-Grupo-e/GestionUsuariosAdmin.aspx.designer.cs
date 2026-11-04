@@ -14,135 +14,135 @@ namespace Clinica_Medica_Grupo_e
     public partial class GestionUsuariosAdmin
     {
 
-        /// <summary>
+        
         /// txtBuscarUsuario control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBuscarUsuario;
 
-        /// <summary>
+        
         /// ddlfiltrobuscarrol control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlfiltrobuscarrol;
 
-        /// <summary>
+        
         /// ddlFiltroActividad control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlFiltroActividad;
 
-        /// <summary>
+        
         /// BotonRestablecerFiltro control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton BotonRestablecerFiltro;
 
-        /// <summary>
+        
         /// dgvUsuarios control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView dgvUsuarios;
 
-        /// <summary>
+        
         /// txtNombreAgregar control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNombreAgregar;
 
-        /// <summary>
+        
         /// txtNonbreUsuarioAgregar control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNonbreUsuarioAgregar;
 
-        /// <summary>
+        
         /// txtCorreoAgregar control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCorreoAgregar;
 
-        /// <summary>
+        
         /// ddlRolUsuarioAgregar control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlRolUsuarioAgregar;
 
-        /// <summary>
+        
         /// condicionalMedicoDDL control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl condicionalMedicoDDL;
 
-        /// <summary>
+        
         /// ddlMedicosAasociar control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlMedicosAasociar;
 
-        /// <summary>
+        
         /// txtPassword control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPassword;
 
-        /// <summary>
+        
         /// txtConfirmarPassword control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtConfirmarPassword;
 
-        /// <summary>
+        
         /// chkEnviarCredenciales control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkEnviarCredenciales;
 
-        /// <summary>
+        
         /// btnGuardarUsuario control.
-        /// </summary>
+        
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.

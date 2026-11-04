@@ -19,7 +19,7 @@
         </asp:LinkButton>
     </div>
 
-    <!-- ===================== FILTROS DE BÚSQUEDA ===================== -->
+    <!--  FILTROS DE BÚSQUEDA  -->
     <asp:Panel ID="pnlFiltros" runat="server" DefaultButton="btnBuscar" CssClass="card-custom p-3 p-xl-4 mb-4">
         <div class="row g-3">
             <div class="col-12 col-md-6 col-lg-5">

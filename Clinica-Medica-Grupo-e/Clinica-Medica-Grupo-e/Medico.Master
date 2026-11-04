@@ -25,7 +25,7 @@
 <body>
     <form id="form1" runat="server">
 
-        <!-- ===================== MENÚ LATERAL =====================-->
+        <!--  MENÚ LATERAL -->
         <aside class="cl-sidebar">
             <div class="d-flex flex-column gap-4">
 
@@ -66,7 +66,7 @@
 
         <div class="cl-main-wrapper">
 
-            <!-- ===================== BARRA SUPERIOR ===================== -->
+            <!--  BARRA SUPERIOR  -->
             <header class="cl-header">
                 <div class="w-100 d-flex align-items-center justify-content-between">
 
@@ -107,7 +107,7 @@
                 </div>
             </header>
 
-            <!-- ===================== CONTENIDO DE CADA PÁGINA ===================== -->
+            <!--  CONTENIDO DE CADA PÁGINA  -->
             <main class="cl-content-area">
                 <div class="cl-content-container container-fluid p-0">
                     <asp:ContentPlaceHolder ID="MainContent" runat="server">

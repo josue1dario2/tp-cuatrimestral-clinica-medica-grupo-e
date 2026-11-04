@@ -1,8 +1,8 @@
-/* =========================================================
+/* ===============
    Clínica - Administración y Recepción
    Estilos de AdminRecep.Master y de sus páginas.
    Se carga DESPUÉS de Bootstrap para poder sobrescribir sus variables.
-   ========================================================= */
+   =============== */
 
 :root {
     --cl-navy-dark: #12263F;
@@ -127,9 +127,9 @@ body {
     letter-spacing: -0.01em;
 }
 
-/* =========================================================
+/* ===============
    LAYOUT (Master Page)
-   ========================================================= */
+   =============== */
 
 .sidebar-custom {
     position: fixed;
@@ -295,9 +295,9 @@ body {
         background-color: var(--cl-surface-low);
     }
 
-/* =========================================================
+/* ===============
    COMPONENTES COMUNES
-   ========================================================= */
+   =============== */
 
 .card-custom {
     background-color: var(--cl-surface-card);
@@ -571,9 +571,9 @@ body {
     color: #b91c1c;
 }
 
-/* =========================================================
+/* ===============
    INICIO (InicioAdmin.aspx)
-   ========================================================= */
+   =============== */
 
 /* Accesos rápidos */
 .card-quick-action {
@@ -809,9 +809,9 @@ body {
         pointer-events: none;
     }
 
-/* =========================================================
+/* ===============
    TURNOS (Turnos.aspx)
-   ========================================================= */
+   =============== */
 
 .page-tag {
     background-color: #ddfbff;
@@ -1107,9 +1107,9 @@ body {
     padding-left: 2rem;
 }
 
-/* =========================================================
+/* ===============
    IMPRESIÓN
-   ========================================================= */
+   =============== */
 @media print {
     .sidebar-custom,
     .topbar-custom,
@@ -1123,9 +1123,9 @@ body {
     }
 }
 
-/* =========================================================
+/* ===============
    SOBRESCRITURAS DE TEMA & PAGINACIÓN (Paleta Teal/Navy)
-   ========================================================= */
+   =============== */
 
 .btn-primary {
     background-color: var(--cl-teal-primary) !important;
@@ -1514,12 +1514,12 @@ tr.pagination-container td {
 }
 
 
-/* =========================================================
+/* ===============
    TURNO CONFIRMADO (TurnoConfirmado.aspx)
    Todo va dentro de .turno-confirmado: así las variables y la clase
    .card-custom (que ya existe arriba con otro estilo) solo cambian
    dentro de esta página.
-   ========================================================= */
+   =============== */
 
 .turno-confirmado {
     --cl-primary: #0E7C86;
@@ -1639,10 +1639,10 @@ tr.pagination-container td {
     accent-color: var(--cl-primary);
 }
 
-/* =========================================================
+/* ===============
    TURNOS DE TRABAJO (TurnosTrabajo.aspx)
    Todo va dentro de .turnos-trabajo para no afectar otras páginas.
-   ========================================================= */
+   =============== */
 
 .turnos-trabajo .tt-tag {
     background-color: #cbdeff;

@@ -6,7 +6,7 @@
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="d-flex flex-column gap-4">
 
-        <!-- ===================== 1. BIENVENIDA ===================== -->
+        <!--  1. BIENVENIDA  -->
         <section class="card-custom p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div class="d-flex flex-column">
                 <div class="d-flex align-items-center gap-2">
@@ -40,7 +40,7 @@
             </div>
         </section>
 
-        <!-- ===================== 2. ACCESOS RÁPIDOS ===================== -->
+        <!--  2. ACCESOS RÁPIDOS  -->
         <section class="row g-3">
             <div class="col-12 col-sm-6 col-lg-3">
                 <asp:HyperLink ID="lnkNuevoTurno" runat="server" NavigateUrl="~/NuevoTurno.aspx" CssClass="card-quick-action card-quick-action-primary w-100">
@@ -92,7 +92,7 @@
             </div>
         </section>
 
-        <!-- ===================== 3. INDICADORES DEL DÍA ===================== -->
+        <!--  3. INDICADORES DEL DÍA  -->
         <section class="row g-3">
 
             <!-- Turnos de hoy -->
@@ -193,7 +193,7 @@
             </div>
         </section>
 
-        <!-- ===================== 4. TURNOS DE HOY ===================== -->
+        <!--  4. TURNOS DE HOY  -->
         <section class="card-custom">
 
             <!-- Título, contador y filtros -->

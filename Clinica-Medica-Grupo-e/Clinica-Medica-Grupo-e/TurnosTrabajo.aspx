@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Turnos de Trabajo" Language="C#" MasterPageFile="~/AdminRecep.Master" AutoEventWireup="true" CodeBehind="TurnosTrabajo.aspx.cs" Inherits="Clinica_Medica_Grupo_e.TurnosTrabajo" %>
+﻿<%@ Page Title="Turnos de Trabajo" Language="C#" MasterPageFile="~/AdminRecep.Master" AutoEventWireup="true" MaintainScrollPositionOnPostback="true" CodeBehind="TurnosTrabajo.aspx.cs" Inherits="Clinica_Medica_Grupo_e.TurnosTrabajo" %>
 
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -6,7 +6,7 @@
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="turnos-trabajo d-flex flex-column gap-4">
 
-        <!-- ===================== 1. ENCABEZADO ===================== -->
+        <!--  1. ENCABEZADO  -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <!-- ===================== 2. TARJETAS KPI ===================== -->
+        <!--  2. TARJETAS KPI  -->
         <%-- Los anchos de las barras (style="width: …") los puede cambiar el code-behind con barKpiX.Style["width"] = "…%" --%>
         <div class="row g-3">
             <div class="col-12 col-sm-6 col-xl-3">
@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <!-- ===================== 3. TABLA + FORMULARIO ===================== -->
+        <!--  3. TABLA + FORMULARIO  -->
         <div class="row g-4 align-items-start">
 
             <!-- Columna izquierda: tabla -->
@@ -145,15 +145,9 @@
                         <div class="d-flex align-items-center gap-2">
                             <%-- Estado (columna Activo). CommandArgument = Activos | Inactivos | Todos --%>
                             <div class="tt-tabs d-flex p-1 bg-light rounded-3" role="group">
-                                <asp:LinkButton ID="btnTabActivos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Activos" CssClass="tt-tab tt-tab-activa">
-                                    <span>Activos (<asp:Label ID="lblCantActivos" runat="server" Text="5"></asp:Label>)</span>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="btnTabInactivos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Inactivos" CssClass="tt-tab">
-                                    <span>Inactivos (<asp:Label ID="lblCantInactivos" runat="server" Text="0"></asp:Label>)</span>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="btnTabTodos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Todos" CssClass="tt-tab">
-                                    <span>Todos</span>
-                                </asp:LinkButton>
+                                <asp:LinkButton ID="btnTabActivos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Activos" CssClass="tt-tab tt-tab-activa" Text="Activos (0)"></asp:LinkButton>
+                                <asp:LinkButton ID="btnTabInactivos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Inactivos" CssClass="tt-tab" Text="Inactivos (0)"></asp:LinkButton>
+                                <asp:LinkButton ID="btnTabTodos" runat="server" OnCommand="FiltroEstado_Command" CommandArgument="Todos" CssClass="tt-tab" Text="Todos"></asp:LinkButton>
                             </div>
                             <asp:LinkButton ID="btnFiltrar" runat="server" OnClick="btnFiltrar_Click" CssClass="btn btn-light btn-sm p-2 rounded-3 d-flex" ToolTip="Buscar">
                                 <span class="material-symbols-outlined icon-20">filter_list</span>
@@ -238,9 +232,8 @@
                                                         <span class="material-symbols-outlined icon-18">content_copy</span>
                                             </asp:LinkButton>
                                             <asp:LinkButton ID="btnCambiarEstado" runat="server" CommandName="CambiarEstado" CommandArgument='<%# Eval("IdTurnoTrabajo") %>'
-                                                CssClass="btn btn-link text-secondary p-1" ToolTip='<%# Eval("AccionEstadoTexto") %>' OnClientClick='<%# Eval("ConfirmarScript") %>'>
-                                                        <span class="material-symbols-outlined icon-18"><%#: Eval("AccionEstadoIcono") %></span>
-                                            </asp:LinkButton>
+                                                CssClass="btn btn-link text-secondary p-1" ToolTip='<%# Eval("AccionEstadoTexto") %>' OnClientClick='<%# Eval("ConfirmarScript") %>'
+                                                Text='<%# "<span class=\"material-symbols-outlined icon-18\">" + Eval("AccionEstadoIcono") + "</span>" %>'></asp:LinkButton>
 
                                         </div>
                                     </td>
@@ -337,14 +330,14 @@
                         <div class="row g-2">
                             <div class="col-6">
                                 <asp:Label ID="lblHoraEntrada" runat="server" AssociatedControlID="ddlHoraEntrada" CssClass="form-label fw-semibold fs-13">Hora de entrada <span class="text-danger">*</span></asp:Label>
-                                <asp:DropDownList ID="ddlHoraEntrada" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlHora_SelectedIndexChanged"
+                                <asp:DropDownList ID="ddlHoraEntrada" runat="server"
                                     CssClass="form-select form-select-sm font-monospace">
                                 </asp:DropDownList>
                                 <span class="text-muted fs-12">Inicio de atención</span>
                             </div>
                             <div class="col-6">
                                 <asp:Label ID="lblHoraSalida" runat="server" AssociatedControlID="ddlHoraSalida" CssClass="form-label fw-semibold fs-13">Hora de salida <span class="text-danger">*</span></asp:Label>
-                                <asp:DropDownList ID="ddlHoraSalida" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlHora_SelectedIndexChanged"
+                                <asp:DropDownList ID="ddlHoraSalida" runat="server"
                                     CssClass="form-select form-select-sm font-monospace">
                                 </asp:DropDownList>
                                 <span class="text-muted fs-12">Cierre de agenda</span>

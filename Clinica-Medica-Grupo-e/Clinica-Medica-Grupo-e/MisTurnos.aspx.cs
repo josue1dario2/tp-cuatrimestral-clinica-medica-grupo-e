@@ -17,9 +17,9 @@ namespace Clinica_Medica_Grupo_e
         private dominio.Medico medico;
         private List<Turno> turnosSemana = new List<Turno>();
 
-        /// <summary>
+        
         /// Día que se está mirando. Se guarda en ViewState para que sobreviva a los PostBack.
-        /// </summary>
+        
         private DateTime FechaSeleccionada
         {
             get { return ViewState["FechaSeleccionada"] == null ? DateTime.Today : (DateTime)ViewState["FechaSeleccionada"]; }
@@ -32,10 +32,8 @@ namespace Clinica_Medica_Grupo_e
                 CargarAgenda();
         }
 
-        // =====================================================================
         // Carga principal
-        // =====================================================================
-
+        
         private void CargarAgenda()
         {
             int idMedico;
@@ -99,9 +97,9 @@ namespace Clinica_Medica_Grupo_e
             phContenido.Visible = false;
         }
 
-        // =====================================================================
+        
         // Encabezado
-        // =====================================================================
+        
 
         private void MostrarDatosMedico()
         {
@@ -124,9 +122,9 @@ namespace Clinica_Medica_Grupo_e
                 master.MostrarMedico(medico.NombreCompleto, especialidades);
         }
 
-        // =====================================================================
+        
         // Semana
-        // =====================================================================
+        
 
         private static DateTime InicioDeSemana(DateTime fecha)
         {
@@ -177,9 +175,9 @@ namespace Clinica_Medica_Grupo_e
             lblFechaSeleccionada.Text = FechaSeleccionada == DateTime.Today ? "Hoy - " + textoFecha : textoFecha;
         }
 
-        // =====================================================================
+        
         // Métricas del día
-        // =====================================================================
+        
 
         private void MostrarMetricas(List<Turno> turnosDelDia)
         {
@@ -200,9 +198,9 @@ namespace Clinica_Medica_Grupo_e
             lblMetricaPorcentaje.Text = porcentaje + "% de la jornada completada";
         }
 
-        // =====================================================================
+        
         // Tabla de turnos
-        // =====================================================================
+        
 
         private void ActualizarFiltroEstado(List<Turno> turnosDelDia)
         {
@@ -259,9 +257,8 @@ namespace Clinica_Medica_Grupo_e
             return resultado.ToList();
         }
 
-        /// <summary>
         /// Convierte un turno en los campos que espera el Repeater rptMisTurnos.
-        /// </summary>
+        
         private object ArmarFila(Turno turno, bool esProximo)
         {
             string estadoTexto, estadoCss, estadoIcono;
@@ -340,18 +337,18 @@ namespace Clinica_Medica_Grupo_e
             return estado == EstadoTurno.Nuevo || estado == EstadoTurno.Reprogramado;
         }
 
-        /// <summary>
+        
         /// "35111222" -> "35.111.222".
-        /// </summary>
+        
         private static string FormatearDni(string dni)
         {
             long numero;
             return long.TryParse(dni, out numero) ? numero.ToString("#,0", Cultura) : dni;
         }
 
-        // =====================================================================
+        
         // Eventos
-        // =====================================================================
+        
 
         protected void btnExportarAgenda_Click(object sender, EventArgs e) { }
 

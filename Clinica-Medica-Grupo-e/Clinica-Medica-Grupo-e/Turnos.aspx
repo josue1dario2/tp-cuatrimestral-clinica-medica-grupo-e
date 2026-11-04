@@ -11,7 +11,7 @@
         <asp:Label ID="lblError" runat="server"></asp:Label>
     </asp:Panel>
 
-    <!-- ===================== 1. ENCABEZADO ===================== -->
+    <!--  1. ENCABEZADO -->
     <div class="d-flex flex-column gap-4 mb-4">
         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             <div>
@@ -24,6 +24,7 @@
                 <p class="text-muted mb-0 fs-14">Control operativo de citaciones, reprogramaciones y trazabilidad asistencial en consultorios externos.</p>
             </div>
             <div class="no-print d-flex align-items-center gap-2 flex-wrap">
+
                 <%-- Imprimir es solo del navegador, no necesita PostBack --%>
                 <button type="button" class="btn-print btn btn-outline-secondary d-flex align-items-center gap-2 bg-white text-dark shadow-sm px-3 py-2 fw-medium" onclick="window.print();">
                     <span class="material-symbols-outlined text-cl-primary">print</span>
@@ -105,7 +106,7 @@
         </div>
     </div>
 
-    <!-- ===================== 2. FILTROS ===================== -->
+    <!--  2. FILTROS -->
     <asp:Panel ID="pnlFiltros" runat="server" DefaultButton="btnBuscarTurnos" CssClass="no-print card-custom p-4 mb-4">
         <div class="d-flex align-items-center justify-content-between mb-3 pb-1">
             <div class="d-flex align-items-center gap-2">
@@ -126,7 +127,9 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4 col-xl-2">
                 <asp:Label ID="lblFiltroMedico" runat="server" AssociatedControlID="ddlMedico" CssClass="filter-label form-label text-muted fw-medium mb-1" Text="Médico / Profesional"></asp:Label>
+                
                 <%-- Se carga desde la base; AppendDataBoundItems mantiene la opción "Todos" --%>
+
                 <asp:DropDownList ID="ddlMedico" runat="server" AppendDataBoundItems="true" CssClass="filter-input form-select form-select-sm">
                     <asp:ListItem Value="0" Text="Todos los médicos"></asp:ListItem>
                 </asp:DropDownList>
@@ -172,7 +175,7 @@
         </div>
     </asp:Panel>
 
-    <!-- ===================== 3. TABLA DE TURNOS ===================== -->
+    <!--  3. TABLA DE TURNOS  -->
     <div class="card-custom overflow-hidden mb-4">
         <div class="table-responsive">
             <%--
@@ -279,7 +282,9 @@
                 <asp:LinkButton ID="btnPaginaAnterior" runat="server" OnClick="btnPaginaAnterior_Click" CssClass="btn-page text-secondary" ToolTip="Página anterior">
                     <span class="material-symbols-outlined icon-18">chevron_left</span>
                 </asp:LinkButton>
+
                 <%-- Campos esperados: Numero, Css ("" | active) --%>
+
                 <asp:Repeater ID="rptPaginas" runat="server" OnItemCommand="rptPaginas_ItemCommand">
                     <ItemTemplate>
                         <asp:LinkButton ID="lnkPagina" runat="server" CssClass='<%# "btn-page border " + Eval("Css") %>'
@@ -293,8 +298,9 @@
         </div>
     </div>
 
-    <!-- ===================== MODAL: CANCELAR TURNO ===================== -->
+    <!-- MODAL: CANCELAR TURNO -->
     <%-- Se abre desde el code-behind al presionar "Cancelar" en una fila (ver Turnos.aspx.cs) --%>
+
     <div class="modal fade" id="modalCancelar" tabindex="-1" aria-labelledby="modalCancelarLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-3">
@@ -370,7 +376,7 @@
         </div>
     </div>
 
-    <!-- ===================== MODAL: DETALLE Y TRAZABILIDAD ===================== -->
+    <!--  MODAL: DETALLE Y TRAZABILIDAD  -->
     <%-- Se abre desde el code-behind al presionar "Ver" en una fila (ver Turnos.aspx.cs) --%>
     <div class="modal fade" id="modalDetalle" tabindex="-1" aria-labelledby="modalDetalleLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">

@@ -1,8 +1,8 @@
-﻿/* =========================================================
+﻿/* ===============
    Clínica - Portal Médico
    Estilos de la Master Page (Medico.Master) y del panel de inicio.
    Se carga DESPUÉS de Bootstrap para poder sobrescribir sus variables.
-   ========================================================= */
+   =============== */
 
 :root {
     --bs-primary: #0E7C86;
@@ -38,9 +38,9 @@ body {
 .text-cl-success { color: var(--cl-success) !important; }
 .bg-cl-soft      { background-color: var(--cl-bg-soft) !important; }
 
-/* =========================================================
+/* ===============
    LAYOUT (Master Page)
-   ========================================================= */
+   =============== */
 
 .cl-sidebar {
     position: fixed;
@@ -168,9 +168,9 @@ body {
     color: var(--bs-primary);
 }
 
-/* =========================================================
+/* ===============
    COMPONENTES COMUNES
-   ========================================================= */
+   =============== */
 
 .cl-card {
     background-color: var(--cl-surface-card);
@@ -249,9 +249,9 @@ body {
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 130, 55, 0); }
 }
 
-/* =========================================================
+/* ===============
    PANEL DE INICIO (InicioMedico.aspx)
-   ========================================================= */
+   =============== */
 
 .cl-status-pill {
     background-color: var(--cl-border-subtle);
@@ -379,9 +379,9 @@ body {
     font-size: 0.75rem;
 }
 
-/* =========================================================
+/* ===============
    MIS TURNOS (MisTurnos.aspx)
-   ========================================================= */
+   =============== */
 
 /* Encabezado de sección */
 .cl-section-icon {
@@ -664,9 +664,9 @@ body {
 .cl-text-13 { font-size: 13px; }
 .cl-text-12 { font-size: 12px; }
 
-/* =========================================================
+/* ===============
    IMPRESIÓN (botón "Imprimir agenda")
-   ========================================================= */
+   =============== */
 @media print {
     .cl-sidebar,
     .cl-header,
