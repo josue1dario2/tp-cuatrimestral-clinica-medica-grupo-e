@@ -120,6 +120,37 @@ namespace negocio
                             );
                         END");
 
+                    EjecutarComando(conexion, @"
+                        IF OBJECT_ID('dbo.ObrasSociales', 'U') IS NULL
+                        BEGIN
+                            CREATE TABLE [dbo].[ObrasSociales](
+                                [IdObraSocial] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                                [Nombre] VARCHAR(100) NOT NULL,
+                                [Sigla] VARCHAR(30) NULL,
+                                [Activo] BIT NOT NULL DEFAULT 1
+                            );
+                        END");
+
+                    EjecutarComando(conexion, @"
+                        IF OBJECT_ID('dbo.PlanesObraSocial', 'U') IS NULL
+                        BEGIN
+                            CREATE TABLE [dbo].[PlanesObraSocial](
+                                [IdPlan] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                                [IdObraSocial] INT NOT NULL,
+                                [NombrePlan] VARCHAR(100) NOT NULL,
+                                [Activo] BIT NOT NULL DEFAULT 1,
+                                CONSTRAINT FK_Planes_ObrasSociales FOREIGN KEY (IdObraSocial) REFERENCES [dbo].[ObrasSociales](IdObraSocial)
+                            );
+                        END");
+
+                    EjecutarComando(conexion, @"
+                        IF COL_LENGTH('dbo.TURNOS', 'IdObraSocial') IS NULL
+                        BEGIN
+                            ALTER TABLE [dbo].[TURNOS] ADD [IdObraSocial] [int] NULL;
+                            ALTER TABLE [dbo].[TURNOS] ADD [IdPlan] [int] NULL;
+                            ALTER TABLE [dbo].[TURNOS] ADD [NumeroAfiliado] [varchar](50) NULL;
+                        END");
+
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarEspecialidades', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarEspecialidades]");
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedListarEspecialidades] AS
@@ -131,6 +162,12 @@ namespace negocio
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedAltaEspecialidad] @Descripcion VARCHAR(50) AS
                         BEGIN
+                            SET NOCOUNT ON;
+                            IF EXISTS (SELECT 1 FROM ESPECIALIDADES WHERE LTRIM(RTRIM(LOWER(Descripcion))) = LTRIM(RTRIM(LOWER(@Descripcion))))
+                            BEGIN
+                                RAISERROR('Ya existe una especialidad registrada con la descripción ingresada.', 16, 1);
+                                RETURN;
+                            END
                             INSERT INTO ESPECIALIDADES (Descripcion, Activo) VALUES (@Descripcion, 1);
                         END");
 
@@ -138,6 +175,12 @@ namespace negocio
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedModificarEspecialidad] @Id INT, @Descripcion VARCHAR(50) AS
                         BEGIN
+                            SET NOCOUNT ON;
+                            IF EXISTS (SELECT 1 FROM ESPECIALIDADES WHERE LTRIM(RTRIM(LOWER(Descripcion))) = LTRIM(RTRIM(LOWER(@Descripcion))) AND Id <> @Id)
+                            BEGIN
+                                RAISERROR('Ya existe otra especialidad registrada con la descripción ingresada.', 16, 1);
+                                RETURN;
+                            END
                             UPDATE ESPECIALIDADES SET Descripcion = @Descripcion WHERE Id = @Id;
                         END");
 
@@ -155,7 +198,6 @@ namespace negocio
                             SELECT Id, Nombre, HoraEntrada, HoraSalida FROM TURNOS_TRABAJO WHERE Activo = 1 ORDER BY HoraEntrada ASC;
                         END");
 
-                    // ----- ABM de Turnos de Trabajo -----
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarTurnosTrabajoGestion', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarTurnosTrabajoGestion]");
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedListarTurnosTrabajoGestion] AS
@@ -438,12 +480,54 @@ namespace negocio
                             VALUES ('Juan', 'Pérez', '35111222', '19900515', 'juan.perez@email.com', '261-555-1234', 'Av. San Martín 123', 1),
                                    ('María', 'Gómez', '40333444', '19971020', 'maria.gomez@email.com', '261-555-5678', 'Belgrano 456', 1);
                         END");
+
+                    EjecutarComando(conexion, @"
+                        IF NOT EXISTS (SELECT 1 FROM ObrasSociales)
+                        BEGIN
+                            SET IDENTITY_INSERT ObrasSociales ON;
+                            INSERT INTO ObrasSociales (IdObraSocial, Nombre, Sigla, Activo) VALUES
+                            (1,  'Particular', 'PARTICULAR', 1),
+                            (2,  'OSDE', 'OSDE', 1),
+                            (3,  'Swiss Medical', 'SMG', 1),
+                            (4,  'Avalian', 'AVALIAN', 1),
+                            (5,  'Galeno', 'GALENO', 1),
+                            (6,  'Medifé', 'MEDIFE', 1),
+                            (7,  'SanCor Salud', 'SANCOR', 1),
+                            (8,  'OMINT', 'OMINT', 1),
+                            (9,  'Prevención Salud', 'PREVENCION', 1),
+                            (10, 'Federada Salud', 'FEDERADA', 1),
+                            (11, 'Medicus', 'MEDICUS', 1),
+                            (12, 'Accord Salud', 'ACCORD', 1),
+                            (13, 'Unión Personal', 'UP', 1),
+                            (14, 'OSPe', 'OSPE', 1),
+                            (15, 'Jerárquicos Salud', 'JERARQUICOS', 1),
+                            (16, 'OSDEPYM', 'OSDEPYM', 1),
+                            (17, 'Hospital Alemán', 'PMHA', 1);
+                            SET IDENTITY_INSERT ObrasSociales OFF;
+
+                            INSERT INTO PlanesObraSocial (IdObraSocial, NombrePlan, Activo) VALUES
+                            (1, 'Particular', 1),
+                            (2, 'OSDE 210', 1), (2, 'OSDE 310', 1), (2, 'OSDE 410', 1), (2, 'OSDE 450', 1), (2, 'OSDE 510', 1),
+                            (3, 'SMG02', 1), (3, 'SMG20', 1), (3, 'SMG30', 1), (3, 'SMG40', 1), (3, 'SMG50', 1),
+                            (4, 'Plan Cerca', 1), (4, 'Plan Integral', 1), (4, 'Plan Superior', 1), (4, 'Plan Selecta', 1),
+                            (5, 'Plan 220', 1), (5, 'Plan 330', 1), (5, 'Plan 440', 1), (5, 'Plan 550', 1),
+                            (6, 'Bronce Classic', 1), (6, 'Bronce', 1), (6, 'Plata', 1), (6, 'Oro', 1), (6, 'Platinum', 1),
+                            (7, 'Plan 1000', 1), (7, 'Plan 1500', 1), (7, 'Plan 3000', 1), (7, 'Plan 4000', 1), (7, 'Plan 5000', 1),
+                            (8, 'Omint Vos', 1), (8, 'Omint Clásico', 1), (8, 'Omint Global', 1), (8, 'Omint Premium', 1),
+                            (9, 'Plan A1', 1), (9, 'Plan A2', 1), (9, 'Plan A4', 1), (9, 'Plan A5', 1), (9, 'Plan A6', 1),
+                            (10, 'Plan 4000', 1), (10, 'Plan 3000', 1), (10, 'Plan 2000', 1), (10, 'Plan 1000', 1),
+                            (11, 'Plan Conecta', 1), (11, 'Plan Integra', 1), (11, 'Plan Family', 1), (11, 'Plan Celeste', 1), (11, 'Plan Azul', 1),
+                            (12, 'Accord 1.5', 1), (12, 'Accord 2.2', 1), (12, 'Accord 3.2', 1), (12, 'Accord 4.2', 1),
+                            (13, 'Plan PMO', 1), (13, 'Plan Classic', 1), (13, 'Plan Familiar', 1),
+                            (14, 'OSPe Joven', 1), (14, 'Plan A-425', 1), (14, 'Plan A-604', 1), (14, 'Plan A-704', 1),
+                            (15, 'Plan Joven', 1), (15, 'PMI Monotributo', 1), (15, 'PMI 2886', 1), (15, 'PMI 3000', 1),
+                            (16, 'Plan 800', 1), (16, 'Plan 2000', 1), (16, 'Plan 3000', 1), (16, 'Plan 4000', 1),
+                            (17, 'Plan L200', 1), (17, 'Plan L300', 1), (17, 'Plan L600', 1), (17, 'Plan L700', 1);
+                        END");
                 }
             }
             catch (Exception)
             {
-                // Si la BD aún no fue creada manualmente o la cadena apunta a un servidor no disponible,
-                // no bloqueamos el ciclo de vida de la aplicación.
             }
         }
 

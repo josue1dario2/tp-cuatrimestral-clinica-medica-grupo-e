@@ -50,14 +50,51 @@ namespace negocio
             return lista.Count > 0 ? lista[0] : null;
         }
 
+        public bool existe(string descripcion, int id = 0)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT COUNT(1) FROM ESPECIALIDADES WHERE LTRIM(RTRIM(LOWER(Descripcion))) = LTRIM(RTRIM(LOWER(@Descripcion)))";
+                if (id > 0)
+                {
+                    consulta += " AND Id <> @Id";
+                    datos.setearParametro("@Id", id);
+                }
+
+                datos.setearConsulta(consulta);
+                datos.setearParametro("@Descripcion", descripcion.Trim());
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return Convert.ToInt32(datos.Lector[0]) > 0;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public void agregar(Especialidad nuevo)
         {
+            if (existe(nuevo.Descripcion))
+            {
+                throw new Exception("Ya existe una especialidad registrada con la descripción '" + nuevo.Descripcion.Trim() + "'.");
+            }
+
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
                 datos.setearProcedimiento("storedAltaEspecialidad");
-                datos.setearParametro("@Descripcion", nuevo.Descripcion);
+                datos.setearParametro("@Descripcion", nuevo.Descripcion.Trim());
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
@@ -72,13 +109,18 @@ namespace negocio
 
         public void modificar(Especialidad mod)
         {
+            if (existe(mod.Descripcion, mod.Id))
+            {
+                throw new Exception("Ya existe otra especialidad registrada con la descripción '" + mod.Descripcion.Trim() + "'.");
+            }
+
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
                 datos.setearProcedimiento("storedModificarEspecialidad");
                 datos.setearParametro("@Id", mod.Id);
-                datos.setearParametro("@Descripcion", mod.Descripcion);
+                datos.setearParametro("@Descripcion", mod.Descripcion.Trim());
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

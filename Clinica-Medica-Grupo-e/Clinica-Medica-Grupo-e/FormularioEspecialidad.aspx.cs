@@ -59,19 +59,34 @@ namespace Clinica_Medica_Grupo_e
             {
                 lblErrorValidacion.Text = "La descripción de la especialidad es obligatoria.";
                 lblErrorValidacion.Visible = true;
+                txtDescripcion.Focus();
                 return;
             }
 
+            string descripcion = txtDescripcion.Text.Trim();
+            int id = 0;
+            if (Request.QueryString["id"] != null)
+                int.TryParse(Request.QueryString["id"], out id);
+
             EspecialidadNegocio negocio = new EspecialidadNegocio();
+
+            if (negocio.existe(descripcion, id))
+            {
+                lblErrorValidacion.Text = string.Format("La especialidad \"{0}\" ya se encuentra registrada en el sistema. Ingrese una diferente.", descripcion);
+                lblErrorValidacion.Visible = true;
+                txtDescripcion.Focus();
+                return;
+            }
+
             Especialidad especialidad = new Especialidad();
 
             try
             {
-                especialidad.Descripcion = txtDescripcion.Text.Trim();
+                especialidad.Descripcion = descripcion;
 
-                if (Request.QueryString["id"] != null)
+                if (id > 0)
                 {
-                    especialidad.Id = int.Parse(Request.QueryString["id"]);
+                    especialidad.Id = id;
                     negocio.modificar(especialidad);
                 }
                 else
@@ -83,6 +98,14 @@ namespace Clinica_Medica_Grupo_e
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("Ya existe") || ex.Message.Contains("duplicada") || ex.Message.Contains("UNIQUE"))
+                {
+                    lblErrorValidacion.Text = string.Format("La especialidad \"{0}\" ya se encuentra registrada.", descripcion);
+                    lblErrorValidacion.Visible = true;
+                    txtDescripcion.Focus();
+                    return;
+                }
+
                 Session.Add("error", ex.ToString());
                 Response.Redirect("Error.aspx", false);
             }
