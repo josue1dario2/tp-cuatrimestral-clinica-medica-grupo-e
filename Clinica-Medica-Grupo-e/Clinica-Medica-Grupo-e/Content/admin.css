@@ -1910,3 +1910,216 @@ tr.pagination-container td {
     margin-top: 0.25em;
     accent-color: var(--cl-teal-primary);
 }
+
+/* ===============
+   ESTADÍSTICAS (Estadisticas.aspx)
+   Todo va dentro de .estadisticas para no afectar otras páginas.
+   =============== */
+
+.estadisticas .es-etiqueta {
+    letter-spacing: 0.05em;
+}
+
+/* Filtros: ícono dentro del select */
+.estadisticas .es-icono-select {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.estadisticas .es-select {
+    padding-left: 2.4rem;
+    background-color: var(--cl-surface-low);
+}
+
+/* Tarjetas KPI */
+.estadisticas .es-kpi-valor {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.estadisticas .es-icono-gris {
+    background-color: var(--cl-surface-container);
+    color: var(--cl-text-secondary);
+}
+
+.estadisticas .es-tendencia {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.estadisticas .es-tendencia-positiva {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.estadisticas .es-tendencia-negativa {
+    background-color: var(--cl-danger-bg);
+    color: var(--cl-danger);
+}
+
+.estadisticas .es-icono-tendencia {
+    font-size: 14px;
+}
+
+/* Gráfico 1: donut por estado */
+.estadisticas .es-donut {
+    width: 208px;
+    height: 208px;
+}
+
+.estadisticas .es-donut-svg {
+    transform: rotate(-90deg);
+}
+
+.estadisticas .es-donut-leyenda {
+    font-size: 10px;
+}
+
+.estadisticas .es-sin-clic {
+    pointer-events: none;
+}
+
+/* Leyenda: necesita al menos 220px al lado del donut; si no los tiene, baja (flex-wrap) */
+.estadisticas .es-leyenda {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+.estadisticas .es-fila-leyenda {
+    background-color: var(--cl-surface-low);
+}
+
+.estadisticas .es-punto {
+    width: 10px;
+    height: 10px;
+}
+
+.estadisticas .es-col-porcentaje {
+    min-width: 40px;
+}
+
+/* Gráfico 2: barras horizontales por especialidad */
+.estadisticas .es-col-cantidad {
+    min-width: 36px;
+}
+
+.estadisticas .es-barra {
+    width: 100%;
+    height: 12px;
+    background-color: var(--cl-surface-low);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.estadisticas .es-barra-relleno {
+    height: 100%;
+    background-color: var(--cl-teal-primary);
+    border-radius: 9999px;
+}
+
+/* Gráfico 3: columnas por médico */
+.estadisticas .es-punto-chico {
+    width: 8px;
+    height: 8px;
+    background-color: var(--cl-teal-primary);
+}
+
+.estadisticas .es-columnas {
+    min-width: 680px;
+    height: 260px;
+    background-color: rgba(239, 244, 255, 0.45);
+}
+
+.estadisticas .es-columna {
+    width: 14%;
+}
+
+.estadisticas .es-columna-fondo {
+    width: 100%;
+    max-width: 56px;
+    height: 100%;
+    background-color: rgba(14, 124, 134, 0.18);
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: background-color 0.2s ease;
+}
+
+    .estadisticas .es-columna-fondo:hover {
+        background-color: rgba(14, 124, 134, 0.28);
+    }
+
+.estadisticas .es-columna-relleno {
+    width: 100%;
+    background-color: var(--cl-teal-primary);
+    border-radius: 12px 12px 0 0;
+}
+
+/* Avatar con las iniciales del médico (reemplaza la foto del HTML) */
+.estadisticas .es-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cl-surface-high);
+    color: var(--cl-teal-primary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.estadisticas .es-texto-medico {
+    max-width: 90px;
+}
+
+/* Matriz de rendimiento */
+.estadisticas .es-icono-fila {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+}
+
+.estadisticas .es-tabla th {
+    background-color: rgba(239, 244, 255, 0.7);
+    color: var(--cl-text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 16px;
+    border-top: none;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.estadisticas .es-tabla td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+}
+
+.estadisticas .es-tabla tbody tr:hover td {
+    background-color: rgba(239, 244, 255, 0.4);
+}
+
+.estadisticas .es-tabla tfoot td {
+    background-color: var(--cl-surface-low);
+    font-weight: 700;
+    padding: 16px;
+    border-top: 1px solid #cbd5e1;
+}
+
+.estadisticas .es-badge-total {
+    background-color: #16a34a;
+}
