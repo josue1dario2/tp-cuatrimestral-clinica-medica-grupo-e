@@ -183,22 +183,20 @@ BEGIN
 END
 GO
 
---actualizacion 5/11/2026 creacion de los procedimientos y modificaciones necesarias para Usuarios 
-USE CLINICA_DB
+--actualizacion 5/11/2026 creacion de los procedimientos y modificaciones necesarias para Usuarios
+USE CLINICA_DB;
 GO
 
-ALTER TABLE [dbo].[USUARIOS]
+IF COL_LENGTH('dbo.USUARIOS', 'NombreUsuario') IS NULL
+    ALTER TABLE dbo.USUARIOS ADD NombreUsuario VARCHAR(50) NULL;
+GO
 
-ADD NombreUsuario VARCHAR(50) NULL,
+IF COL_LENGTH('dbo.USUARIOS', 'UltimaConexion') IS NULL
+    ALTER TABLE dbo.USUARIOS ADD UltimaConexion DATETIME NULL;
+GO
 
-    UltimaConexion DATETIME NULL;
+UPDATE dbo.USUARIOS SET NombreUsuario = Email WHERE NombreUsuario IS NULL;
+GO
 
-UPDATE USUARIOS
-
-SET NombreUsuario=Email;
-
-ALTER TABLE USUARIOS
-
-ALTER COLUMN NombreUsuario VARCHAR (50) NOT NULL;
-
-SELECT *  from dbo.USUARIOS
+ALTER TABLE dbo.USUARIOS ALTER COLUMN NombreUsuario VARCHAR(50) NOT NULL;
+GO

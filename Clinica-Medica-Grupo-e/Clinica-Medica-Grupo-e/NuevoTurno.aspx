@@ -58,7 +58,7 @@
             </a>
         </div>
 
-        <asp:ScriptManager ID="ScriptManager1" runat="server" />
+        <%--<asp:ScriptManager ID="ScriptManager1" runat="server" />--%>
 
         <asp:UpdatePanel ID="updTurno" runat="server">
             <ContentTemplate>
