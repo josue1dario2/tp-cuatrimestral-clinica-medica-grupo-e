@@ -183,3 +183,22 @@ BEGIN
 END
 GO
 
+--actualizacion 5/11/2026 creacion de los procedimientos y modificaciones necesarias para Usuarios 
+USE CLINICA_DB
+GO
+
+ALTER TABLE [dbo].[USUARIOS]
+
+ADD NombreUsuario VARCHAR(50) NULL,
+
+    UltimaConexion DATETIME NULL;
+
+UPDATE USUARIOS
+
+SET NombreUsuario=Email;
+
+ALTER TABLE USUARIOS
+
+ALTER COLUMN NombreUsuario VARCHAR (50) NOT NULL;
+
+SELECT *  from dbo.USUARIOS

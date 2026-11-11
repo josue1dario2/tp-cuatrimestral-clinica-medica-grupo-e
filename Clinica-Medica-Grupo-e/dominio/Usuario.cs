@@ -13,10 +13,14 @@ namespace dominio
         public string Pass { get; set; }
         public TipoUsuario TipoUsuario { get; set; }
         public bool Activo { get; set; }
+        public string NombreUsuario { get; set; }
 
+        public DateTime? UltimaConexion { get; set; }
         public override string ToString()
         {
             return Email;
         }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
     }
 }

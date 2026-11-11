@@ -67,6 +67,7 @@
     <Content Include="Content\admin.css" />
     <Content Include="Content\medico.css" />
     <Content Include="AdminRecep.Master" />
+    <Content Include="FormularioModificarUsuario.aspx" />
     <Content Include="Master.Master" />
     <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
@@ -111,6 +112,13 @@
     </Compile>
     <Compile Include="Estadisticas.aspx.designer.cs">
       <DependentUpon>Estadisticas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioModificarUsuario.aspx.cs">
+      <DependentUpon>FormularioModificarUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormularioModificarUsuario.aspx.designer.cs">
+      <DependentUpon>FormularioModificarUsuario.aspx</DependentUpon>
     </Compile>
     <Compile Include="GestionUsuariosAdmin.aspx.cs">
       <DependentUpon>GestionUsuariosAdmin.aspx</DependentUpon>

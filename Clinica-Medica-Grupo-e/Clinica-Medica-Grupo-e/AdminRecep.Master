@@ -102,8 +102,9 @@
 </head>
 <body>
     <form id="form1" runat="server" class="m-0 p-0">
+        <asp:ScriptManager runat="server"  ID="ScriptManager1"/>
 
-        <!--  MENÚ LATERAL  -->
+        <!-- ===================== MENÚ LATERAL ===================== -->
         <aside class="sidebar-custom">
             <div class="d-flex flex-column">
 
@@ -180,7 +181,7 @@
             </div>
         </aside>
 
-        <!--  BARRA SUPERIOR  -->
+        <!-- ===================== BARRA SUPERIOR ===================== -->
         <header class="topbar-custom d-flex align-items-center justify-content-between px-4">
 
             <!-- Fecha y búsqueda global -->
@@ -220,7 +221,7 @@
             </div>
         </header>
 
-        <!--  CONTENIDO DE CADA PÁGINA  -->
+        <!-- ===================== CONTENIDO DE CADA PÁGINA ===================== -->
         <main class="main-wrapper">
             <div class="main-container container-fluid px-4 py-4">
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">

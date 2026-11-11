@@ -19,7 +19,6 @@
                     Administración de cuentas de acceso, roles del personal y asignación de profesionales médicos a consultorios y agendas de turnos.
                 </p>
             </div>
-            <div>
 
                 <!-- Botón que activa el Offcanvas / Drawer -->
                 <button aria-controls="drawerNuevoUsuario" class="btn btn-teal" data-bs-target="#drawerNuevoUsuario" data-bs-toggle="offcanvas" id="btnNuevoUsuario" type="button">
@@ -28,6 +27,9 @@
                 </button>
             </div>
         </div>
+
+        <asp:UpdatePanel runat="server" ID="updFiltros" UpdateMode="Conditional">
+        <ContentTemplate>
 
         <!-- Barra de Filtros Rápidos -->
         <div class="card-custom p-3">
@@ -39,7 +41,7 @@
                             <span class="material-symbols-outlined fs-6">search</span>
                         </span>
 
-                        <asp:TextBox runat="server" ID="txtBuscarUsuario" CssClass="form-control bg-light border-0" Style="font-size: 14px;" Placeholder="Buscar por usuario, nombre o email.." />
+                        <asp:TextBox runat="server" ID="txtBuscarUsuario" CssClass="form-control bg-light border-0" Style="font-size: 14px;" Placeholder="Buscar por usuario, nombre o email.."  OnTextChanged="txtBuscarUsuario_TextChanged" AutoPostBack="true"/>
                     </div>
                 </div>
                 <!-- Filtros select -->
@@ -47,7 +49,7 @@
                     <div class="d-flex align-items-center gap-2 bg-light px-2.5 py-1 rounded-3">
                         <span class="material-symbols-outlined fs-6 text-secondary">badge</span>
 
-                        <asp:DropDownList runat="server" ID="ddlfiltrobuscarrol" CssClass="form-select form-select-sm border-0 bg-transparent fw-medium">
+                        <asp:DropDownList runat="server" ID="ddlfiltrobuscarrol" CssClass="form-select form-select-sm border-0 bg-transparent fw-medium" AutoPostBack="true" OnSelectedIndexChanged="ddlfiltrobuscarrol_SelectedIndexChanged">
                             <asp:ListItem Text="Todos los roles" Value="" />
                             <asp:ListItem Text="Administradores" Value="1" />
                             <asp:ListItem Text="Recepcionistas" Value="2" />
@@ -60,7 +62,7 @@
                     <div class="d-flex align-items-center gap-2 bg-light px-2.5 py-1 rounded-3">
                         <span class="material-symbols-outlined fs-6 text-secondary">toggle_on</span>
 
-                        <asp:DropDownList runat="server" ID="ddlFiltroActividad" CssClass="form-select form-select-sm border-0 bg-transparent fw-medium">
+                        <asp:DropDownList runat="server" ID="ddlFiltroActividad" CssClass="form-select form-select-sm border-0 bg-transparent fw-medium" AutoPostBack="true" OnSelectedIndexChanged="ddlFiltroActividad_SelectedIndexChanged">
                             <asp:ListItem Text="Todos" Value="" />
                             <asp:ListItem Text="Activos" Value="1" />
                             <asp:ListItem Text="Inactivos" Value="0" />
@@ -70,15 +72,17 @@
 
 
 
-                    <asp:LinkButton runat="server" ID="BotonRestablecerFiltro" CssClass="btn btn-light btn-sm d-flex align-items-center justify-content-center p-2 rounded-3 text-secondary"> 
+                    <asp:LinkButton runat="server" ID="BotonRestablecerFiltro" CssClass="btn btn-light btn-sm d-flex align-items-center justify-content-center p-2 rounded-3 text-secondary" OnClick="BotonRestablecerFiltro_Click"> 
         <span class="material-symbols-outlined fs-6">filter_alt_off</span>
                     </asp:LinkButton>
                 </div>
             </div>
         </div>
     </div>
+                            
 
-
+            </ContentTemplate>
+    </asp:UpdatePanel>
 
     <!-- 2. Tarjetas de Métricas / Resumen Operativo -->
     <div class="row g-3 mb-4">
@@ -145,7 +149,9 @@
     </div>
 
 
-
+    <asp:UpdatePanel runat="server" ID="updUsuarios" UpdateMode="Conditional" >
+        <ContentTemplate>
+    
     <!-- 3. Tabla Principal de Usuarios -->
     <div class="card-custom overflow-hidden mb-4">
         <div class="table-responsive">
@@ -154,7 +160,8 @@
             <asp:GridView ID="dgvUsuarios" runat="server"
                 AutoGenerateColumns="false" DataKeyNames="Id"
                 CssClass="table table-custom mb-0 table-hover align-middle"
-                AllowPaging="true" PageSize="5">
+                AllowPaging="true" PageSize="5"
+                  OnPageIndexChanging="dgvUsuarios_PageIndexChanging">
 
                 <Columns>
                     <asp:TemplateField HeaderText="Usuario / Contacto"><%-- agregar el data field despues, tambien a usuario --%>
@@ -184,22 +191,56 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:BoundField HeaderText="Rol Asignado" DataField="TipoUsuario" />
-                    <asp:BoundField HeaderText="Médico Asociado" />
-                    <%-- agregar el data field despues   DataField=MedicoAsociado --%>
-                    <asp:BoundField HeaderText="Último Acceso" />
-                    <%-- agregar el data field despues --%>
-                    <asp:BoundField HeaderText="Estado" DataField="Activo" />
+                    <asp:TemplateField HeaderText="Rol Asignado">
+                        <ItemTemplate>
+                            <span class="small text-muted text-truncate">
+                                <%# Eval("TipoUsuario") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                     <asp:TemplateField HeaderText="Médico asociado">
+                        <ItemTemplate>
+                            <span class="small text-muted text-truncate">
+                            <%# Eval("Nombre") %> <%# Eval("Apellido") %>
+                              </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+
+                     <asp:TemplateField HeaderText="Último acceso">
+                        <ItemTemplate>
+                            <%# Eval("UltimaConexion") == null ? "..." : Eval("UltimaConexion", "{0:dd/MM/yyyy HH:mm}") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+
+
+
+                    <asp:TemplateField HeaderText="Estado">
+
+                        <ItemTemplate>
+                            <asp:CheckBox  runat="server" ID="chkEstado" 
+                                Checked='<%#Convert.ToBoolean(Eval("Activo")) %>' 
+                                 AutoPostBack="true"
+                                 OnCheckedChanged="chkEstado_CheckedChanged"/>
+
+                         </ItemTemplate>
+
+                     </asp:TemplateField>
+
+
+
                     <asp:TemplateField HeaderText="Acciones">
 
                         <ItemTemplate>
 
                             <div class="d-inline-flex gap-1">
-                                <asp:LinkButton runat="server" ID="btnEditar" CssClass="action-btn">
+                                <asp:LinkButton runat="server" ID="btnEditar" CssClass="action-btn" OnClick="btnEditar_Click">
                  <span class="material-symbols-outlined">edit</span>
                                 </asp:LinkButton>
 
-                                <asp:LinkButton runat="server" ID="btnRestablecer" CssClass="action-btn">
+                                <asp:LinkButton runat="server" ID="btnRestablecer" CssClass="action-btn" OnClick="btnRestablecer_Click">
                  <span class="material-symbols-outlined">key</span>
                                 </asp:LinkButton>
 
@@ -222,13 +263,17 @@
 
 
 
+
         </div>
         <!-- Paginación de Tabla -->
 
     </div>
-
+            </ContentTemplate>
+            </asp:UpdatePanel>
     <!-- 4. Drawer / Modal Lateral de "Nuevo Usuario" usando Offcanvas de Bootstrap 5.3.8 -->
     <div aria-labelledby="drawerNuevoUsuarioLabel" class="offcanvas offcanvas-end offcanvas-custom" id="drawerNuevoUsuario" tabindex="-1">
+                    <asp:UpdatePanel runat="server" ID="updAltaUsuario">
+                             <ContentTemplate>
         <div class="offcanvas-header bg-light border-bottom p-4">
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
@@ -279,6 +324,8 @@
 
                 </div>
             </div>
+
+                        
             <!-- Rol del Usuario -->
             <div>
                 <label class="form-label fw-semibold text-dark small mb-1" for="ddlRolUsuario">
@@ -289,16 +336,16 @@
                         <span class="material-symbols-outlined fs-6">verified_user</span>
                     </span>
 
-                    <asp:DropDownList runat="server" ID="ddlRolUsuarioAgregar" CssClass="form-select bg-light border-0">
-                        <asp:ListItem Text="Administrador" />
-                        <asp:ListItem Text="Recepcionista" />
-                        <asp:ListItem Text="Médico" />
+                    <asp:DropDownList runat="server" ID="ddlRolUsuarioAgregar" CssClass="form-select bg-light border-0" AutoPostBack="true" OnSelectedIndexChanged="ddlRolUsuarioAgregar_SelectedIndexChanged">
+                        <asp:ListItem Text="Administrador"  Value="1"/>
+                        <asp:ListItem Text="Recepcionista"  Value="2"/>
+                        <asp:ListItem Text="Médico"  Value="3"/>
                     </asp:DropDownList>
 
                 </div>
             </div>
             <!-- Campo Condicional: Médico Asociado (Destacado) -->
-            <div class="p-3 rounded-3" style="background-color: #e5f6f8; border: 1px solid #c2ebef;" runat="server" id="condicionalMedicoDDL">
+            <div class="p-3 rounded-3" style="background-color: #e5f6f8; border: 1px solid #c2ebef;" runat="server" id="condicionalMedicoDDL" visible="false">
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="material-symbols-outlined fs-5" style="color: var(--cl-teal-primary);">link</span>
                     <label class="form-label fw-bold mb-0 small" for="ddlMedicoAsociado" style="color: var(--cl-teal-primary);">
@@ -306,7 +353,7 @@
                     </label>
                 </div>
 
-                <asp:DropDownList runat="server" ID="ddlMedicosAasociar">
+                <asp:DropDownList runat="server" ID="ddlMedicosAasociar" AutoPostBack="true" OnSelectedIndexChanged="ddlMedicosAasociar_SelectedIndexChanged" >
                 </asp:DropDownList>
 
 
@@ -317,6 +364,9 @@
                     <span>Vincula esta cuenta con la agenda de turnos, firma digital y consultorio del profesional.</span>
                 </div>
             </div>
+
+
+
             <!-- Contraseña y Seguridad -->
             <div class="row g-2">
                 <div class="col-12 col-sm-6">
@@ -341,16 +391,22 @@
 
                 </div>
             </div>
-            <!-- Validación de Contraseña -->
 
-            <div class="d-flex align-items-center justify-content-between p-2 rounded-2" style="background-color: #d1f2d9; color: #005320;">
-                <div class="d-flex align-items-center gap-1">
-                    <span class="material-symbols-outlined fs-6">check_circle</span>
-                    <span class="fw-semibold" style="font-size: 12px;">Las contraseñas coinciden</span>
-                </div>
-                <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle" style="font-size: 11px;">Segura (8+ carácteres, mayúsculas y símbolo)
-                </span>
-            </div>
+            <!-- Validación  -->
+
+                <asp:Panel runat="server" ID="pnlMensajeUsuario"
+                    Visible="false"
+                    CssClass="d-flex align-items-center gap-2 p-2 rounded-2 mt-2">
+
+                    <span class="material-symbols-outlined fs-6">
+                        check_circle
+                    </span>
+
+                    <asp:Label runat="server" ID="lblmensajefinal"
+                        CssClass="fw-semibold"
+                        Style="font-size: 12px;" />
+
+                </asp:Panel>
 
 
             <!-- Casilla Enviar Notificación -->
@@ -366,7 +422,7 @@
         <div class="offcanvas-footer bg-light border-top p-3 d-flex justify-content-end gap-2">
             <button class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="offcanvas" type="button">Cancelar</button>
 
-            <asp:LinkButton runat="server" ID="btnGuardarUsuario" CssClass="btn btn-teal btn-sm px-4">
+            <asp:LinkButton runat="server" ID="btnGuardarUsuario" CssClass="btn btn-teal btn-sm px-4" OnClick="btnGuardarUsuario_Click">
 <span class="material-symbols-outlined fs-6">save</span>
 <span>Guardar usuario</span>
             </asp:LinkButton>
@@ -375,6 +431,10 @@
 
 
         </div>
+
+
+                        </ContentTemplate>
+                 </asp:UpdatePanel>
     </div>
 
 

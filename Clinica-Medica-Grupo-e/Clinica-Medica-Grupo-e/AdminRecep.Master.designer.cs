@@ -14,189 +14,198 @@ namespace Clinica_Medica_Grupo_e
     public partial class AdminRecep
     {
 
-        
+        /// <summary>
         /// head control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
 
-        
+        /// <summary>
         /// form1 control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
-        
+        /// <summary>
+        /// ScriptManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+
+        /// <summary>
         /// lnkNavInicio control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavInicio;
 
-        
+        /// <summary>
         /// lnkNavTurnos control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavTurnos;
 
-        
+        /// <summary>
         /// lnkNavNuevoTurno control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavNuevoTurno;
 
-        
+        /// <summary>
         /// lnkNavPacientes control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavPacientes;
 
-        
+        /// <summary>
         /// lnkNavMedicos control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavMedicos;
 
-        
+        /// <summary>
         /// phMenuAdministracion control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phMenuAdministracion;
 
-        
+        /// <summary>
         /// lnkNavEspecialidades control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavEspecialidades;
 
-        
+        /// <summary>
         /// lnkNavTurnosTrabajo control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavTurnosTrabajo;
 
-        
+        /// <summary>
         /// lnkNavUsuarios control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavUsuarios;
 
-        
+        /// <summary>
         /// lnkNavEstadisticas control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkNavEstadisticas;
 
-        
+        /// <summary>
         /// lblFechaHoy control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblFechaHoy;
 
-        
+        /// <summary>
         /// pnlBuscarGlobal control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlBuscarGlobal;
 
-        
+        /// <summary>
         /// txtBuscarGlobal control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBuscarGlobal;
 
-        
+        /// <summary>
         /// btnBuscarGlobal control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnBuscarGlobal;
 
-        
+        /// <summary>
         /// lblNombreUsuario control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblNombreUsuario;
 
-        
+        /// <summary>
         /// lblRolUsuario control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRolUsuario;
 
-        
+        /// <summary>
         /// btnCerrarSesion control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesion;
 
-        
+        /// <summary>
         /// MainContent control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
 
-        
+        /// <summary>
         /// Scripts control.
-        
+        /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.

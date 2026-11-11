@@ -181,5 +181,50 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<Medico> ListarMedicoSinUsuario()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<Medico> lista = new List<Medico>();
+            try
+            {
+
+
+                datos.setearProcedimiento("StoredBuscarMedicosSinUsuario");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico medico = new Medico();
+                    medico.Id = (int)datos.Lector["Id"];
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.Email = (string)datos.Lector["Email"];
+                    if (!(datos.Lector["Email"] is DBNull))
+                        medico.Email = (string)datos.Lector["Email"];
+
+                    lista.Add(medico);
+                }
+
+                return lista;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+
+
+
+
+        }
+
     }
 }

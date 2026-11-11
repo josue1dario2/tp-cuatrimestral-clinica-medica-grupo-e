@@ -503,3 +503,227 @@ BEGIN
 END
 GO
 
+
+
+
+--Creacion de procedimientos almacenados requeridos 5/11/2026
+
+
+CREATE PROCEDURE StoredListarUsuarios
+
+AS
+
+BEGIN
+
+
+SELECT
+U.Id,
+U.Nombreusuario,
+U.Email,
+U.TipoUsuario,
+U.Activo,
+U.UltimaConexion,
+M.Nombre,
+M.Apellido
+
+FROM USUARIOS AS U 
+LEFT JOIN MEDICOS AS M
+
+ON U.Id= M.IdUsuario
+
+
+END;
+GO
+
+CREATE PROCEDURE StoredBuscarPorID
+
+@IdABuscar INT
+AS
+BEGIN
+
+SELECT
+    U.Id,
+    U.Nombreusuario,
+    U.Email,
+    U.Pass,
+    U.TipoUsuario,
+    U.Activo,
+    U.UltimaConexion,
+    M.Nombre,
+    M.Apellido
+
+FROM USUARIOS AS U
+LEFT JOIN MEDICOS AS M
+    ON U.Id = M.IdUsuario
+
+WHERE U.Id = @IdABuscar
+
+END;
+GO
+
+
+CREATE PROCEDURE StoredRegistrarUsuario
+
+@Nombreusuario VARCHAR(50),
+@Email VARCHAR(50),
+@Pass VARCHAR(50),
+@TipoUsuario INT,
+@IdMedico INT
+
+AS
+BEGIN
+
+DECLARE @IdUsuario INT;
+
+IF @TipoUsuario = 3
+BEGIN
+    IF NOT EXISTS(
+        SELECT 1
+        FROM MEDICOS
+        WHERE MEDICOS.Id = @IdMedico
+        AND IdUsuario IS NULL
+    )
+    BEGIN
+        THROW 50001, 'El medico no existe o ya tiene usuario asociado', 1;
+    END
+END
+
+IF EXISTS (
+    SELECT 1
+    FROM USUARIOS
+    WHERE Email = @Email
+)
+BEGIN
+    THROW 50002, 'Ya existe un usuario registrado con ese correo.', 1;
+END
+
+INSERT INTO USUARIOS(Email, Pass, TipoUsuario, NombreUsuario, Activo)
+VALUES (@Email, @Pass, @TipoUsuario, @Nombreusuario, 1);
+
+SET @IdUsuario = SCOPE_IDENTITY();
+
+IF @TipoUsuario = 3
+    UPDATE MEDICOS
+    SET MEDICOS.IdUsuario = @IdUsuario
+    WHERE MEDICOS.Id = @IdMedico
+    AND IdUsuario IS NULL;
+
+END;
+GO
+
+
+
+
+CREATE PROCEDURE StoredBuscarMedicosSinUsuario
+
+AS 
+
+BEGIN
+
+SELECT 
+
+Id,
+Nombre,
+Apellido,
+Email
+FROM MEDICOS
+WHERE IdUsuario IS NULL;
+
+END 
+GO
+
+
+
+CREATE PROCEDURE StoredModificarUsuario
+
+@pass VARCHAR(50),
+@nombreUsuario VARCHAR(50),
+@Email VARCHAR(50),
+@Id int
+
+AS 
+
+BEGIN
+
+UPDATE USUARIOS
+
+SET USUARIOS.Pass=@pass, USUARIOS.NombreUsuario=@nombreUsuario, USUARIOS.Email=@Email
+
+WHERE USUARIOS.Id= @Id;
+
+END;
+GO
+
+CREATE PROCEDURE StoredModificarEstadoUsuario
+
+@Id int
+
+AS 
+BEGIN
+
+
+UPDATE USUARIOS
+SET Activo=CASE
+WHEN Activo = 1 THEN 0 
+ELSE 1 
+
+END 
+
+WHERE id=@Id
+
+end;
+go
+
+CREATE PROCEDURE StoredActualizarUltimaConexion
+
+@Id int
+
+AS 
+BEGIN
+
+
+UPDATE USUARIOS
+
+SET UltimaConexion = GETDATE()
+
+WHERE id=@Id
+
+end;
+go
+
+
+CREATE PROCEDURE FiltrarUsuarios
+
+@Texto VARCHAR(50),
+@Rol INT,
+@Activo BIT
+
+AS
+BEGIN
+
+SELECT
+    U.Id,
+    U.NombreUsuario,
+    U.Email,
+    U.TipoUsuario,
+    U.Activo,
+    U.UltimaConexion,
+    M.Nombre,
+    M.Apellido
+
+FROM USUARIOS AS U
+LEFT JOIN MEDICOS AS M
+    ON U.Id = M.IdUsuario
+
+WHERE (
+    U.NombreUsuario LIKE '%' + @Texto + '%'
+    OR U.Email LIKE '%' + @Texto + '%'
+    OR M.Nombre LIKE '%' + @Texto + '%'
+    OR M.Apellido LIKE '%' + @Texto + '%'
+)
+
+AND (@Rol IS NULL OR U.TipoUsuario = @Rol)
+AND (@Activo IS NULL OR U.Activo = @Activo)
+
+END;
+GO
