@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
 using dominio;
 using negocio;
 
@@ -66,6 +67,9 @@ namespace Clinica_Medica_Grupo_e
             btnTabActivos.Text = "Activos (" + todos.Count(t => t.Activo) + ")";
             btnTabInactivos.Text = "Inactivos (" + todos.Count(t => !t.Activo) + ")";
 
+            // Tarjetas de arriba (también sobre todos los turnos).
+            CargarIndicadores(todos);
+
             // 1) Filtro por estado.
             IEnumerable<TurnoTrabajo> filtrados = todos;
             if (FiltroEstado == "Activos")
@@ -95,6 +99,117 @@ namespace Clinica_Medica_Grupo_e
 
             MarcarPestana();
         }
+
+        // INDICADORES (las cuatro tarjetas de arriba)
+
+        private void CargarIndicadores(List<TurnoTrabajo> todos)
+        {
+            List<TurnoTrabajo> activos = todos.Where(t => t.Activo).ToList();
+
+            CargarTarjetaTurnos(todos, activos);
+            CargarTarjetaMedicos(todos, activos);
+            CargarTarjetaCobertura(activos);
+            CargarTarjetaBloques(activos);
+        }
+
+        private void CargarTarjetaTurnos(List<TurnoTrabajo> todos, List<TurnoTrabajo> activos)
+        {
+            int total = todos.Count;
+            int cantidadActivos = activos.Count;
+            int porcentaje = Porcentaje(cantidadActivos, total);
+
+            lblKpiTurnos.Text = total.ToString();
+            lblKpiTurnosActivos.Text = cantidadActivos + (cantidadActivos == 1 ? " esquema activo" : " esquemas activos");
+            lblKpiTurnosPorcentaje.Text = porcentaje + "% operativos";
+            AnchoBarra(barKpiTurnos, porcentaje);
+        }
+
+        private void CargarTarjetaMedicos(List<TurnoTrabajo> todos, List<TurnoTrabajo> activos)
+        {
+            int registrados = todos.Sum(t => t.CantidadMedicos);
+            int conHorario = activos.Sum(t => t.CantidadMedicos);
+            int porcentaje = Porcentaje(conHorario, registrados);
+
+            lblKpiMedicos.Text = conHorario.ToString();
+            lblKpiMedicosAsignados.Text = conHorario + (conHorario == 1 ? " profesional" : " profesionales");
+            lblKpiMedicosTotal.Text = "De " + registrados + " registrados";
+            AnchoBarra(barKpiMedicos, porcentaje);
+        }
+
+        private void CargarTarjetaCobertura(List<TurnoTrabajo> activos)
+        {
+            if (activos.Count == 0)
+            {
+                lblKpiCobertura.Text = "Sin turnos";
+                lblKpiHorasDiarias.Text = "0 horas diarias";
+                lblKpiCoberturaDetalle.Text = "Sin atención";
+                AnchoBarra(barKpiCobertura, 0);
+                return;
+            }
+
+            int desde = activos.Min(t => t.HoraEntrada);
+            int hasta = activos.Max(t => t.HoraSalida);
+
+            HashSet<int> horasCubiertas = new HashSet<int>();
+            foreach (TurnoTrabajo turno in activos)
+            {
+                for (int h = turno.HoraEntrada; h < turno.HoraSalida; h++)
+                    horasCubiertas.Add(h);
+            }
+
+            int horas = horasCubiertas.Count;
+            bool continua = horas == hasta - desde;
+
+            lblKpiCobertura.Text = HoraTexto(desde) + " a " + HoraTexto(hasta);
+            lblKpiHorasDiarias.Text = horas + (horas == 1 ? " hora diaria" : " horas diarias");
+            lblKpiCoberturaDetalle.Text = continua ? "Atención continua" : "Con horas sin atención";
+            AnchoBarra(barKpiCobertura, Porcentaje(horas, 24));
+        }
+
+        private void CargarTarjetaBloques(List<TurnoTrabajo> activos)
+        {
+            int bloques = activos.Sum(t => t.CantidadHoras * t.CantidadMedicos);
+
+            int ocupados = 0;
+            try
+            {
+                FiltroTurnos filtro = new FiltroTurnos();
+                filtro.Desde = DateTime.Today;
+                filtro.Hasta = DateTime.Today;
+                List<Turno> turnosHoy = new TurnoNegocio().buscar(filtro);
+
+                List<int> idsActivos = activos.Select(t => t.Id).ToList();
+                ocupados = turnosHoy.Count(t => t.Estado != EstadoTurno.Cancelado
+                                             && idsActivos.Contains(t.Medico.TurnoTrabajo.Id));
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("No se pudieron contar los turnos de hoy: " + ex.Message, true);
+            }
+
+            int disponibles = Math.Max(bloques - ocupados, 0);
+
+            lblKpiBloques.Text = bloques.ToString();
+            lblKpiBloquesDisponibles.Text = disponibles + (disponibles == 1 ? " bloque libre hoy" : " bloques libres hoy");
+            AnchoBarra(barKpiBloques, Porcentaje(disponibles, bloques));
+        }
+
+        private static int Porcentaje(int parte, int total)
+        {
+            if (total <= 0)
+                return 0;
+            return (int)Math.Round(parte * 100.0 / total);
+        }
+
+        private static void AnchoBarra(HtmlGenericControl barra, int porcentaje)
+        {
+            barra.Style["width"] = porcentaje + "%";
+        }
+
+
+
+
+
 
         // Convierte un TurnoTrabajo en los campos que espera el Repeater rptTurnosTrabajo.
         private object ArmarFila(TurnoTrabajo turno)

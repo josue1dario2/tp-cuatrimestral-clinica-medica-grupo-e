@@ -92,7 +92,7 @@
                     <div class="mt-3">
                         <div class="d-flex justify-content-between fs-13 text-muted mb-1">
                             <asp:Label ID="lblKpiHorasDiarias" runat="server" CssClass="text-success fw-semibold" Text="15 horas diarias"></asp:Label>
-                            <span>Guardia continua</span>
+                            <asp:Label ID="lblKpiCoberturaDetalle" runat="server" Text="Guardia continua"></asp:Label>
                         </div>
                         <div class="progress tt-progress">
                             <div id="barKpiCobertura" runat="server" class="progress-bar bg-success" role="progressbar" style="width: 75%;"></div>
