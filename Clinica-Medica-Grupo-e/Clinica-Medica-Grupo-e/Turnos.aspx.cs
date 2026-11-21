@@ -13,9 +13,9 @@ namespace Clinica_Medica_Grupo_e
     {
         private static readonly CultureInfo Cultura = new CultureInfo("es-AR");
 
-        
+
         /// Página actual de la tabla (empieza en 1). Se guarda en ViewState.
-        
+
         private int PaginaActual
         {
             get { return ViewState["PaginaActual"] == null ? 1 : (int)ViewState["PaginaActual"]; }
@@ -42,9 +42,9 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
-        
+
         // Carga inicial
-        
+
 
         private void CargarCombos()
         {
@@ -61,9 +61,9 @@ namespace Clinica_Medica_Grupo_e
             ddlEspecialidad.DataBind();
         }
 
-        
+
         /// Por defecto se muestran los turnos desde hoy en adelante.
-        
+
         private void FiltrosPorDefecto()
         {
             txtFechaDesde.Text = DateTime.Today.ToString("yyyy-MM-dd");
@@ -75,9 +75,9 @@ namespace Clinica_Medica_Grupo_e
             txtNumeroTurno.Text = "";
         }
 
-        
+
         // Métricas (siempre del día de hoy, sin importar los filtros)
-        
+
 
         private void CargarMetricasDeHoy()
         {
@@ -111,13 +111,13 @@ namespace Clinica_Medica_Grupo_e
             return total == 0 ? "0%" : (parte * 100.0 / total).ToString("0.#", Cultura) + "%";
         }
 
-        
-        // Búsqueda avanzada
-        
 
-        
+        // Búsqueda avanzada
+
+
+
         /// Lee los filtros de la pantalla. Devuelve null (y muestra el motivo) si alguno es inválido.
-        
+
         private FiltroTurnos LeerFiltros()
         {
             FiltroTurnos filtro = new FiltroTurnos();
@@ -176,12 +176,13 @@ namespace Clinica_Medica_Grupo_e
             return filtro;
         }
 
-        
+
         /// Ejecuta la búsqueda con los filtros actuales y muestra la página actual.
-        
+
         private void Buscar()
         {
             pnlError.Visible = false;
+            pnlExito.Visible = false;
 
             FiltroTurnos filtro = LeerFiltros();
             if (filtro == null)
@@ -210,9 +211,9 @@ namespace Clinica_Medica_Grupo_e
             pnlError.Visible = true;
         }
 
-        
+
         // Tabla y paginación
-        
+
 
         private void MostrarResultados(List<Turno> turnos)
         {
@@ -236,9 +237,9 @@ namespace Clinica_Medica_Grupo_e
             MostrarPaginador(totalPaginas);
         }
 
-        
+
         /// Muestra hasta 7 botones de página alrededor de la actual (siempre incluye la primera y la última).
-        
+
         private void MostrarPaginador(int totalPaginas)
         {
             List<int> numeros = new List<int>();
@@ -256,9 +257,9 @@ namespace Clinica_Medica_Grupo_e
             btnPaginaSiguiente.Enabled = PaginaActual < totalPaginas;
         }
 
-        
+
         /// Convierte un turno en los campos que espera el Repeater rptTurnos.
-        
+
         private object ArmarFila(Turno turno)
         {
             string filaCss = "";
@@ -342,18 +343,18 @@ namespace Clinica_Medica_Grupo_e
             }
         }
 
-        
+
         /// "35111222" -> "35.111.222".
-        
+
         private static string FormatearDni(string dni)
         {
             long numero;
             return long.TryParse(dni, out numero) ? numero.ToString("#,0", Cultura) : dni;
         }
 
-        
+
         // Modal de detalle
-        
+
 
         private void MostrarDetalle(int idTurno)
         {
@@ -385,9 +386,9 @@ namespace Clinica_Medica_Grupo_e
                 "document.addEventListener('DOMContentLoaded', function () { abrirModal('modalDetalle'); });", true);
         }
 
-        
+
         // Eventos
-        
+
 
         protected void btnBuscarTurnos_Click(object sender, EventArgs e)
         {
@@ -424,15 +425,159 @@ namespace Clinica_Medica_Grupo_e
                     break;
 
                 case "Cancelar":
-                    // TODO: cargar hfIdTurnoCancelar y los lblCancelar..., y abrir 'modalCancelar'.
+                    try
+                    {
+                        AbrirModalCancelar(idTurno);
+                    }
+                    catch (Exception ex)
+                    {
+                        MostrarError("No se pudo cargar el turno: " + ex.Message);
+                    }
                     break;
+
             }
+        }
+
+        // MODAL DE CANCELACIÓN
+
+        // Carga los datos del turno en el modal y lo abre.
+        private void AbrirModalCancelar(int idTurno)
+        {
+            Turno turno = new TurnoNegocio().buscarPorId(idTurno);
+            if (turno == null)
+            {
+                MostrarError("El turno seleccionado ya no existe.");
+                return;
+            }
+
+            // Solo se cancelan turnos Nuevos o Reprogramados (igual que PuedeCancelar en ArmarFila).
+            if (turno.Estado != EstadoTurno.Nuevo && turno.Estado != EstadoTurno.Reprogramado)
+            {
+                MostrarError("El turno #" + turno.NumeroTurno + " está " + TextoEstado(turno.Estado).ToLower()
+                    + " y ya no se puede cancelar.");
+                return;
+            }
+
+            hfIdTurnoCancelar.Value = turno.Id.ToString();
+
+            lblCancelarCodigo.Text = "#" + turno.NumeroTurno;
+            lblCancelarEstado.Text = TextoEstado(turno.Estado);
+            lblCancelarEstado.CssClass = "badge-estado " + CssEstado(turno.Estado);
+
+            lblCancelarPaciente.Text = turno.Paciente.NombreCompleto;
+            lblCancelarPacienteDetalle.Text = "DNI " + FormatearDni(turno.Paciente.Dni) + " • " + TextoCobertura(turno);
+
+            lblCancelarMedico.Text = turno.Medico.NombreCompleto;
+            lblCancelarMedicoDetalle.Text = turno.Especialidad.Descripcion;
+
+            string fecha = turno.Fecha.ToString("dddd d 'de' MMMM 'de' yyyy", Cultura);
+            lblCancelarFecha.Text = char.ToUpper(fecha[0]) + fecha.Substring(1) + " - " + turno.HoraTexto;
+
+            // El modal arranca limpio cada vez que se abre.
+            txtMotivoCancelacion.Text = "";
+            chkNotificarPaciente.Checked = true;
+            pnlErrorCancelar.Visible = false;
+
+            AbrirModal("modalCancelar");
+        }
+
+        // "OSDE 310", "Galeno" o "Particular".
+        private static string TextoCobertura(Turno turno)
+        {
+            if (turno.ObraSocial == null)
+                return "Particular";
+            if (turno.Plan == null)
+                return turno.ObraSocial.Nombre;
+            return turno.ObraSocial.Nombre + " " + turno.Plan.NombrePlan;
         }
 
         protected void btnConfirmarCancelacion_Click(object sender, EventArgs e)
         {
-            // TODO: validar el motivo, cancelar el turno hfIdTurnoCancelar.Value y notificar si chkNotificarPaciente.Checked.
+            string motivo = txtMotivoCancelacion.Text.Trim();
+
+            // 1) Validaciones
+            if (motivo.Length < 5)
+            {
+                MostrarErrorCancelar("Escribí el motivo de la cancelación (al menos 5 caracteres).");
+                return;
+            }
+            if (motivo.Length > 300)
+            {
+                MostrarErrorCancelar("El motivo no puede superar los 300 caracteres (tiene " + motivo.Length + ").");
+                return;
+            }
+
+            int idTurno;
+            if (!int.TryParse(hfIdTurnoCancelar.Value, out idTurno))
+            {
+                MostrarError("No se encontró el turno a cancelar. Volvé a intentarlo.");
+                return;
+            }
+
+            // 2) Cancelar
+            bool cancelado;
+            try
+            {
+                cancelado = new TurnoNegocio().cancelar(idTurno, motivo);
+            }
+            catch (Exception ex)
+            {
+                MostrarErrorCancelar("No se pudo cancelar el turno: " + ex.Message);
+                return;
+            }
+
+            // 3) Refrescar la tabla y las métricas (Buscar oculta los mensajes anteriores)
+            Buscar();
+            try
+            {
+                CargarMetricasDeHoy();
+            }
+            catch (Exception)
+            {
+                // Si fallan las métricas, la cancelación ya se hizo: no la tapamos con un error.
+            }
+
+            // 4) Avisar el resultado
+            if (!cancelado)
+            {
+                MostrarError("El turno " + lblCancelarCodigo.Text + " ya no se puede cancelar: cambió de estado mientras tanto.");
+                return;
+            }
+
+            if (chkNotificarPaciente.Checked)
+            {
+                // TODO: enviar el email de aviso al paciente.
+            }
+
+            MostrarExito("Se canceló el turno " + lblCancelarCodigo.Text + " de " + lblCancelarPaciente.Text
+                + ". El horario quedó libre en la agenda.");
         }
+
+        // Muestra el error DENTRO del modal y lo vuelve a abrir (el PostBack lo cerró).
+        private void MostrarErrorCancelar(string mensaje)
+        {
+            lblErrorCancelar.Text = mensaje;
+            pnlErrorCancelar.Visible = true;
+            AbrirModal("modalCancelar");
+        }
+
+        private void MostrarExito(string mensaje)
+        {
+            lblExito.Text = mensaje;
+            pnlExito.Visible = true;
+        }
+
+
+
+
+        // Abre un modal de Bootstrap cuando la página termina de cargar (función abrirModal de turnos.js).
+        private void AbrirModal(string idModal)
+        {
+            ClientScript.RegisterStartupScript(GetType(), "abrirModal",
+                "document.addEventListener('DOMContentLoaded', function () { abrirModal('" + idModal + "'); });", true);
+        }
+
+
 
         protected void ddlPorPagina_SelectedIndexChanged(object sender, EventArgs e)
         {

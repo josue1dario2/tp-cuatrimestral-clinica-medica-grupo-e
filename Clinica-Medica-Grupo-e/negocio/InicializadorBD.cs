@@ -230,6 +230,18 @@ namespace negocio
                         END");
 
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedReactivarTurnoTrabajo', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedReactivarTurnoTrabajo]");
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedCancelarTurno', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedCancelarTurno]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedCancelarTurno] @Id INT, @Motivo VARCHAR(300) AS
+                        BEGIN
+                            SET NOCOUNT ON;
+                            UPDATE TURNOS
+                            SET Estado = 3,
+                                Observaciones = LEFT(ISNULL(NULLIF(Observaciones, '') + ' | ', '') + 'Cancelado: ' + @Motivo, 500)
+                            WHERE Id = @Id AND Estado IN (1, 2);
+                            SELECT @@ROWCOUNT;
+                        END");
+
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedReactivarTurnoTrabajo] @Id INT AS
                         BEGIN

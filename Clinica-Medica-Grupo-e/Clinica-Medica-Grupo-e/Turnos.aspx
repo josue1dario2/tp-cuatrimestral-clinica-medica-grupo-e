@@ -10,6 +10,17 @@
         <span class="material-symbols-outlined">warning</span>
         <asp:Label ID="lblError" runat="server"></asp:Label>
     </asp:Panel>
+    
+    <!-- Mensaje de éxito (por ejemplo, al cancelar un turno) -->
+    <asp:Panel ID="pnlExito" runat="server" Visible="false" CssClass="alert alert-success d-flex align-items-center gap-2 mb-4">
+        <span class="material-symbols-outlined">check_circle</span>
+        <asp:Label ID="lblExito" runat="server"></asp:Label>
+    </asp:Panel>
+
+
+
+
+
 
     <!--  1. ENCABEZADO -->
     <div class="d-flex flex-column gap-4 mb-4">
@@ -127,7 +138,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4 col-xl-2">
                 <asp:Label ID="lblFiltroMedico" runat="server" AssociatedControlID="ddlMedico" CssClass="filter-label form-label text-muted fw-medium mb-1" Text="Médico / Profesional"></asp:Label>
-                
+
                 <%-- Se carga desde la base; AppendDataBoundItems mantiene la opción "Todos" --%>
 
                 <asp:DropDownList ID="ddlMedico" runat="server" AppendDataBoundItems="true" CssClass="filter-input form-select form-select-sm">
@@ -205,52 +216,52 @@
                         <tbody>
                 </HeaderTemplate>
                 <ItemTemplate>
-                            <tr class='<%# Eval("FilaCss") %>'>
-                                <td class="py-3 px-3">
-                                    <span class="turno-numero font-monospace fw-semibold bg-light px-2 py-1 rounded text-nowrap"><%#: Eval("NumeroTurno") %></span>
-                                </td>
-                                <td class="py-3 px-3">
-                                    <div class="turno-fecha fw-semibold text-dark"><%#: Eval("FechaHora") %></div>
-                                    <div class="turno-subtexto text-muted"><%#: Eval("Subtexto") %></div>
-                                </td>
-                                <td class="py-3 px-3">
-                                    <div class="fw-semibold text-dark"><%#: Eval("PacienteNombre") %></div>
-                                    <div class="text-muted fs-12">DNI <%#: Eval("PacienteDni") %> • <span class="fw-medium text-cl-primary"><%#: Eval("Contacto") %></span></div>
-                                </td>
-                                <td class="py-3 px-3">
-                                    <div class="fw-medium text-dark"><%#: Eval("MedicoNombre") %></div>
-                                    <div class="text-muted fs-12"><%#: Eval("MedicoMatricula") %></div>
-                                </td>
-                                <td class="py-3 px-3">
-                                    <span class="especialidad-pill badge rounded-pill px-2 py-1">
-                                        <span class="especialidad-dot d-inline-block rounded-circle me-1"></span>
-                                        <%#: Eval("Especialidad") %>
-                                    </span>
-                                </td>
-                                <td class="py-3 px-3 text-center">
-                                    <span class='badge-estado <%# Eval("EstadoCss") %>'>
-                                        <span class="material-symbols-outlined icon-16"><%#: Eval("EstadoIcono") %></span>
-                                        <%#: Eval("EstadoTexto") %>
-                                    </span>
-                                </td>
-                                <td class="py-3 px-3 text-end text-nowrap no-print">
-                                    <asp:LinkButton ID="btnVerDetalle" runat="server" CssClass="btn-row-action btn-row-ver" ToolTip="Ver ficha y trazabilidad"
-                                        CommandName="VerDetalle" CommandArgument='<%# Eval("IdTurno") %>'>
+                    <tr class='<%# Eval("FilaCss") %>'>
+                        <td class="py-3 px-3">
+                            <span class="turno-numero font-monospace fw-semibold bg-light px-2 py-1 rounded text-nowrap"><%#: Eval("NumeroTurno") %></span>
+                        </td>
+                        <td class="py-3 px-3">
+                            <div class="turno-fecha fw-semibold text-dark"><%#: Eval("FechaHora") %></div>
+                            <div class="turno-subtexto text-muted"><%#: Eval("Subtexto") %></div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <div class="fw-semibold text-dark"><%#: Eval("PacienteNombre") %></div>
+                            <div class="text-muted fs-12">DNI <%#: Eval("PacienteDni") %> • <span class="fw-medium text-cl-primary"><%#: Eval("Contacto") %></span></div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <div class="fw-medium text-dark"><%#: Eval("MedicoNombre") %></div>
+                            <div class="text-muted fs-12"><%#: Eval("MedicoMatricula") %></div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="especialidad-pill badge rounded-pill px-2 py-1">
+                                <span class="especialidad-dot d-inline-block rounded-circle me-1"></span>
+                                <%#: Eval("Especialidad") %>
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-center">
+                            <span class='badge-estado <%# Eval("EstadoCss") %>'>
+                                <span class="material-symbols-outlined icon-16"><%#: Eval("EstadoIcono") %></span>
+                                <%#: Eval("EstadoTexto") %>
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-end text-nowrap no-print">
+                            <asp:LinkButton ID="btnVerDetalle" runat="server" CssClass="btn-row-action btn-row-ver" ToolTip="Ver ficha y trazabilidad"
+                                CommandName="VerDetalle" CommandArgument='<%# Eval("IdTurno") %>'>
                                         <span class="material-symbols-outlined">visibility</span>
-                                    </asp:LinkButton>
-                                    <asp:LinkButton ID="btnReprogramar" runat="server" CssClass="btn-row-action btn-row-reprogramar" ToolTip="Reprogramar turno"
-                                        CommandName="Reprogramar" CommandArgument='<%# Eval("IdTurno") %>' Enabled='<%# (bool)Eval("PuedeReprogramar") %>'>
+                            </asp:LinkButton>
+                            <asp:LinkButton ID="btnReprogramar" runat="server" CssClass="btn-row-action btn-row-reprogramar" ToolTip="Reprogramar turno"
+                                CommandName="Reprogramar" CommandArgument='<%# Eval("IdTurno") %>' Enabled='<%# (bool)Eval("PuedeReprogramar") %>'>
                                         <span class="material-symbols-outlined">event_repeat</span>
-                                    </asp:LinkButton>
-                                    <asp:LinkButton ID="btnCancelar" runat="server" CssClass="btn-row-action btn-row-cancelar" ToolTip="Cancelar turno"
-                                        CommandName="Cancelar" CommandArgument='<%# Eval("IdTurno") %>' Enabled='<%# (bool)Eval("PuedeCancelar") %>'>
+                            </asp:LinkButton>
+                            <asp:LinkButton ID="btnCancelar" runat="server" CssClass="btn-row-action btn-row-cancelar" ToolTip="Cancelar turno"
+                                CommandName="Cancelar" CommandArgument='<%# Eval("IdTurno") %>' Enabled='<%# (bool)Eval("PuedeCancelar") %>'>
                                         <span class="material-symbols-outlined">event_busy</span>
-                                    </asp:LinkButton>
-                                </td>
-                            </tr>
+                            </asp:LinkButton>
+                        </td>
+                    </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                        </tbody>
+                    </tbody>
                     </table>
                 </FooterTemplate>
             </asp:Repeater>
@@ -263,9 +274,10 @@
         <!-- Paginación -->
         <div class="table-gestion-footer no-print p-3 bg-white border-top d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3 text-muted">
-                <span>
-                    Mostrando <asp:Label ID="lblRangoMostrado" runat="server" CssClass="fw-bold text-dark" Text="1 - 10"></asp:Label>
-                    de <asp:Label ID="lblTotalRegistros" runat="server" CssClass="fw-bold text-dark" Text="142"></asp:Label>
+                <span>Mostrando
+                    <asp:Label ID="lblRangoMostrado" runat="server" CssClass="fw-bold text-dark" Text="1 - 10"></asp:Label>
+                    de
+                    <asp:Label ID="lblTotalRegistros" runat="server" CssClass="fw-bold text-dark" Text="142"></asp:Label>
                     turnos registrados
                 </span>
                 <div class="d-flex align-items-center gap-1">
@@ -320,11 +332,19 @@
 
                 <div class="modal-body py-3">
                     <asp:HiddenField ID="hfIdTurnoCancelar" runat="server" />
+                    <%-- Error de la cancelación: se muestra dentro del modal (ver MostrarErrorCancelar) --%>
+                    <asp:Panel ID="pnlErrorCancelar" runat="server" Visible="false" CssClass="alert alert-danger d-flex align-items-center gap-2 p-2 mb-3 fs-13">
+                        <span class="material-symbols-outlined">error</span>
+                        <asp:Label ID="lblErrorCancelar" runat="server"></asp:Label>
+                    </asp:Panel>
+
+
+
 
                     <div class="p-3 bg-light rounded-3 mb-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="modal-codigo font-monospace fw-bold bg-white px-2 rounded border">
-                                Código: <asp:Label ID="lblCancelarCodigo" runat="server" Text="T-2025-000123"></asp:Label>
+                            <span class="modal-codigo font-monospace fw-bold bg-white px-2 rounded border">Código:
+                                <asp:Label ID="lblCancelarCodigo" runat="server" Text="T-2025-000123"></asp:Label>
                             </span>
                             <asp:Label ID="lblCancelarEstado" runat="server" CssClass="badge-estado badge-estado-nuevo" Text="Nuevo"></asp:Label>
                         </div>
@@ -389,8 +409,7 @@
                         </div>
                         <div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <h5 class="modal-title fw-bold text-dark mb-0" id="modalDetalleLabel">
-                                    Ficha Completa de Turno #<asp:Label ID="lblDetalleNumero" runat="server" Text="T-2025-000125"></asp:Label>
+                                <h5 class="modal-title fw-bold text-dark mb-0" id="modalDetalleLabel">Ficha Completa de Turno #<asp:Label ID="lblDetalleNumero" runat="server" Text="T-2025-000125"></asp:Label>
                                 </h5>
                                 <asp:Label ID="lblDetalleEstado" runat="server" CssClass="badge-estado badge-estado-reprogramado" Text="Reprogramado"></asp:Label>
                             </div>
@@ -407,20 +426,44 @@
                                 <span class="modal-section-label text-muted text-uppercase fw-semibold d-block mb-1">Información del paciente</span>
                                 <asp:Label ID="lblDetallePaciente" runat="server" CssClass="modal-nombre fw-bold text-dark d-block" Text="Laura Beatriz Martínez"></asp:Label>
                                 <div class="modal-datos text-muted mt-1">
-                                    <div>DNI: <asp:Label ID="lblDetalleDni" runat="server" CssClass="fw-bold text-dark" Text="32.115.420"></asp:Label></div>
-                                    <div>Teléfono: <asp:Label ID="lblDetalleTelefono" runat="server" Text="+54 11 4892-1104"></asp:Label></div>
-                                    <div>Email: <asp:Label ID="lblDetalleEmail" runat="server" Text="l.martinez@gmail.com"></asp:Label></div>
-                                    <div>Dirección: <asp:Label ID="lblDetalleDireccion" runat="server" Text="Av. San Martín 123"></asp:Label></div>
+                                    <div>
+                                        DNI:
+                                        <asp:Label ID="lblDetalleDni" runat="server" CssClass="fw-bold text-dark" Text="32.115.420"></asp:Label>
+                                    </div>
+                                    <div>
+                                        Teléfono:
+                                        <asp:Label ID="lblDetalleTelefono" runat="server" Text="+54 11 4892-1104"></asp:Label>
+                                    </div>
+                                    <div>
+                                        Email:
+                                        <asp:Label ID="lblDetalleEmail" runat="server" Text="l.martinez@gmail.com"></asp:Label>
+                                    </div>
+                                    <div>
+                                        Dirección:
+                                        <asp:Label ID="lblDetalleDireccion" runat="server" Text="Av. San Martín 123"></asp:Label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <span class="modal-section-label text-muted text-uppercase fw-semibold d-block mb-1">Asignación profesional</span>
                                 <asp:Label ID="lblDetalleMedico" runat="server" CssClass="modal-nombre fw-bold text-dark d-block" Text="Dra. Sofía Albarracín"></asp:Label>
                                 <div class="modal-datos text-muted mt-1">
-                                    <div>Matrícula: <asp:Label ID="lblDetalleMatricula" runat="server" Text="MN 120.441"></asp:Label></div>
-                                    <div>Especialidad: <asp:Label ID="lblDetalleEspecialidad" runat="server" Text="Ginecología"></asp:Label></div>
-                                    <div>Turno de trabajo: <asp:Label ID="lblDetalleTurnoTrabajo" runat="server" Text="Mañana (08:00 a 14:00 hs)"></asp:Label></div>
-                                    <div>Fecha y hora: <asp:Label ID="lblDetalleFechaHora" runat="server" CssClass="fw-bold text-dark" Text="24/05/2025 • 11:15 hs"></asp:Label></div>
+                                    <div>
+                                        Matrícula:
+                                        <asp:Label ID="lblDetalleMatricula" runat="server" Text="MN 120.441"></asp:Label>
+                                    </div>
+                                    <div>
+                                        Especialidad:
+                                        <asp:Label ID="lblDetalleEspecialidad" runat="server" Text="Ginecología"></asp:Label>
+                                    </div>
+                                    <div>
+                                        Turno de trabajo:
+                                        <asp:Label ID="lblDetalleTurnoTrabajo" runat="server" Text="Mañana (08:00 a 14:00 hs)"></asp:Label>
+                                    </div>
+                                    <div>
+                                        Fecha y hora:
+                                        <asp:Label ID="lblDetalleFechaHora" runat="server" CssClass="fw-bold text-dark" Text="24/05/2025 • 11:15 hs"></asp:Label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 pt-2 border-top">
@@ -433,37 +476,37 @@
                     <%-- La base todavía no tiene una tabla de historial de movimientos:
                          esta sección queda oculta hasta que exista (phHistorial.Visible = true). --%>
                     <asp:PlaceHolder ID="phHistorial" runat="server" Visible="false">
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <span class="material-symbols-outlined text-cl-primary">timeline</span>
-                            <span class="fw-bold text-dark fs-14">Línea de tiempo del historial de movimientos</span>
-                        </div>
-                        <%--
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <span class="material-symbols-outlined text-cl-primary">timeline</span>
+                                <span class="fw-bold text-dark fs-14">Línea de tiempo del historial de movimientos</span>
+                            </div>
+                            <%--
                             Campos esperados (un ítem por movimiento):
                               Titulo, FechaHora, Operador, OperadorDetalle (rol o área), Comentario,
                               Icono (Material Symbols: add | sync | mail | cancel...), DotCss (bg-primary | bg-warning text-dark | bg-success | bg-danger)
-                        --%>
-                        <div class="timeline">
-                            <div class="timeline-line"></div>
-                            <asp:Repeater ID="rptHistorial" runat="server">
-                                <ItemTemplate>
-                                    <div class="timeline-item position-relative mb-3">
-                                        <div class='timeline-dot <%# Eval("DotCss") %>'>
-                                            <span class="material-symbols-outlined"><%#: Eval("Icono") %></span>
-                                        </div>
-                                        <div class="bg-white border p-3 rounded-2 shadow-sm">
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <strong class="text-dark fs-13"><%#: Eval("Titulo") %></strong>
-                                                <span class="font-monospace text-muted fs-12"><%#: Eval("FechaHora") %></span>
+                            --%>
+                            <div class="timeline">
+                                <div class="timeline-line"></div>
+                                <asp:Repeater ID="rptHistorial" runat="server">
+                                    <ItemTemplate>
+                                        <div class="timeline-item position-relative mb-3">
+                                            <div class='timeline-dot <%# Eval("DotCss") %>'>
+                                                <span class="material-symbols-outlined"><%#: Eval("Icono") %></span>
                                             </div>
-                                            <div class="text-muted fs-12">Operador: <strong class="text-dark"><%#: Eval("Operador") %></strong> (<%#: Eval("OperadorDetalle") %>)</div>
-                                            <div class="fst-italic text-muted mt-1 fs-12"><%#: Eval("Comentario") %></div>
+                                            <div class="bg-white border p-3 rounded-2 shadow-sm">
+                                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                                    <strong class="text-dark fs-13"><%#: Eval("Titulo") %></strong>
+                                                    <span class="font-monospace text-muted fs-12"><%#: Eval("FechaHora") %></span>
+                                                </div>
+                                                <div class="text-muted fs-12">Operador: <strong class="text-dark"><%#: Eval("Operador") %></strong> (<%#: Eval("OperadorDetalle") %>)</div>
+                                                <div class="fst-italic text-muted mt-1 fs-12"><%#: Eval("Comentario") %></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </ItemTemplate>
-                            </asp:Repeater>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
                         </div>
-                    </div>
                     </asp:PlaceHolder>
                 </div>
 

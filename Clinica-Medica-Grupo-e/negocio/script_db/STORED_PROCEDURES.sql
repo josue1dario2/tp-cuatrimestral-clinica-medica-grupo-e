@@ -727,3 +727,30 @@ AND (@Activo IS NULL OR U.Activo = @Activo)
 
 END;
 GO
+
+-- =============================================================================
+-- TURNOS
+-- =============================================================================
+
+-- Cancelar turno: solo si está Nuevo (1) o Reprogramado (2).
+-- Agrega el motivo al final de Observaciones y devuelve cuántas filas cambió (0 o 1).
+IF OBJECT_ID('dbo.storedCancelarTurno', 'P') IS NOT NULL
+    DROP PROCEDURE [dbo].[storedCancelarTurno];
+GO
+
+CREATE PROCEDURE [dbo].[storedCancelarTurno]
+    @Id INT,
+    @Motivo VARCHAR(300)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE TURNOS
+    SET Estado = 3,
+        Observaciones = LEFT(ISNULL(NULLIF(Observaciones, '') + ' | ', '') + 'Cancelado: ' + @Motivo, 500)
+    WHERE Id = @Id
+      AND Estado IN (1, 2);
+
+    SELECT @@ROWCOUNT;
+END
+GO

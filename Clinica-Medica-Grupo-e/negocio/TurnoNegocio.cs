@@ -98,7 +98,7 @@ namespace negocio
 
                 return lista;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -121,7 +121,7 @@ namespace negocio
 
                 return datos.Lector.Read() ? armarTurno(datos) : null;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -194,6 +194,33 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        /// Cancela un turno Nuevo o Reprogramado y guarda el motivo en Observaciones.
+        /// Devuelve false si el turno no existe o ya no se puede cancelar.
+        public bool cancelar(int id, string motivo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("storedCancelarTurno");
+                datos.setearParametro("@Id", id);
+                datos.setearParametro("@Motivo", motivo);
+                return datos.ejecutarAccionScalar() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
+
+
 
         /// Verifica si el médico ya tiene un turno reservado en esa fecha y horario.
         public bool existeTurno(int idMedico, DateTime fecha, int hora)
