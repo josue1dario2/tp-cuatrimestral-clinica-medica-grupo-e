@@ -69,6 +69,7 @@
     <Content Include="AdminRecep.Master" />
     <Content Include="FormularioModificarUsuario.aspx" />
     <Content Include="Master.Master" />
+    <Content Include="CancelarTurno.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Especialidades.aspx" />
     <Content Include="EspecialidadesLista.aspx" />
@@ -143,6 +144,13 @@
     </Compile>
     <Compile Include="Master.Master.designer.cs">
       <DependentUpon>Master.Master</DependentUpon>
+    </Compile>
+    <Compile Include="CancelarTurno.aspx.cs">
+      <DependentUpon>CancelarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CancelarTurno.aspx.designer.cs">
+      <DependentUpon>CancelarTurno.aspx</DependentUpon>
     </Compile>
     <Compile Include="Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>

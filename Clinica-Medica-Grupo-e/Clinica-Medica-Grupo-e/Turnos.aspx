@@ -11,7 +11,7 @@
         <asp:Label ID="lblError" runat="server"></asp:Label>
     </asp:Panel>
     
-    <!-- Mensaje de éxito (por ejemplo, al cancelar un turno) -->
+    <!-- Mensaje de éxito (por ejemplo, al volver de CancelarTurno.aspx) -->
     <asp:Panel ID="pnlExito" runat="server" Visible="false" CssClass="alert alert-success d-flex align-items-center gap-2 mb-4">
         <span class="material-symbols-outlined">check_circle</span>
         <asp:Label ID="lblExito" runat="server"></asp:Label>
@@ -306,92 +306,6 @@
                 <asp:LinkButton ID="btnPaginaSiguiente" runat="server" OnClick="btnPaginaSiguiente_Click" CssClass="btn-page" ToolTip="Página siguiente">
                     <span class="material-symbols-outlined icon-18">chevron_right</span>
                 </asp:LinkButton>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: CANCELAR TURNO -->
-    <%-- Se abre desde el code-behind al presionar "Cancelar" en una fila (ver Turnos.aspx.cs) --%>
-
-    <div class="modal fade" id="modalCancelar" tabindex="-1" aria-labelledby="modalCancelarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-3">
-
-                <div class="modal-header border-bottom-0 pb-0">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="modal-icon-circle modal-icon-danger rounded-circle d-flex align-items-center justify-content-center">
-                            <span class="material-symbols-outlined">warning</span>
-                        </div>
-                        <div>
-                            <h5 class="modal-title fw-bold text-dark mb-0" id="modalCancelarLabel">Cancelar Turno Médico</h5>
-                            <span class="text-muted fs-12">Acción irrevocable • Liberación de cupo</span>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-
-                <div class="modal-body py-3">
-                    <asp:HiddenField ID="hfIdTurnoCancelar" runat="server" />
-                    <%-- Error de la cancelación: se muestra dentro del modal (ver MostrarErrorCancelar) --%>
-                    <asp:Panel ID="pnlErrorCancelar" runat="server" Visible="false" CssClass="alert alert-danger d-flex align-items-center gap-2 p-2 mb-3 fs-13">
-                        <span class="material-symbols-outlined">error</span>
-                        <asp:Label ID="lblErrorCancelar" runat="server"></asp:Label>
-                    </asp:Panel>
-
-
-
-
-                    <div class="p-3 bg-light rounded-3 mb-3">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="modal-codigo font-monospace fw-bold bg-white px-2 rounded border">Código:
-                                <asp:Label ID="lblCancelarCodigo" runat="server" Text="T-2025-000123"></asp:Label>
-                            </span>
-                            <asp:Label ID="lblCancelarEstado" runat="server" CssClass="badge-estado badge-estado-nuevo" Text="Nuevo"></asp:Label>
-                        </div>
-                        <div class="row g-2 mb-2 fs-13">
-                            <div class="col-6">
-                                <span class="text-muted d-block">Paciente:</span>
-                                <asp:Label ID="lblCancelarPaciente" runat="server" CssClass="fw-bold text-dark d-block" Text="Juan Ignacio López"></asp:Label>
-                                <asp:Label ID="lblCancelarPacienteDetalle" runat="server" CssClass="text-muted fs-12" Text="DNI 34.892.104 • OSDE 310"></asp:Label>
-                            </div>
-                            <div class="col-6">
-                                <span class="text-muted d-block">Profesional:</span>
-                                <asp:Label ID="lblCancelarMedico" runat="server" CssClass="fw-bold text-dark d-block" Text="Dr. Gómez Rossi, Alejandro"></asp:Label>
-                                <asp:Label ID="lblCancelarMedicoDetalle" runat="server" CssClass="text-muted fs-12" Text="Dermatología • Cons. 04"></asp:Label>
-                            </div>
-                        </div>
-                        <div class="pt-2 border-top fs-13">
-                            <span class="text-muted">Fecha y hora citada: </span>
-                            <asp:Label ID="lblCancelarFecha" runat="server" CssClass="fw-bold text-dark" Text="Sábado 24 de mayo 2025 - 16:00 hs"></asp:Label>
-                        </div>
-                    </div>
-
-                    <div class="modal-aviso d-flex align-items-start gap-2 p-3 rounded-2 mb-3">
-                        <span class="material-symbols-outlined">info</span>
-                        <div>Al cancelar este turno se liberará automáticamente el cupo en la agenda médica y se notificará al paciente por correo electrónico.</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <asp:Label ID="lblMotivoCancelacion" runat="server" AssociatedControlID="txtMotivoCancelacion" CssClass="form-label fw-semibold text-dark mb-1 fs-13">
-                            Motivo de cancelación <span class="text-danger">*</span>
-                        </asp:Label>
-                        <asp:TextBox ID="txtMotivoCancelacion" runat="server" TextMode="MultiLine" Rows="3" CssClass="form-control fs-13"></asp:TextBox>
-                        <span class="text-muted d-block mt-1 fs-12">Este motivo quedará asentado en el historial de trazabilidad del paciente.</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <asp:CheckBox ID="chkNotificarPaciente" runat="server" Checked="true" CssClass="chk-teal" />
-                        <asp:Label ID="lblNotificarPaciente" runat="server" AssociatedControlID="chkNotificarPaciente" CssClass="text-dark fs-13 mb-0" Text="Notificar al paciente por email de inmediato"></asp:Label>
-                    </div>
-                </div>
-
-                <div class="modal-footer border-top-0 pt-0">
-                    <button type="button" class="btn btn-light border text-secondary px-3 py-2 fw-medium fs-14" data-bs-dismiss="modal">Volver</button>
-                    <asp:LinkButton ID="btnConfirmarCancelacion" runat="server" OnClick="btnConfirmarCancelacion_Click"
-                        CssClass="btn btn-danger d-inline-flex align-items-center gap-1 px-3 py-2 fw-semibold shadow-sm fs-14">
-                        <span class="material-symbols-outlined">check</span>
-                        <span>Confirmar cancelación</span>
-                    </asp:LinkButton>
-                </div>
             </div>
         </div>
     </div>

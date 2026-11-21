@@ -39,6 +39,15 @@ namespace Clinica_Medica_Grupo_e
 
                 FiltrosPorDefecto();
                 Buscar();
+
+                // Mensaje que deja otra página antes de volver acá (por ejemplo, CancelarTurno.aspx).
+                // Va después de Buscar(), porque Buscar() oculta los mensajes.
+                string mensaje = Session["MensajeTurnos"] as string;
+                if (mensaje != null)
+                {
+                    Session.Remove("MensajeTurnos");
+                    MostrarExito(mensaje);
+                }
             }
         }
 
@@ -382,8 +391,7 @@ namespace Clinica_Medica_Grupo_e
             lblDetalleFechaHora.Text = turno.Fecha.ToString("dd/MM/yyyy") + " • " + turno.HoraTexto;
             lblDetalleMotivo.Text = string.IsNullOrEmpty(turno.Observaciones) ? "Sin observaciones" : turno.Observaciones;
 
-            ClientScript.RegisterStartupScript(GetType(), "abrirModal",
-                "document.addEventListener('DOMContentLoaded', function () { abrirModal('modalDetalle'); });", true);
+            AbrirModal("modalDetalle");
         }
 
 
@@ -425,140 +433,10 @@ namespace Clinica_Medica_Grupo_e
                     break;
 
                 case "Cancelar":
-                    try
-                    {
-                        AbrirModalCancelar(idTurno);
-                    }
-                    catch (Exception ex)
-                    {
-                        MostrarError("No se pudo cargar el turno: " + ex.Message);
-                    }
+                    Response.Redirect("~/CancelarTurno.aspx?id=" + idTurno);
                     break;
 
             }
-        }
-
-        // MODAL DE CANCELACIÓN
-
-        // Carga los datos del turno en el modal y lo abre.
-        private void AbrirModalCancelar(int idTurno)
-        {
-            Turno turno = new TurnoNegocio().buscarPorId(idTurno);
-            if (turno == null)
-            {
-                MostrarError("El turno seleccionado ya no existe.");
-                return;
-            }
-
-            // Solo se cancelan turnos Nuevos o Reprogramados (igual que PuedeCancelar en ArmarFila).
-            if (turno.Estado != EstadoTurno.Nuevo && turno.Estado != EstadoTurno.Reprogramado)
-            {
-                MostrarError("El turno #" + turno.NumeroTurno + " está " + TextoEstado(turno.Estado).ToLower()
-                    + " y ya no se puede cancelar.");
-                return;
-            }
-
-            hfIdTurnoCancelar.Value = turno.Id.ToString();
-
-            lblCancelarCodigo.Text = "#" + turno.NumeroTurno;
-            lblCancelarEstado.Text = TextoEstado(turno.Estado);
-            lblCancelarEstado.CssClass = "badge-estado " + CssEstado(turno.Estado);
-
-            lblCancelarPaciente.Text = turno.Paciente.NombreCompleto;
-            lblCancelarPacienteDetalle.Text = "DNI " + FormatearDni(turno.Paciente.Dni) + " • " + TextoCobertura(turno);
-
-            lblCancelarMedico.Text = turno.Medico.NombreCompleto;
-            lblCancelarMedicoDetalle.Text = turno.Especialidad.Descripcion;
-
-            string fecha = turno.Fecha.ToString("dddd d 'de' MMMM 'de' yyyy", Cultura);
-            lblCancelarFecha.Text = char.ToUpper(fecha[0]) + fecha.Substring(1) + " - " + turno.HoraTexto;
-
-            // El modal arranca limpio cada vez que se abre.
-            txtMotivoCancelacion.Text = "";
-            chkNotificarPaciente.Checked = true;
-            pnlErrorCancelar.Visible = false;
-
-            AbrirModal("modalCancelar");
-        }
-
-        // "OSDE 310", "Galeno" o "Particular".
-        private static string TextoCobertura(Turno turno)
-        {
-            if (turno.ObraSocial == null)
-                return "Particular";
-            if (turno.Plan == null)
-                return turno.ObraSocial.Nombre;
-            return turno.ObraSocial.Nombre + " " + turno.Plan.NombrePlan;
-        }
-
-        protected void btnConfirmarCancelacion_Click(object sender, EventArgs e)
-        {
-            string motivo = txtMotivoCancelacion.Text.Trim();
-
-            // 1) Validaciones
-            if (motivo.Length < 5)
-            {
-                MostrarErrorCancelar("Escribí el motivo de la cancelación (al menos 5 caracteres).");
-                return;
-            }
-            if (motivo.Length > 300)
-            {
-                MostrarErrorCancelar("El motivo no puede superar los 300 caracteres (tiene " + motivo.Length + ").");
-                return;
-            }
-
-            int idTurno;
-            if (!int.TryParse(hfIdTurnoCancelar.Value, out idTurno))
-            {
-                MostrarError("No se encontró el turno a cancelar. Volvé a intentarlo.");
-                return;
-            }
-
-            // 2) Cancelar
-            bool cancelado;
-            try
-            {
-                cancelado = new TurnoNegocio().cancelar(idTurno, motivo);
-            }
-            catch (Exception ex)
-            {
-                MostrarErrorCancelar("No se pudo cancelar el turno: " + ex.Message);
-                return;
-            }
-
-            // 3) Refrescar la tabla y las métricas (Buscar oculta los mensajes anteriores)
-            Buscar();
-            try
-            {
-                CargarMetricasDeHoy();
-            }
-            catch (Exception)
-            {
-                // Si fallan las métricas, la cancelación ya se hizo: no la tapamos con un error.
-            }
-
-            // 4) Avisar el resultado
-            if (!cancelado)
-            {
-                MostrarError("El turno " + lblCancelarCodigo.Text + " ya no se puede cancelar: cambió de estado mientras tanto.");
-                return;
-            }
-
-            if (chkNotificarPaciente.Checked)
-            {
-                // TODO: enviar el email de aviso al paciente.
-            }
-
-            MostrarExito("Se canceló el turno " + lblCancelarCodigo.Text + " de " + lblCancelarPaciente.Text
-                + ". El horario quedó libre en la agenda.");
-        }
-
-        // Muestra el error DENTRO del modal y lo vuelve a abrir (el PostBack lo cerró).
-        private void MostrarErrorCancelar(string mensaje)
-        {
-            lblErrorCancelar.Text = mensaje;
-            pnlErrorCancelar.Visible = true;
-            AbrirModal("modalCancelar");
         }
 
         private void MostrarExito(string mensaje)
