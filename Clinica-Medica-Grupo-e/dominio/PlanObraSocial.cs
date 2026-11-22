@@ -17,6 +17,8 @@ namespace dominio
         {
             return NombrePlan;
         }
+        public string NombreObraSocial { get; set; }
+        public string Sigla { get; set; }
     }
 }
 
