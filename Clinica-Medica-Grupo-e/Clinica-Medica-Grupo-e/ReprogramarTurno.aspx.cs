@@ -1,6 +1,9 @@
-﻿using System;
+﻿using dominio;
+using negocio;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -17,14 +20,92 @@ namespace Clinica_Medica_Grupo_e
 
                 // TEMPORAL: datos de ejemplo para ver el calendario y los horarios con el diseño.
                 // Borrar estas dos líneas (y los dos métodos de abajo) cuando se conecte la base.
+                lblResumenNuevo.Text = Formato.Fecha(DateTime.Today).ToString() + " " + DateTime.Now.ToString("HH:mm") + " hs";
+                lblBarraNuevo.Text = Formato.Fecha(DateTime.Today).ToString() + " " + DateTime.Now.ToString("HH:mm") + " hs";
                 CargarCalendarioDeEjemplo();
                 CargarHorariosDeEjemplo();
+                try
+                {
+                    object valorTurno = Session["idReprogTurno"];
+
+                    if (valorTurno is int IDViejo)
+                    {
+                        //
+                        CargarDatosTurno(IDViejo);
+                        
+
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
         }
 
         
         // TEMPORAL: datos de ejemplo (solo para ver el diseño)
         
+        private void CargarDatosTurno(int IDViejo)
+        {
+            Turno turnoViejo = new TurnoNegocio().buscarPorId(IDViejo);
+            CargarControles(turnoViejo);
+            CargarComboMedicos(turnoViejo.Especialidad.Id);
+
+
+        }
+
+        private void CargarControles(Turno turno)
+        {
+            lblPacienteIniciales.Text = turno.Paciente.Nombre[0].ToString() + turno.Paciente.Apellido[0].ToString();
+            lblPacienteNombre.Text = turno.Paciente.Nombre.ToString() + "<br>" + turno.Paciente.Apellido.ToString();
+            lblNumeroTurno.Text = turno.NumeroTurno.ToString();
+            lblPacienteEdad.Text = turno.Paciente.Edad.ToString() + " años";
+            lblBreadcrumbNumero.Text = turno.NumeroTurno.ToString();
+            lblPacienteEmail.Text = turno.Paciente.Email.ToString();
+            lblNotifEmail.Text = turno.Paciente.Email.ToString();
+            lblPacienteTelefono.Text = turno.Paciente.Telefono.ToString();
+            lblNotifNumero.Text = turno.NumeroTurno.ToString();
+            lblMotivoOriginal.Text = turno.Observaciones.ToString();
+            lblPacienteCobertura.Text = turno.ObraSocial == null ? "Particular" : turno.ObraSocial.Nombre;
+            
+            lblPacienteCredencial.Text = string.Empty;
+            lblFechaActual.Text = turno.HoraTexto.ToString();
+            lblPacienteDni.Text = Formato.Dni(turno.Paciente.Dni);
+            lblHoraActual.Text = DateTime.Now.ToString("HH:mm");
+            lblResumenAnterior.Text = Formato.Fecha(turno.Fecha) + " " + turno.HoraTexto.ToString();
+            lblMedicoActual.Text = "Dr(a). " + turno.Medico.Nombre.ToString()+ " " + turno.Medico.Apellido.ToString();
+            lblMatriculaActual.Text = "MN " + turno.Medico.Matricula.ToString() + ")";
+            EspecialidadNegocio especiaActual = new EspecialidadNegocio();
+            lblEspecialidadActual.Text = turno.Especialidad.Descripcion.ToString();
+            lblMismaEspecialidad.Text = "(Misma especialidad: " + turno.Especialidad.Descripcion.ToString() + ")";
+            
+            lblBarraAnterior.Text = Formato.Fecha(turno.Fecha).ToString() + " " + turno.HoraTexto.ToString();
+            
+            
+        }
+
+        private void CargarComboMedicos(int id)
+        {
+            List<Medico> listaMed = new MedicoNegocio()
+                .listarActivosPorEspecialidad(id);
+            if (listaMed !=null)
+            {
+                var listaMedicos = listaMed.Select(p => new
+                {
+                    Id = p.Id,
+                    TextoCompleto = $"{p.Nombre} {p.Apellido} ({p.Matricula})"
+                }).ToList();
+
+                ddlMedico.DataSource = listaMedicos;
+                ddlMedico.DataTextField = "TextoCompleto";
+                ddlMedico.DataValueField = "id";
+                ddlMedico.DataBind();
+            }
+            lblMedicosDisponibles.Text = listaMed.Count.ToString()+ (listaMed.Count >1 ? " médicos" : " medico") +  " con agenda abierta";
+
+        }
 
         private void CargarCalendarioDeEjemplo()
         {

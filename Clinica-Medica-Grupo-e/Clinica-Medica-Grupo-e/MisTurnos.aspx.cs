@@ -318,7 +318,7 @@ namespace Clinica_Medica_Grupo_e
                 IdTurno = turno.Id,
                 Hora = turno.HoraTexto,
                 PacienteNombre = turno.Paciente.NombreCompleto,
-                PacienteDetalle = turno.Paciente.Edad + " años • DNI " + FormatearDni(turno.Paciente.Dni),
+                PacienteDetalle = turno.Paciente.Edad + " años • DNI " + Formato.Dni(turno.Paciente.Dni),
                 Motivo = string.IsNullOrEmpty(turno.Observaciones) ? "Sin observaciones" : turno.Observaciones,
                 EstadoTexto = estadoTexto,
                 EstadoCss = estadoCss,
