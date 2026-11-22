@@ -218,7 +218,32 @@ namespace negocio
             }
         }
 
+        /// Reprograma un turno con storedReprogramarTurno y devuelve su código:
+        /// 1 reprogramado, 0 el turno no se puede reprogramar, -1 horario ocupado,
+        /// -2 médico inválido, -3 fecha u hora inválida, -4 sin cambios.
+        public int reprogramar(int id, int idMedico, DateTime fecha, int hora, string motivo)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
+            try
+            {
+                datos.setearProcedimiento("storedReprogramarTurno");
+                datos.setearParametro("@Id", id);
+                datos.setearParametro("@IdMedico", idMedico);
+                datos.setearParametro("@Fecha", fecha.Date);
+                datos.setearParametro("@Hora", hora);
+                datos.setearParametro("@Motivo", motivo);
+                return datos.ejecutarAccionScalar();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
 
 

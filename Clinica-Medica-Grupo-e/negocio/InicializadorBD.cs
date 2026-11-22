@@ -255,14 +255,14 @@ namespace negocio
                             SET NOCOUNT ON;
                             SET XACT_ABORT ON;   -- ante cualquier error, deshace la transacción
 
-                            DECLARE @IdMedicoAnterior INT, @FechaAnterior DATE, @HoraAnterior INT, @IdEspecialidad INT;
+                            DECLARE @IdMedicoAnterior INT, @FechaAnterior DATE, @HoraAnterior INT, @IdEspecialidad INT, @EstadoAnterior INT;
 
                             BEGIN TRANSACTION;
 
-                            -- 1) El turno existe y está Nuevo (1) o Reprogramado (2). UPDLOCK lo bloquea hasta el COMMIT.
-                            SELECT @IdMedicoAnterior = IdMedico, @FechaAnterior = Fecha, @HoraAnterior = Hora, @IdEspecialidad = IdEspecialidad
+                            -- 1) El turno existe y no está Cerrado (5). UPDLOCK lo bloquea hasta el COMMIT.
+                            SELECT @IdMedicoAnterior = IdMedico, @FechaAnterior = Fecha, @HoraAnterior = Hora, @IdEspecialidad = IdEspecialidad, @EstadoAnterior = Estado
                             FROM TURNOS WITH (UPDLOCK)
-                            WHERE Id = @Id AND Estado IN (1, 2);
+                            WHERE Id = @Id AND Estado IN (1, 2, 3, 4);
 
                             IF @FechaAnterior IS NULL
                             BEGIN
@@ -271,8 +271,8 @@ namespace negocio
                                 RETURN;
                             END
 
-                            -- 2) Sin cambios
-                            IF @IdMedico = @IdMedicoAnterior AND @Fecha = @FechaAnterior AND @Hora = @HoraAnterior
+                            -- 2) Sin cambios (solo si el turno sigue vigente: uno cancelado sí se puede reusar en el mismo horario)
+                            IF @EstadoAnterior IN (1, 2) AND @IdMedico = @IdMedicoAnterior AND @Fecha = @FechaAnterior AND @Hora = @HoraAnterior
                             BEGIN
                                 ROLLBACK TRANSACTION;
                                 SELECT -4;

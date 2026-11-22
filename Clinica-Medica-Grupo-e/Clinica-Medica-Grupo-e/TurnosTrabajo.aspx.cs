@@ -12,17 +12,20 @@ namespace Clinica_Medica_Grupo_e
 {
     public partial class TurnosTrabajo : Page
     {
-        // Pestaña elegida: "Activos", "Inactivos" o "Todos". Se guarda en el ViewState para que no se pierda en cada PostBack.
+        // Pestaña elegida: "Activos", "Inactivos" o "Todos". Se guarda en Session para que no se pierda en cada PostBack (se borra al entrar a la página).
         private string FiltroEstado
         {
-            get { return ViewState["FiltroEstado"] as string ?? "Activos"; }
-            set { ViewState["FiltroEstado"] = value; }
+            get { return Session["TurnosTrabajo_FiltroEstado"] as string ?? "Activos"; }
+            set { Session["TurnosTrabajo_FiltroEstado"] = value; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                // La Session no se borra sola: cada visita arranca en la pestaña Activos.
+                Session.Remove("TurnosTrabajo_FiltroEstado");
+
                 CargarHoras();
                 CargarTurnos();
 

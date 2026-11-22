@@ -14,18 +14,21 @@ namespace Clinica_Medica_Grupo_e
         private static readonly CultureInfo Cultura = new CultureInfo("es-AR");
 
 
-        /// Página actual de la tabla (empieza en 1). Se guarda en ViewState.
+        /// Página actual de la tabla (empieza en 1). Se guarda en Session (se borra al entrar a la página).
 
         private int PaginaActual
         {
-            get { return ViewState["PaginaActual"] == null ? 1 : (int)ViewState["PaginaActual"]; }
-            set { ViewState["PaginaActual"] = value; }
+            get { return Session["Turnos_PaginaActual"] == null ? 1 : (int)Session["Turnos_PaginaActual"]; }
+            set { Session["Turnos_PaginaActual"] = value; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                // La Session no se borra sola: cada visita arranca en la página 1.
+                Session.Remove("Turnos_PaginaActual");
+
                 try
                 {
                     CargarCombos();

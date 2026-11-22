@@ -236,7 +236,8 @@ namespace negocio
             try
             {
                 datos.setearConsulta(
-                    "SELECT M.Id, M.Nombre, M.Apellido, M.Matricula " +
+                    "SELECT M.Id, M.Nombre, M.Apellido, M.Matricula, " +
+                    "TT.Id AS IdTurnoTrabajo, TT.Nombre AS TurnoTrabajoNombre, TT.HoraEntrada, TT.HoraSalida " +
                     "FROM MEDICOS M " +
                     "INNER JOIN MEDICOS_ESPECIALIDADES ME ON ME.IdMedico = M.Id " +
                     "INNER JOIN TURNOS_TRABAJO TT ON TT.Id = M.IdTurnoTrabajo " +
@@ -255,6 +256,11 @@ namespace negocio
                     medico.Apellido = (string)datos.Lector["Apellido"];
                     medico.Matricula = (string)datos.Lector["Matricula"];
                     medico.Activo = true;   // la consulta solo trae activos
+                    medico.TurnoTrabajo = new TurnoTrabajo();
+                    medico.TurnoTrabajo.Id = (int)datos.Lector["IdTurnoTrabajo"];
+                    medico.TurnoTrabajo.Nombre = (string)datos.Lector["TurnoTrabajoNombre"];
+                    medico.TurnoTrabajo.HoraEntrada = (int)datos.Lector["HoraEntrada"];
+                    medico.TurnoTrabajo.HoraSalida = (int)datos.Lector["HoraSalida"];
 
                     lista.Add(medico);
                 }

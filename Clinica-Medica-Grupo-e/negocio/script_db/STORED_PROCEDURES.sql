@@ -755,15 +755,16 @@ BEGIN
 END
 GO
 
--- Reprogramar turno: cambia médico, fecha y hora de un turno Nuevo (1) o Reprogramado (2)
--- y lo deja en estado Reprogramado (2). Agrega el cambio y el motivo al final de Observaciones.
+-- Reprogramar turno: cambia médico, fecha y hora de un turno en cualquier estado menos Cerrado (5):
+-- Nuevo (1), Reprogramado (2), Cancelado (3) o No asistió (4). Un turno cancelado o ausente se reusa.
+-- Lo deja en estado Reprogramado (2). Agrega el cambio y el motivo al final de Observaciones.
 -- Devuelve un código:
 --    1  reprogramado
---    0  el turno no existe o su estado no permite reprogramarlo
+--    0  el turno no existe o está Cerrado (ya atendido)
 --   -1  el horario elegido ya está ocupado
 --   -2  el médico no está activo o no tiene la especialidad del turno
 --   -3  fecha u hora inválida (pasada o fuera del turno de trabajo del médico)
---   -4  no hay cambios (mismo médico, fecha y hora)
+--   -4  no hay cambios (mismo médico, fecha y hora en un turno Nuevo o Reprogramado)
 IF OBJECT_ID('dbo.storedReprogramarTurno', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedReprogramarTurno];
 GO
@@ -779,14 +780,14 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;   -- ante cualquier error, deshace la transacción
 
-    DECLARE @IdMedicoAnterior INT, @FechaAnterior DATE, @HoraAnterior INT, @IdEspecialidad INT;
+    DECLARE @IdMedicoAnterior INT, @FechaAnterior DATE, @HoraAnterior INT, @IdEspecialidad INT, @EstadoAnterior INT;
 
     BEGIN TRANSACTION;
 
-    -- 1) El turno existe y está Nuevo (1) o Reprogramado (2). UPDLOCK lo bloquea hasta el COMMIT.
-    SELECT @IdMedicoAnterior = IdMedico, @FechaAnterior = Fecha, @HoraAnterior = Hora, @IdEspecialidad = IdEspecialidad
+    -- 1) El turno existe y no está Cerrado (5). UPDLOCK lo bloquea hasta el COMMIT.
+    SELECT @IdMedicoAnterior = IdMedico, @FechaAnterior = Fecha, @HoraAnterior = Hora, @IdEspecialidad = IdEspecialidad, @EstadoAnterior = Estado
     FROM TURNOS WITH (UPDLOCK)
-    WHERE Id = @Id AND Estado IN (1, 2);
+    WHERE Id = @Id AND Estado IN (1, 2, 3, 4);
 
     IF @FechaAnterior IS NULL
     BEGIN
@@ -795,8 +796,8 @@ BEGIN
         RETURN;
     END
 
-    -- 2) Sin cambios
-    IF @IdMedico = @IdMedicoAnterior AND @Fecha = @FechaAnterior AND @Hora = @HoraAnterior
+    -- 2) Sin cambios (solo si el turno sigue vigente: uno cancelado sí se puede reusar en el mismo horario)
+    IF @EstadoAnterior IN (1, 2) AND @IdMedico = @IdMedicoAnterior AND @Fecha = @FechaAnterior AND @Hora = @HoraAnterior
     BEGIN
         ROLLBACK TRANSACTION;
         SELECT -4;

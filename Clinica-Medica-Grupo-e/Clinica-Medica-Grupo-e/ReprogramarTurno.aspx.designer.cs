@@ -24,6 +24,24 @@ namespace Clinica_Medica_Grupo_e
         protected global::System.Web.UI.WebControls.HiddenField hfIdTurno;
 
         /// <summary>
+        /// pnlError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlError;
+
+        /// <summary>
+        /// lblError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
+
+        /// <summary>
         /// lnkBreadcrumbTurnos control.
         /// </summary>
         /// <remarks>
@@ -76,6 +94,15 @@ namespace Clinica_Medica_Grupo_e
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkVolver;
+
+        /// <summary>
+        /// pnlContenido control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlContenido;
 
         /// <summary>
         /// lblEstadoActual control.
