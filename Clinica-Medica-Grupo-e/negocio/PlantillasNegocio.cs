@@ -2,6 +2,7 @@
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -17,6 +18,8 @@ namespace negocio
         private string motivoPlantilla;
         private string plantillaCorreo;
         private Turno turnoPlantilla;
+
+        private static readonly CultureInfo Cultura = new CultureInfo("es-AR");
         public PlantillasNegocio(string motivo, Turno turno)
         {
             this.motivoPlantilla = motivo;
@@ -69,7 +72,12 @@ namespace negocio
             plantillaCorreo = plantillaCorreo.Replace("{{MEDICO_APELLIDO}}", HttpUtility.HtmlEncode(turnoPlantilla.Medico.Apellido));
             plantillaCorreo = plantillaCorreo.Replace("{{MEDICO_ESPECIALIDAD}}", HttpUtility.HtmlEncode(turnoPlantilla.Especialidad.Descripcion));
             plantillaCorreo = plantillaCorreo.Replace("{{MEDICO_MATRICULA}}", HttpUtility.HtmlEncode(turnoPlantilla.Medico.Matricula));
-            plantillaCorreo = plantillaCorreo.Replace("{{FECHA}}", HttpUtility.HtmlEncode(turnoPlantilla.Fecha.ToString("dddd dd/MM/yyyy")));
+
+
+
+            string fecha = turnoPlantilla.Fecha.ToString("dddd d 'de' MMMM 'de' yyyy", Cultura);
+            fecha = char.ToUpper(fecha[0]) + fecha.Substring(1);
+            plantillaCorreo = plantillaCorreo.Replace("{{FECHA}}", fecha);
             plantillaCorreo = plantillaCorreo.Replace("{{HORA}}", HttpUtility.HtmlEncode(turnoPlantilla.HoraTexto));
             plantillaCorreo = plantillaCorreo.Replace("{{MOTIVO}}", HttpUtility.HtmlEncode(turnoPlantilla.Observaciones));
 
