@@ -226,6 +226,12 @@
                         </div>
                     </div>
 
+                    <%-- Notificación por correo: marcada por defecto --%>
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <asp:CheckBox ID="chkEnviarCorreo" runat="server" Checked="true" CssClass="chk-teal" />
+                        <asp:Label ID="lblEnviarCorreo" runat="server" AssociatedControlID="chkEnviarCorreo" CssClass="text-dark fs-13 mb-0" Text="Enviar correo electrónico de notificación"></asp:Label>
+                    </div>
+
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-3 border-top">
                         <a href="Turnos.aspx" class="btn btn-light border px-4 py-2 text-secondary" style="font-size: 14px;">
                             Cancelar

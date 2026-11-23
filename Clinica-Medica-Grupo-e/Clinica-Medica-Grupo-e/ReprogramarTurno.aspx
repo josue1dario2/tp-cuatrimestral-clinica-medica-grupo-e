@@ -357,6 +357,11 @@
                         <p class="mb-0 mt-1 lh-base" style="font-size: 14px; color: rgba(30, 58, 138, 0.95);">
                             El número de identificador se mantiene <strong class="fw-bold font-monospace" style="color: var(--cl-info-text);">(#<asp:Label ID="lblNotifNumero" runat="server" Text="1001"></asp:Label>)</strong> y se enviará un correo electrónico de confirmación inmediata al paciente (<asp:Label ID="lblNotifEmail" runat="server" CssClass="fw-semibold text-decoration-underline" Text="paciente@email.com"></asp:Label>) y recordatorio por WhatsApp avisando la nueva fecha y horario con el bono de atención actualizado.
                         </p>
+                        <%-- Notificación por correo: marcada por defecto --%>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <asp:CheckBox ID="chkEnviarCorreo" runat="server" Checked="true" CssClass="chk-teal" />
+                            <asp:Label ID="lblEnviarCorreo" runat="server" AssociatedControlID="chkEnviarCorreo" CssClass="fw-semibold fs-13 mb-0" Text="Enviar correo electrónico de notificación"></asp:Label>
+                        </div>
                     </div>
                 </div>
                 <!-- Barra de Acciones y Guardado -->
