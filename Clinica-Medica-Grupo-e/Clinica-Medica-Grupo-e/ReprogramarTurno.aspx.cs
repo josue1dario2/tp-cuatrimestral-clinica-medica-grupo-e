@@ -594,6 +594,11 @@ namespace Clinica_Medica_Grupo_e
                     // El mensaje se arma antes de limpiar Session, porque LimpiarEstado borra la fecha y la hora elegidas.
                     Session["MensajeTurnos"] = "Se reprogramó el turno #" + lblNumeroTurno.Text + " para el "
                         + TextoFechaHora(FechaElegida.Value, HoraElegida.Value) + ".";
+                    if (chkEnviarCorreo.Checked)
+                    {
+                        enviarTurno((int)Session["idReprogTurno"]);
+                    }
+                    
                     Session.Remove("idReprogTurno");
                     LimpiarEstado();
                     Response.Redirect("~/Turnos.aspx");
@@ -688,5 +693,12 @@ namespace Clinica_Medica_Grupo_e
         {
             return string.IsNullOrWhiteSpace(texto) ? "-" : texto;
         }
+
+        private void enviarTurno(int idTurno)
+        {
+            Turno turno = new TurnoNegocio().buscarPorId(idTurno);
+            new EmailNegocio("Reprogramacion").EnviarCorreo(turno, "Reprogramacion");
+        }
+
     }
 }

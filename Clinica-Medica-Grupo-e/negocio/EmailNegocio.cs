@@ -31,6 +31,9 @@ namespace negocio
 
                 case "Recordatorio":
                     return "Recordatorio de turno";
+                
+                case "Reprogramacion":
+                    return "Reprogramación de turno";
 
                 default:
                     throw new ArgumentException("Motivo no válido.");

@@ -37,10 +37,12 @@ namespace negocio
         }
         private string preProcesamiento()
         {
-            if (motivoPlantilla != "Reprogramacion")
-            {
-                plantillaCorreo = QuitarBloque(plantillaCorreo, "ANTERIOR");
-            }
+            plantillaCorreo = QuitarBloque(plantillaCorreo, "ANTERIOR");
+            //}
+            //else if (motivoPlantilla == "Reprogramacion")
+            //{
+            //    plantillaCorreo = QuitarBloque(plantillaCorreo, "Fecha");
+            //}
             return plantillaCorreo;
         }
 
