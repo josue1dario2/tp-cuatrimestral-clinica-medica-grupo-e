@@ -520,6 +520,20 @@ namespace Clinica_Medica_Grupo_e
 
                 if (idTurnoGenerado > 0)
                 {
+                    if (chkEnviarCorreo.Checked)
+                    {
+                        try
+                        {
+                            Turno turnoCompleto = turnoNegocio.buscarPorId(idTurnoGenerado);   // con paciente, médico, número, etc.
+                            new EmailNegocio("Confirmacion").EnviarCorreo(turnoCompleto, "Confirmacion");
+                        }
+                        catch (Exception ex)
+                        {
+                            // El turno ya está guardado: solo se avisa que el correo no salió
+                            Session["MensajeCorreo"] = "El turno se guardó, pero no se pudo enviar el correo: " + ex.Message;
+                        }
+                    }
+
                     Response.Redirect(string.Format("~/TurnoConfirmado.aspx?id={0}", idTurnoGenerado), false);
                     Context.ApplicationInstance.CompleteRequest();
                 }

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<!--
+    PLANTILLA DE CORREO: notificación de turnos (nuevo, cancelado o reprogramado).
+
+    Reglas para correos HTML:
+    - Diseño con tablas y estilos en línea (style="..."): muchos clientes de correo
+      (Gmail, Outlook) ignoran las hojas de estilo externas, Bootstrap, las fuentes web y JavaScript.
+    - No lleva <form>, <script> ni archivos .css.
+
+    VARIABLES (se reemplazan desde el código con .Replace("{{NOMBRE}}", valor)):
+      {{COLOR}}               Color del estado. Ej.: #0E7C86 (nuevo), #C62828 (cancelado), #B45309 (reprogramado)
+      {{MOTIVO_CORREO}}       Etiqueta superior. Ej.: TURNO NUEVO / TURNO CANCELADO / TURNO REPROGRAMADO
+      {{TITULO}}              Ej.: Tu turno está confirmado
+      {{MENSAJE}}             Párrafo debajo del título
+      {{NUMERO_TURNO}}        Número de turno
+      {{PACIENTE_NOMBRE}}  {{PACIENTE_APELLIDO}}  {{PACIENTE_DNI}}
+      {{MEDICO_NOMBRE}}  {{MEDICO_APELLIDO}}  {{MEDICO_ESPECIALIDAD}}  {{MEDICO_MATRICULA}}
+      {{FECHA}}  {{HORA}}     Fecha y hora del turno (en una reprogramación, las nuevas)
+
+    BLOQUES OPCIONALES (entre comentarios INICIO_... y FIN_...):
+      ANTERIOR  {{FECHA_ANTERIOR}} {{HORA_ANTERIOR}}  Solo para reprogramaciones. Si no se usa, se borra el bloque entero.
+      MOTIVO    {{MOTIVO}}                            Motivo de la cancelación o de la reprogramación. Si no se usa, se borra el bloque.
+-->
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{MOTIVO_CORREO}} - Clínica Médica</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f8f9ff; font-family: Arial, Helvetica, sans-serif; color: #0b1c30;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f8f9ff;">
+        <tr>
+            <td align="center" style="padding: 24px 12px;">
+
+                <!-- Tarjeta principal -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e5eeff;">
+
+                    <!-- Franja de color del estado -->
+                    <tr>
+                        <td style="height: 6px; line-height: 6px; font-size: 0; background-color: {{COLOR}};">&nbsp;</td>
+                    </tr>
+
+                    <!-- Encabezado: marca -->
+                    <tr>
+                        <td style="padding: 20px 24px 8px 24px;">
+                            <span style="font-size: 20px; font-weight: bold; color: #0b1c30;">Clínica Médica</span><br />
+                            <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #4d5f7b;">Gestión Integral de Salud</span>
+                        </td>
+                    </tr>
+
+                    <!-- Motivo del correo, título y mensaje -->
+                    <tr>
+                        <td align="center" style="padding: 16px 24px 24px 24px; background-color: #eff4ff;">
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 999px; background-color: {{COLOR}}; color: #ffffff; font-size: 11px; font-weight: bold; letter-spacing: 1px;">{{MOTIVO_CORREO}}</span>
+                            <h1 style="margin: 12px 0 6px 0; font-size: 24px; line-height: 32px; color: #0b1c30;">{{TITULO}}</h1>
+                            <p style="margin: 0; font-size: 14px; line-height: 20px; color: #4d5f7b;">{{MENSAJE}}</p>
+                            <p style="margin: 14px 0 0 0;">
+                                <span style="display: inline-block; padding: 6px 14px; border-radius: 999px; background-color: #e5eeff; font-family: 'Courier New', monospace; font-size: 12px; font-weight: bold; color: #0b1c30;">N° de turno: {{NUMERO_TURNO}}</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Datos del turno -->
+                    <tr>
+                        <td style="padding: 24px;">
+
+                            <!-- Paciente -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 12px; background-color: #eff4ff; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 14px 16px;">
+                                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #00626a;">Paciente</span><br />
+                                        <span style="font-size: 16px; font-weight: bold; color: #0b1c30;">{{PACIENTE_NOMBRE}} {{PACIENTE_APELLIDO}}</span><br />
+                                        <span style="font-size: 13px; color: #4d5f7b;">DNI {{PACIENTE_DNI}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Profesional -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 12px; background-color: #eff4ff; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 14px 16px;">
+                                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #00626a;">Profesional</span><br />
+                                        <span style="font-size: 16px; font-weight: bold; color: #0b1c30;">Dr/a. {{MEDICO_NOMBRE}} {{MEDICO_APELLIDO}}</span><br />
+                                        <span style="font-size: 13px; color: #4d5f7b;">{{MEDICO_ESPECIALIDAD}} &bull; Matrícula {{MEDICO_MATRICULA}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!--INICIO_ANTERIOR-->
+                            <!-- Fecha y hora anteriores (solo reprogramaciones) -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 12px; background-color: #f8f9ff; border: 1px dashed #c3cbd9; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 14px 16px;">
+                                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #6e797a;">Fecha y hora anteriores</span><br />
+                                        <span style="font-size: 15px; color: #6e797a; text-decoration: line-through;">{{FECHA_ANTERIOR}} &bull; {{HORA_ANTERIOR}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--FIN_ANTERIOR-->
+
+                            <!-- Fecha y hora -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 12px; background-color: #ffffff; border: 2px solid {{COLOR}}; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 14px 16px;">
+                                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: {{COLOR}};">Fecha y hora</span><br />
+                                        <span style="font-size: 18px; font-weight: bold; color: #0b1c30;">{{FECHA}} &bull; {{HORA}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!--INICIO_MOTIVO-->
+                            <!-- Motivo de la cancelación o reprogramación -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #e5eeff; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 14px 16px;">
+                                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #4d5f7b;">Motivo</span><br />
+                                        <span style="font-size: 14px; line-height: 20px; color: #0b1c30;">{{MOTIVO}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--FIN_MOTIVO-->
+
+                        </td>
+                    </tr>
+
+                    <!-- Aviso -->
+                    <tr>
+                        <td style="padding: 0 24px 24px 24px;">
+                            <p style="margin: 0; padding: 14px 16px; background-color: #d4e3ff; border-radius: 8px; font-size: 12px; line-height: 18px; color: #061c35;">
+                                Recordá llevar tu <strong>DNI</strong> y tu credencial de cobertura médica. Si no podés asistir, avisanos con al menos <strong>24 horas de anticipación</strong> para liberar el horario.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Pie -->
+                    <tr>
+                        <td align="center" style="padding: 20px 24px; background-color: #eff4ff; font-size: 11px; line-height: 16px; color: #6e797a;">
+                            Este es un correo automático, por favor no lo respondas.<br />
+                            Contiene información confidencial protegida por la Ley 25.326 de Protección de Datos Personales.
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

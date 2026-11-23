@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
+using System.Web.ModelBinding;
 
 namespace negocio
 {
@@ -16,21 +17,28 @@ namespace negocio
         public EmailService()
         {
             server = new SmtpClient();
-            server.Credentials = new NetworkCredential("programationiii@gmail.com", "programacion3");
+            server.Credentials = new NetworkCredential("f5807a39944f8c", "462e755284e1b0");
             server.EnableSsl = true;
-            server.Port = 587;
-            server.Host = "smtp.gmail.com";
+            server.Port = 2525;
+            server.Host = "sandbox.smtp.mailtrap.io";
         }
 
         public void armarCorreo(string emailDestino, string asunto, string cuerpo)
         {
-            email = new MailMessage();
-            email.From = new MailAddress("noresponder@ecommerceprogramacioniii.com");
-            email.To.Add(emailDestino);
-            email.Subject = asunto;
-            email.IsBodyHtml = true;
-            email.Body = "<h1>Reporte de materias a las que se ha inscripto</h1> <br>Hola, te inscribiste.... bla bla";
-            //email.Body = cuerpo;
+            try
+            {
+                email = new MailMessage();
+                email.From = new MailAddress("noresponder@clinicamedica.com");
+                email.To.Add(emailDestino);
+                email.Subject = asunto;
+                email.IsBodyHtml = true;
+                email.Body = cuerpo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
 
         }
 

@@ -88,6 +88,7 @@
     <Content Include="MisTurnos.aspx" />
     <Content Include="NuevoTurno.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="Plantillas\NotificacionTurno.html" />
     <Content Include="PlanesObraSocial.aspx" />
     <Content Include="ReprogramarTurno.aspx" />
     <Content Include="Scripts\inicio-medico.js" />
