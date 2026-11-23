@@ -591,10 +591,11 @@ namespace Clinica_Medica_Grupo_e
             switch (resultado)
             {
                 case 1:
-                    Session.Remove("idReprogTurno");
-                    LimpiarEstado();
+                    // El mensaje se arma antes de limpiar Session, porque LimpiarEstado borra la fecha y la hora elegidas.
                     Session["MensajeTurnos"] = "Se reprogramó el turno #" + lblNumeroTurno.Text + " para el "
                         + TextoFechaHora(FechaElegida.Value, HoraElegida.Value) + ".";
+                    Session.Remove("idReprogTurno");
+                    LimpiarEstado();
                     Response.Redirect("~/Turnos.aspx");
                     break;
                 case -1:
