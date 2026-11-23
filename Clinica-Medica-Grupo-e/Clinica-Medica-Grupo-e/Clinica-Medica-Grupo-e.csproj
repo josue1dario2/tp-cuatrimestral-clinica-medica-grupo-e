@@ -68,6 +68,7 @@
     <Content Include="Content\medico.css" />
     <Content Include="AdminRecep.Master" />
     <Content Include="FormularioModificarUsuario.aspx" />
+    <Content Include="GestionObraSociales.aspx" />
     <Content Include="Master.Master" />
     <Content Include="CancelarTurno.aspx" />
     <Content Include="Error.aspx" />
@@ -120,6 +121,12 @@
     </Compile>
     <Compile Include="FormularioModificarUsuario.aspx.designer.cs">
       <DependentUpon>FormularioModificarUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionObraSociales.aspx.cs">
+      <DependentUpon>GestionObraSociales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GestionObraSociales.aspx.designer.cs">
+      <DependentUpon>GestionObraSociales.aspx</DependentUpon>
     </Compile>
     <Compile Include="GestionUsuariosAdmin.aspx.cs">
       <DependentUpon>GestionUsuariosAdmin.aspx</DependentUpon>
