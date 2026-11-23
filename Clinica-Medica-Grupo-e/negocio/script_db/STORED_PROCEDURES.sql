@@ -471,19 +471,16 @@ GO
 -- =============================================================================
 
 -- 5.1 Listar Obras Sociales Activas (Particular al principio)
-IF OBJECT_ID('dbo.storedListarObrasSociales', 'P') IS NOT NULL
-    DROP PROCEDURE [dbo].[storedListarObrasSociales];
-GO
-
-CREATE PROCEDURE [dbo].[storedListarObrasSociales]
+CREATE OR ALTER PROCEDURE StoredListarObrasSociales
+    @Texto VARCHAR(100) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
     SELECT IdObraSocial, Nombre, Sigla, Activo
     FROM ObrasSociales
-    WHERE Activo = 1
-    ORDER BY CASE WHEN Sigla = 'PARTICULAR' THEN 0 ELSE 1 END, Nombre ASC;
-END
+    WHERE (@Texto IS NULL OR Nombre LIKE '%' + @Texto + '%' OR Sigla LIKE '%' + @Texto + '%')
+    ORDER BY CASE WHEN Sigla = 'PARTICULAR' THEN 0 ELSE 1 END, Nombre;
+END;
 GO
 
 -- 5.2 Listar Planes por Obra Social
