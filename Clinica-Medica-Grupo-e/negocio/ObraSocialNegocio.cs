@@ -139,6 +139,171 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<ObraSocial> ListarSP(string texto)
+        {
+            List<ObraSocial> lista = new List<ObraSocial>();
+            AccesoDatos datos = new AccesoDatos();
+
+
+            try
+            {
+
+                datos.setearProcedimiento("StoredListarObrasSociales");
+
+                datos.setearParametro("@Texto", string.IsNullOrEmpty(texto) ? (object)DBNull.Value : texto.Trim());
+
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    ObraSocial aux = new ObraSocial();
+
+                    aux.IdObraSocial = (int)datos.Lector["IdObraSocial"];
+                    aux.Nombre = (string)datos.Lector["Nombre"].ToString();
+                    aux.Sigla = datos.Lector["Sigla"] == DBNull.Value ? null : datos.Lector["Sigla"].ToString().Trim();
+                    aux.Activo = (bool)datos.Lector["Activo"];
+                    lista.Add(aux);
+
+                }
+
+                return lista;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.cerrarConexion(); }
+
+        }
+
+
+        public ObraSocial BuscarPorIDSP(int id)
+        {
+            ObraSocial obra = null;
+            AccesoDatos datos = new AccesoDatos();
+
+
+            try
+            {
+                datos.setearProcedimiento("StoredBuscarObrasocialPorID");
+                datos.setearParametro("@IdObraSocial", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+
+                    obra = new ObraSocial();
+                    obra.IdObraSocial = (int)datos.Lector["IdObraSocial"];
+                    obra.Nombre = datos.Lector["Nombre"].ToString();
+
+                    obra.Sigla = datos.Lector["Sigla"] == DBNull.Value ? null : datos.Lector["Sigla"].ToString();
+
+                    obra.Activo = (bool)datos.Lector["Activo"];
+
+
+                }
+                return obra;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+
+
+            }
+
+
+
+        }
+
+
+        public void RegistrarSP(ObraSocial nueva)
+        {
+
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("StoredRegistrarObraSocial");
+
+                datos.setearParametro("@Nombre", nueva.Nombre);
+
+                datos.setearParametro("@Sigla", string.IsNullOrWhiteSpace(nueva.Sigla) ? (object)DBNull.Value : nueva.Sigla.Trim());
+
+                datos.ejecutarAccion();
+
+
+
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+
+
+            }
+
+        }
+
+        public void ModificarSP(ObraSocial modificada)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("StoredModificarObraSocial");
+
+                datos.setearParametro("@IdObraSocial", modificada.IdObraSocial);
+                datos.setearParametro("@Nombre", modificada.Nombre);
+
+                datos.setearParametro("@Sigla", string.IsNullOrWhiteSpace(modificada.Sigla) ? (object)DBNull.Value : modificada.Sigla.Trim());
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void ModificarEstadoSP(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("StoredModificarEstadoObraSocial");
+                datos.setearParametro("@IdObraSocial", id);
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+
+        }
+
+
+
+
+
+
     }
 }
 
