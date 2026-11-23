@@ -29,7 +29,7 @@ namespace Clinica_Medica_Grupo_e
             HyperLink[] links =
             {
                 lnkNavInicio, lnkNavTurnos, lnkNavNuevoTurno, lnkNavPacientes, lnkNavMedicos,
-                lnkNavEspecialidades, lnkNavTurnosTrabajo, lnkNavUsuarios, lnkNavEstadisticas
+                lnkNavEspecialidades, lnkNavTurnosTrabajo, lnkNavUsuarios, lnkNavEstadisticas,lnkNavObrasSociales
             };
 
             foreach (HyperLink link in links)
