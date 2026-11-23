@@ -160,6 +160,13 @@
                                 <span class="material-symbols-outlined">manage_accounts</span>
                                 <span>Usuarios</span>
                             </asp:HyperLink>
+                            <asp:HyperLink ID="lnkNavObrasSociales" runat="server"
+                                NavigateUrl="~/GestionObraSociales.aspx"
+                                CssClass="nav-item-custom">
+                                <span class="material-symbols-outlined">health_and_safety</span>
+                                <span>Obras Sociales</span>
+                            </asp:HyperLink>
+
                             <asp:HyperLink ID="lnkNavEstadisticas" runat="server" NavigateUrl="~/Estadisticas.aspx" CssClass="nav-item-custom">
                                 <span class="material-symbols-outlined">analytics</span>
                                 <span>Estadísticas</span>

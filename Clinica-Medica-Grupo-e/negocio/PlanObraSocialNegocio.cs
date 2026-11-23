@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using dominio;
 namespace negocio
 {
-    internal class PlanObraSocialNegocio
+    public class PlanObraSocialNegocio
     {
         public List<PlanObraSocial> ListarSP(string texto, int? idObraSocial, bool? activo)
         {
