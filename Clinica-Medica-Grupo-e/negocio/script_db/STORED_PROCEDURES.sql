@@ -754,3 +754,311 @@ BEGIN
     SELECT @@ROWCOUNT;
 END
 GO
+
+
+-- actualizacion procedimientos obra social 16/11
+
+CREATE PROCEDURE StoredListarObrasSociales
+
+@Texto VARCHAR(100) = NULL
+
+AS
+
+BEGIN
+
+SELECT
+
+idObraSocial,Nombre,Sigla,Activo FROM ObrasSociales
+
+where
+(@Texto IS NULL OR Nombre LIKE '%' + @Texto + '%' OR Sigla LIKE '%' + @Texto + '%')
+ORDER BY Nombre;
+END;
+GO
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE StoredBuscarObraSocialPorID
+@IdObraSocial INT
+
+AS 
+BEGIN
+SELECT IdObraSocial,Nombre,Sigla,Activo
+FROM ObrasSociales
+WHERE IdObraSocial=@IdObraSocial
+END;
+GO
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE StoredRegistrarObraSocial
+@Nombre VARCHAR(100),
+@Sigla VARCHAR(30) = NULL
+
+AS
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM ObrasSociales
+        WHERE Nombre = @Nombre
+    )
+    BEGIN
+        THROW 50010, 'Ya existe una obra social con ese nombre.', 1;
+    END
+
+    INSERT INTO ObrasSociales (Nombre, Sigla, Activo)
+    VALUES (@Nombre, @Sigla, 1);
+END;
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE StoredModificarObraSocial
+@IdObraSocial INT,
+@Nombre VARCHAR(100),
+@Sigla VARCHAR(30) = NULL
+
+AS 
+BEGIN
+
+IF EXISTS 
+(SELECT 1
+FROM ObrasSociales
+WHERE Nombre = @Nombre
+AND IdObraSocial <> @IdObraSocial )
+
+BEGIN
+   THROW 50011, 'Ya existe otra obra social con ese nombre.', 1;
+END
+
+UPDATE ObrasSociales
+SET Nombre = @Nombre,
+Sigla = @Sigla
+
+WHERE IdObraSocial = @IdObraSocial;
+END;
+GO
+
+
+
+
+
+
+CREATE PROCEDURE StoredModificarEstadoObraSocial
+    @IdObraSocial INT
+AS
+BEGIN
+    UPDATE ObrasSociales
+    SET Activo = CASE
+    WHEN Activo = 1 THEN 0
+    ELSE 1
+    END
+    WHERE IdObraSocial = @IdObraSocial;
+END;
+GO
+
+
+--Procesos de planes de obra social 
+
+CREATE PROCEDURE StoredListarPlanesObraSocial
+    @Texto VARCHAR(100) = NULL,
+    @IdObraSocial INT = NULL,
+    @Activo BIT = NULL
+AS
+BEGIN
+    SELECT
+        P.IdPlan,
+        P.IdObraSocial,
+        P.NombrePlan,
+        P.Activo,
+        O.Nombre AS NombreObraSocial,
+        O.Sigla
+    FROM PlanesObraSocial P
+    INNER JOIN ObrasSociales O
+        ON P.IdObraSocial = O.IdObraSocial
+    WHERE
+        (
+            @Texto IS NULL
+            OR P.NombrePlan LIKE '%' + @Texto + '%'
+            OR O.Nombre LIKE '%' + @Texto + '%'
+            OR O.Sigla LIKE '%' + @Texto + '%'
+        )
+        AND
+        (
+            @IdObraSocial IS NULL
+            OR P.IdObraSocial = @IdObraSocial
+        )
+        AND
+        (
+            @Activo IS NULL
+            OR P.Activo = @Activo
+        )
+    ORDER BY O.Nombre, P.NombrePlan;
+END;
+GO
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE StoredBuscarPlanPorID
+    @IdPlan INT
+AS
+BEGIN
+    SELECT
+        P.IdPlan,
+        P.IdObraSocial,
+        P.NombrePlan,
+        P.Activo,
+        O.Nombre AS NombreObraSocial,
+        O.Sigla
+    FROM PlanesObraSocial P
+    INNER JOIN ObrasSociales O
+        ON P.IdObraSocial = O.IdObraSocial
+    WHERE P.IdPlan = @IdPlan;
+END;
+GO
+
+
+
+
+CREATE PROCEDURE StoredRegistrarPlanObraSocial
+    @IdObraSocial INT,
+    @NombrePlan VARCHAR(100)
+AS
+BEGIN
+  
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM ObrasSociales
+        WHERE IdObraSocial = @IdObraSocial
+        AND Activo = 1
+    )
+    BEGIN
+        THROW 50012, 'La obra social no existe o está inactiva.', 1;
+    END
+
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM PlanesObraSocial
+        WHERE IdObraSocial = @IdObraSocial
+        AND NombrePlan = @NombrePlan
+    )
+    BEGIN
+        THROW 50013, 'Ya existe un plan con ese nombre para esta obra social.', 1;
+    END
+
+    INSERT INTO PlanesObraSocial
+    (
+        IdObraSocial,
+        NombrePlan,
+        Activo
+    )
+    VALUES
+    (
+        @IdObraSocial,
+        @NombrePlan,
+        1
+    );
+END;
+GO
+
+
+
+
+
+
+
+
+CREATE PROCEDURE StoredModificarEstadoPlanObraSocial
+    @IdPlan INT
+AS
+BEGIN
+    UPDATE PlanesObraSocial
+    SET Activo =
+        CASE
+            WHEN Activo = 1 THEN 0
+            ELSE 1
+        END
+    WHERE IdPlan = @IdPlan;
+END;
+GO
+    
+
+CREATE PROCEDURE StoredModificarPlanObraSocial
+    @IdPlan INT,
+    @IdObraSocial INT,
+    @NombrePlan VARCHAR(100)
+AS
+BEGIN
+
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM PlanesObraSocial
+        WHERE IdPlan = @IdPlan
+    )
+    BEGIN
+        THROW 50014, 'El plan que intenta modificar no existe.', 1;
+    END
+
+
+    IF NOT EXISTS
+    (
+        SELECT 1
+        FROM ObrasSociales
+        WHERE IdObraSocial = @IdObraSocial
+        AND Activo = 1
+    )
+    BEGIN
+        THROW 50012, 'La obra social no existe o está inactiva.', 1;
+    END
+
+
+    IF EXISTS
+    (
+        SELECT 1
+        FROM PlanesObraSocial
+        WHERE IdObraSocial = @IdObraSocial
+        AND NombrePlan = @NombrePlan
+        AND IdPlan <> @IdPlan
+    )
+    BEGIN
+        THROW 50013, 'Ya existe otro plan con ese nombre para esta obra social.', 1;
+    END
+
+    UPDATE PlanesObraSocial
+    SET
+        IdObraSocial = @IdObraSocial,
+        NombrePlan = @NombrePlan
+    WHERE IdPlan = @IdPlan;
+END;
+GO
