@@ -88,6 +88,7 @@
     <Content Include="MisTurnos.aspx" />
     <Content Include="NuevoTurno.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="PlanesObraSocial.aspx" />
     <Content Include="ReprogramarTurno.aspx" />
     <Content Include="Scripts\inicio-medico.js" />
     <Content Include="Scripts\reprogramar-turno.js" />
@@ -124,6 +125,7 @@
     </Compile>
     <Compile Include="GestionObraSociales.aspx.cs">
       <DependentUpon>GestionObraSociales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GestionObraSociales.aspx.designer.cs">
       <DependentUpon>GestionObraSociales.aspx</DependentUpon>
@@ -193,6 +195,13 @@
     </Compile>
     <Compile Include="FormularioPaciente.aspx.designer.cs">
       <DependentUpon>FormularioPaciente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PlanesObraSocial.aspx.cs">
+      <DependentUpon>PlanesObraSocial.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PlanesObraSocial.aspx.designer.cs">
+      <DependentUpon>PlanesObraSocial.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReprogramarTurno.aspx.cs">
       <DependentUpon>ReprogramarTurno.aspx</DependentUpon>
