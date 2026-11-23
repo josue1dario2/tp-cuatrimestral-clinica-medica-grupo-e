@@ -108,6 +108,12 @@ namespace Clinica_Medica_Grupo_e
             try
             {
                 cancelado = new TurnoNegocio().cancelar(idTurno, motivo);
+                if (chkNotificarPaciente.Checked)
+                {
+                    enviarEmail(idTurno);
+                }
+                    
+
             }
             catch (Exception ex)
             {
@@ -193,6 +199,12 @@ namespace Clinica_Medica_Grupo_e
         {
             long numero;
             return long.TryParse(dni, out numero) ? numero.ToString("#,0", Cultura) : dni;
+        }
+
+        private void enviarEmail(int idTurno)
+        {
+            Turno turno = new TurnoNegocio().buscarPorId(idTurno);
+            new EmailNegocio("Cancelacion").EnviarCorreo(turno, "Cancelacion");
         }
     }
 }

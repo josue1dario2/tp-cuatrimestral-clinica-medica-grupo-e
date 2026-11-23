@@ -596,7 +596,7 @@ namespace Clinica_Medica_Grupo_e
                         + TextoFechaHora(FechaElegida.Value, HoraElegida.Value) + ".";
                     if (chkEnviarCorreo.Checked)
                     {
-                        enviarTurno((int)Session["idReprogTurno"]);
+                        enviarEmail((int)Session["idReprogTurno"]);
                     }
                     
                     Session.Remove("idReprogTurno");
@@ -694,7 +694,7 @@ namespace Clinica_Medica_Grupo_e
             return string.IsNullOrWhiteSpace(texto) ? "-" : texto;
         }
 
-        private void enviarTurno(int idTurno)
+        private void enviarEmail(int idTurno)
         {
             Turno turno = new TurnoNegocio().buscarPorId(idTurno);
             new EmailNegocio("Reprogramacion").EnviarCorreo(turno, "Reprogramacion");
