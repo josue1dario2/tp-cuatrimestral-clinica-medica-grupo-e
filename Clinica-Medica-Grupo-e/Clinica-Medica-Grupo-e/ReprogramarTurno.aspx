@@ -1,16 +1,20 @@
-﻿<%@ Page Title="Reprogramar turno" Language="C#" MasterPageFile="~/AdminRecep.Master" AutoEventWireup="true" CodeBehind="ReprogramarTurno.aspx.cs" Inherits="Clinica_Medica_Grupo_e.ReprogramarTurno" %>
+﻿<%@ Page Title="Reprogramar turno" Language="C#" MasterPageFile="~/AdminRecep.Master" AutoEventWireup="true" CodeBehind="ReprogramarTurno.aspx.cs" Inherits="Clinica_Medica_Grupo_e.ReprogramarTurno" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="cntHead" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="reprogramar-turno">
-        
-        <asp:HiddenField ID="hfIdTurno" runat="server" />
 
-        
+        <asp:HiddenField ID="hfIdTurno" runat="server" />
+        <%-- Errores: turno inexistente, no reprogramable, validaciones, base de datos --%>
+        <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert alert-danger d-flex align-items-center gap-2 mt-3">
+            <span class="material-symbols-outlined">error</span>
+            <asp:Label ID="lblError" runat="server"></asp:Label>
+        </asp:Panel>
+
         <div class="d-flex flex-column w-100">
-        
+
             <div class="d-flex flex-column gap-2 pt-3 mb-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-1" style="font-size: 12px;">
@@ -45,8 +49,11 @@
 
                 </div>
             </div>
+            <asp:Panel ID="pnlContenido" runat="server">
+            </asp:panel>
             <!-- 2. Grid Principal en 2 Columnas -->
             <div class="row g-4 align-items-start">
+            
                 <!-- COLUMNA IZQUIERDA: Turno actual (Solo Lectura) -->
                 <div class="col-12 col-lg-5 d-flex flex-column gap-3">
                     <div class="card-hospital-low p-4 shadow-sm position-relative">

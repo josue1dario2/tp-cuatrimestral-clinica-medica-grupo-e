@@ -66,7 +66,7 @@ namespace Clinica_Medica_Grupo_e
             lblEstado.CssClass = "badge-estado " + CssEstado(turno.Estado);
 
             lblPaciente.Text = turno.Paciente.NombreCompleto;
-            lblPacienteDetalle.Text = "DNI " + FormatearDni(turno.Paciente.Dni) + " • " + TextoCobertura(turno);
+            lblPacienteDetalle.Text = "DNI " + Formato.Dni(turno.Paciente.Dni) + " • " + TextoCobertura(turno);
 
             lblMedico.Text = turno.Medico.NombreCompleto;
             lblMedicoDetalle.Text = turno.Especialidad.Descripcion;

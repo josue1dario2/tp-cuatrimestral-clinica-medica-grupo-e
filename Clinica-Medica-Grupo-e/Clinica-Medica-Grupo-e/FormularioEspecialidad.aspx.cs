@@ -10,8 +10,8 @@ namespace Clinica_Medica_Grupo_e
     {
         public bool ConfirmaEliminacion
         {
-            get { return ViewState["ConfirmaEliminacion"] != null && (bool)ViewState["ConfirmaEliminacion"]; }
-            set { ViewState["ConfirmaEliminacion"] = value; }
+            get { return Session["FormularioEspecialidad_ConfirmaEliminacion"] != null && (bool)Session["FormularioEspecialidad_ConfirmaEliminacion"]; }
+            set { Session["FormularioEspecialidad_ConfirmaEliminacion"] = value; }
         }
 
         protected void Page_Load(object sender, EventArgs e)

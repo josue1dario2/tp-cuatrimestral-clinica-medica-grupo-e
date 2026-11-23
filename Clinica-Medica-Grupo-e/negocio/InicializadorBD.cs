@@ -242,6 +242,96 @@ namespace negocio
                             SELECT @@ROWCOUNT;
                         END");
 
+                    EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedReprogramarTurno', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedReprogramarTurno]");
+                    EjecutarComando(conexion, @"
+                        CREATE PROCEDURE [dbo].[storedReprogramarTurno]
+                            @Id INT,
+                            @IdMedico INT,
+                            @Fecha DATE,
+                            @Hora INT,
+                            @Motivo VARCHAR(300)
+                        AS
+                        BEGIN
+                            SET NOCOUNT ON;
+                            SET XACT_ABORT ON;   -- ante cualquier error, deshace la transacción
+
+                            DECLARE @IdMedicoAnterior INT, @FechaAnterior DATE, @HoraAnterior INT, @IdEspecialidad INT, @EstadoAnterior INT;
+
+                            BEGIN TRANSACTION;
+
+                            -- 1) El turno existe y no está Cerrado (5). UPDLOCK lo bloquea hasta el COMMIT.
+                            SELECT @IdMedicoAnterior = IdMedico, @FechaAnterior = Fecha, @HoraAnterior = Hora, @IdEspecialidad = IdEspecialidad, @EstadoAnterior = Estado
+                            FROM TURNOS WITH (UPDLOCK)
+                            WHERE Id = @Id AND Estado IN (1, 2, 3, 4);
+
+                            IF @FechaAnterior IS NULL
+                            BEGIN
+                                ROLLBACK TRANSACTION;
+                                SELECT 0;
+                                RETURN;
+                            END
+
+                            -- 2) Sin cambios (solo si el turno sigue vigente: uno cancelado sí se puede reusar en el mismo horario)
+                            IF @EstadoAnterior IN (1, 2) AND @IdMedico = @IdMedicoAnterior AND @Fecha = @FechaAnterior AND @Hora = @HoraAnterior
+                            BEGIN
+                                ROLLBACK TRANSACTION;
+                                SELECT -4;
+                                RETURN;
+                            END
+
+                            -- 3) Médico activo y con la especialidad del turno
+                            IF NOT EXISTS (SELECT 1
+                                           FROM MEDICOS M
+                                           INNER JOIN MEDICOS_ESPECIALIDADES ME ON ME.IdMedico = M.Id
+                                           WHERE M.Id = @IdMedico AND M.Activo = 1 AND ME.IdEspecialidad = @IdEspecialidad)
+                            BEGIN
+                                ROLLBACK TRANSACTION;
+                                SELECT -2;
+                                RETURN;
+                            END
+
+                            -- 4) Fecha y hora: no en el pasado y dentro del turno de trabajo (activo) del médico
+                            IF @Fecha < CAST(GETDATE() AS DATE)
+                               OR (@Fecha = CAST(GETDATE() AS DATE) AND @Hora <= DATEPART(HOUR, GETDATE()))
+                               OR NOT EXISTS (SELECT 1
+                                              FROM MEDICOS M
+                                              INNER JOIN TURNOS_TRABAJO TT ON TT.Id = M.IdTurnoTrabajo
+                                              WHERE M.Id = @IdMedico AND TT.Activo = 1
+                                                AND @Hora >= TT.HoraEntrada AND @Hora < TT.HoraSalida)
+                            BEGIN
+                                ROLLBACK TRANSACTION;
+                                SELECT -3;
+                                RETURN;
+                            END
+
+                            -- 5) Horario libre: otro turno del médico ese día y hora (sin contar este ni los cancelados).
+                            --    UPDLOCK + HOLDLOCK evita que otra recepcionista lo ocupe antes del COMMIT.
+                            IF EXISTS (SELECT 1
+                                       FROM TURNOS WITH (UPDLOCK, HOLDLOCK)
+                                       WHERE IdMedico = @IdMedico AND Fecha = @Fecha AND Hora = @Hora
+                                         AND Estado <> 3 AND Id <> @Id)
+                            BEGIN
+                                ROLLBACK TRANSACTION;
+                                SELECT -1;
+                                RETURN;
+                            END
+
+                            -- 6) Reprogramar
+                            UPDATE TURNOS
+                            SET IdMedico = @IdMedico,
+                                Fecha = @Fecha,
+                                Hora = @Hora,
+                                Estado = 2,
+                                Observaciones = LEFT(ISNULL(NULLIF(Observaciones, '') + ' | ', '')
+                                    + 'Reprogramado del ' + CONVERT(VARCHAR(10), @FechaAnterior, 103) + ' ' + RIGHT('0' + CAST(@HoraAnterior AS VARCHAR(2)), 2) + ':00'
+                                    + ' al ' + CONVERT(VARCHAR(10), @Fecha, 103) + ' ' + RIGHT('0' + CAST(@Hora AS VARCHAR(2)), 2) + ':00'
+                                    + ': ' + @Motivo, 500)
+                            WHERE Id = @Id;
+
+                            COMMIT TRANSACTION;
+                            SELECT 1;
+                        END");
+
                     EjecutarComando(conexion, @"
                         CREATE PROCEDURE [dbo].[storedReactivarTurnoTrabajo] @Id INT AS
                         BEGIN

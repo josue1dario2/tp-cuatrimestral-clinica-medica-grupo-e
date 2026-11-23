@@ -18,18 +18,22 @@ namespace Clinica_Medica_Grupo_e
         private List<Turno> turnosSemana = new List<Turno>();
 
         
-        /// Día que se está mirando. Se guarda en ViewState para que sobreviva a los PostBack.
+        /// Día que se está mirando. Se guarda en Session para que sobreviva a los PostBack (se borra al entrar a la página).
         
         private DateTime FechaSeleccionada
         {
-            get { return ViewState["FechaSeleccionada"] == null ? DateTime.Today : (DateTime)ViewState["FechaSeleccionada"]; }
-            set { ViewState["FechaSeleccionada"] = value.Date; }
+            get { return Session["MisTurnos_FechaSeleccionada"] == null ? DateTime.Today : (DateTime)Session["MisTurnos_FechaSeleccionada"]; }
+            set { Session["MisTurnos_FechaSeleccionada"] = value.Date; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
+            {
+                // La Session no se borra sola: cada visita arranca en el día de hoy.
+                Session.Remove("MisTurnos_FechaSeleccionada");
                 CargarAgenda();
+            }
         }
 
         // Carga principal
@@ -318,7 +322,7 @@ namespace Clinica_Medica_Grupo_e
                 IdTurno = turno.Id,
                 Hora = turno.HoraTexto,
                 PacienteNombre = turno.Paciente.NombreCompleto,
-                PacienteDetalle = turno.Paciente.Edad + " años • DNI " + FormatearDni(turno.Paciente.Dni),
+                PacienteDetalle = turno.Paciente.Edad + " años • DNI " + Formato.Dni(turno.Paciente.Dni),
                 Motivo = string.IsNullOrEmpty(turno.Observaciones) ? "Sin observaciones" : turno.Observaciones,
                 EstadoTexto = estadoTexto,
                 EstadoCss = estadoCss,

@@ -20,8 +20,6 @@
 
 
 
-
-
     <!--  1. ENCABEZADO -->
     <div class="d-flex flex-column gap-4 mb-4">
         <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">

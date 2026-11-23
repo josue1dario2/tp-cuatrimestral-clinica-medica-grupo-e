@@ -14,18 +14,21 @@ namespace Clinica_Medica_Grupo_e
         private static readonly CultureInfo Cultura = new CultureInfo("es-AR");
 
 
-        /// Página actual de la tabla (empieza en 1). Se guarda en ViewState.
+        /// Página actual de la tabla (empieza en 1). Se guarda en Session (se borra al entrar a la página).
 
         private int PaginaActual
         {
-            get { return ViewState["PaginaActual"] == null ? 1 : (int)ViewState["PaginaActual"]; }
-            set { ViewState["PaginaActual"] = value; }
+            get { return Session["Turnos_PaginaActual"] == null ? 1 : (int)Session["Turnos_PaginaActual"]; }
+            set { Session["Turnos_PaginaActual"] = value; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                // La Session no se borra sola: cada visita arranca en la página 1.
+                Session.Remove("Turnos_PaginaActual");
+
                 try
                 {
                     CargarCombos();
@@ -302,7 +305,7 @@ namespace Clinica_Medica_Grupo_e
                 FechaHora = turno.Fecha.ToString("dd/MM/yyyy") + " • " + turno.HoraTexto,
                 Subtexto = turno.Estado == EstadoTurno.Cancelado ? "Cupo liberado" : "Turno " + turno.Medico.TurnoTrabajo.Nombre,
                 PacienteNombre = turno.Paciente.NombreCompleto,
-                PacienteDni = FormatearDni(turno.Paciente.Dni),
+                PacienteDni = Formato.Dni(turno.Paciente.Dni),
                 Contacto = string.IsNullOrEmpty(turno.Paciente.Telefono) ? turno.Paciente.Email : turno.Paciente.Telefono,
                 MedicoNombre = turno.Medico.NombreCompleto,
                 MedicoMatricula = turno.Medico.Matricula,
@@ -379,7 +382,7 @@ namespace Clinica_Medica_Grupo_e
             lblDetalleEstado.CssClass = "badge-estado " + CssEstado(turno.Estado);
 
             lblDetallePaciente.Text = turno.Paciente.NombreCompleto;
-            lblDetalleDni.Text = FormatearDni(turno.Paciente.Dni);
+            lblDetalleDni.Text = Formato.Dni(turno.Paciente.Dni);
             lblDetalleTelefono.Text = string.IsNullOrEmpty(turno.Paciente.Telefono) ? "No registrado" : turno.Paciente.Telefono;
             lblDetalleEmail.Text = turno.Paciente.Email;
             lblDetalleDireccion.Text = string.IsNullOrEmpty(turno.Paciente.Direccion) ? "No registrada" : turno.Paciente.Direccion;
@@ -429,7 +432,9 @@ namespace Clinica_Medica_Grupo_e
                     break;
 
                 case "Reprogramar":
-                    Response.Redirect("~/ReprogramarTurno.aspx?id=" + idTurno);
+                    Session.Add("idReprogTurno", idTurno);
+                    Response.Redirect("~/ReprogramarTurno.aspx");
+                    //Response.Redirect("~/ReprogramarTurno.aspx?id=" + idTurno);
                     break;
 
                 case "Cancelar":

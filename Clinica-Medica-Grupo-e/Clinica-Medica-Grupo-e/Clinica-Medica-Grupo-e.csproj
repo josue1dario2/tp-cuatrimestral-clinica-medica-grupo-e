@@ -116,6 +116,7 @@
     <Compile Include="Estadisticas.aspx.designer.cs">
       <DependentUpon>Estadisticas.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formato.cs" />
     <Compile Include="FormularioModificarUsuario.aspx.cs">
       <DependentUpon>FormularioModificarUsuario.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

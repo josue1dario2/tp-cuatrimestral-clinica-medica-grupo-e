@@ -226,5 +226,63 @@ namespace negocio
 
         }
 
+        /// Médicos activos de una especialidad cuyo turno de trabajo también está activo.
+        /// Sirve para los combos de NuevoTurno y ReprogramarTurno.
+        public List<Medico> listarActivosPorEspecialidad(int idEspecialidad)
+        {
+            List<Medico> lista = new List<Medico>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(
+                    "SELECT M.Id, M.Nombre, M.Apellido, M.Matricula, " +
+                    "TT.Id AS IdTurnoTrabajo, TT.Nombre AS TurnoTrabajoNombre, TT.HoraEntrada, TT.HoraSalida " +
+                    "FROM MEDICOS M " +
+                    "INNER JOIN MEDICOS_ESPECIALIDADES ME ON ME.IdMedico = M.Id " +
+                    "INNER JOIN TURNOS_TRABAJO TT ON TT.Id = M.IdTurnoTrabajo " +
+                    "WHERE ME.IdEspecialidad = @IdEspecialidad " +
+                    "  AND M.Activo = 1 " +
+                    "  AND TT.Activo = 1 " +
+                    "ORDER BY M.Apellido, M.Nombre");
+                datos.setearParametro("@IdEspecialidad", idEspecialidad);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Medico medico = new Medico();
+                    medico.Id = (int)datos.Lector["Id"];
+                    medico.Nombre = (string)datos.Lector["Nombre"];
+                    medico.Apellido = (string)datos.Lector["Apellido"];
+                    medico.Matricula = (string)datos.Lector["Matricula"];
+                    medico.Activo = true;   // la consulta solo trae activos
+                    medico.TurnoTrabajo = new TurnoTrabajo();
+                    medico.TurnoTrabajo.Id = (int)datos.Lector["IdTurnoTrabajo"];
+                    medico.TurnoTrabajo.Nombre = (string)datos.Lector["TurnoTrabajoNombre"];
+                    medico.TurnoTrabajo.HoraEntrada = (int)datos.Lector["HoraEntrada"];
+                    medico.TurnoTrabajo.HoraSalida = (int)datos.Lector["HoraSalida"];
+
+                    lista.Add(medico);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
+
+
+
+
+
+
     }
 }
