@@ -1,3 +1,5 @@
+using dominio;
+using negocio;
 using System;
 using System.Globalization;
 using System.IO;
@@ -10,11 +12,36 @@ namespace Clinica_Medica_Grupo_e
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblFechaHoy.Text = "Hoy, " + DateTime.Today.ToString("d 'de' MMMM yyyy", new CultureInfo("es-AR"));
-            MarcarLinkActivo();
+            if (Session["Usuario"] == null)
+            {
+                Session["MensajeLogin"] = "Debés iniciar sesión para acceder al sistema.";
 
-            // TODO: cargar usuario logueado (lblNombreUsuario, lblRolUsuario)
-            //       y ocultar phMenuAdministracion si el rol es Recepción.
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            
+            if (usuario.TipoUsuario != TipoUsuario.Admin &&
+                usuario.TipoUsuario != TipoUsuario.Recepcionista)
+            {
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+           
+            lblFechaHoy.Text = "Hoy, " + DateTime.Today.ToString("d 'de' MMMM yyyy", new CultureInfo("es-AR"));
+
+            lblNombreUsuario.Text = usuario.NombreUsuario;
+            lblRolUsuario.Text = usuario.TipoUsuario.ToString();
+
+            
+            phMenuAdministracion.Visible = usuario.TipoUsuario == TipoUsuario.Admin;
+
+            MarcarLinkActivo();
         }
 
         
@@ -73,7 +100,19 @@ namespace Clinica_Medica_Grupo_e
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
-            // TODO: cerrar sesión y redirigir al login.
+            if (Session["Usuario"] != null)
+            {
+                Usuario usuario = (Usuario)Session["Usuario"];
+
+                UsuarioNegocio negocio = new UsuarioNegocio();
+
+                negocio.ActualizarUltimaConexion(usuario.Id);
+            }
+
+            Session.Clear();
+            Session.Abandon();
+
+            Response.Redirect("~/Login.aspx");
         }
     }
 }
