@@ -281,8 +281,79 @@ namespace negocio
 
             return buscado;
         }
-        
 
+        public Usuario BuscarUsuarioPorNombreUsuario(string nombreUsuario)
+        {
+
+            AccesoDatos datos = new AccesoDatos();
+            Usuario aBuscar = new Usuario();
+
+            try
+            {
+
+                datos.setearProcedimiento("StoredBuscarUsuarioPorNombreUsuario");
+
+                datos.setearParametro("@NombreUsuario", nombreUsuario);
+
+                datos.ejecutarLectura();
+
+
+                while (datos.Lector.Read())
+                {
+                    Usuario usuario = new Usuario();
+
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.NombreUsuario = (string)datos.Lector["NombreUsuario"];
+                    usuario.Email = (string)datos.Lector["Email"];
+                    usuario.Pass = (string)datos.Lector["Pass"];
+
+                    usuario.TipoUsuario = (TipoUsuario)(int)datos.Lector["TipoUsuario"];
+                    usuario.Activo = (bool)datos.Lector["Activo"];
+
+                    if (datos.Lector["Nombre"] != DBNull.Value)
+                        usuario.Nombre = (string)datos.Lector["Nombre"];
+
+                    if (datos.Lector["Apellido"] != DBNull.Value)
+                        usuario.Apellido = (string)datos.Lector["Apellido"];
+
+                    if (datos.Lector["UltimaConexion"] != DBNull.Value)
+                        usuario.UltimaConexion = (DateTime)datos.Lector["UltimaConexion"];
+
+                    aBuscar = usuario;
+
+                }
+
+
+                return aBuscar;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { datos.cerrarConexion(); }
+
+
+
+        }
+
+
+        public Usuario Login(string NombreUsuario, string Pass)
+        {
+            Usuario usuario = BuscarUsuarioPorNombreUsuario(NombreUsuario);
+
+            if (usuario == null)
+                return null;
+
+            if (!usuario.Activo)
+                return null;
+
+            if (usuario.Pass != Pass)
+                return null;
+
+            return usuario;
+        }
 
 
 
