@@ -1059,3 +1059,28 @@ BEGIN
     WHERE IdPlan = @IdPlan;
 END;
 GO
+
+--actualizacion 23/11 procedimiento de Usuario
+
+CREATE OR ALTER PROCEDURE StoredBuscarUsuarioPorNombreUsuario
+    @NombreUsuario VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        U.Id,
+        U.NombreUsuario,
+        U.Email,
+        U.Pass,
+        U.TipoUsuario,
+        U.Activo,
+        U.UltimaConexion,
+        M.Nombre,
+        M.Apellido
+    FROM USUARIOS U
+    LEFT JOIN MEDICOS M ON U.Id = M.IdUsuario
+    WHERE U.NombreUsuario = @NombreUsuario;
+END
+
+
