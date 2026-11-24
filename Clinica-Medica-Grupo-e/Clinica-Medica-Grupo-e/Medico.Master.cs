@@ -15,15 +15,33 @@ namespace Clinica_Medica_Grupo_e
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["medicoLogueado"] != null)
-            {
-                dominio.Medico medico = (dominio.Medico)Session["medicoLogueado"];
 
-                if (!IsPostBack && lblNombreMedico != null)
-                {
-                    lblNombreMedico.Text = medico.Apellido + ", " + medico.Nombre;
-                }
+
+            
+            if (Session["Usuario"] == null)
+            {
+                Session["MensajeLogin"] = "Debés iniciar sesión para acceder al sistema.";
+
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
             }
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+           
+            if (usuario.TipoUsuario != TipoUsuario.Medico)
+            {
+                Response.Redirect("~/InicioAdmin.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+
+
+
+
+
 
             if (!IsPostBack && lblFechaActual != null)
             {
