@@ -12,7 +12,7 @@ namespace Clinica_Medica_Grupo_e
 {
     public partial class TurnosTrabajo : Page
     {
-        // Pestaña elegida: "Activos", "Inactivos" o "Todos". Se guarda en Session para que no se pierda en cada PostBack (se borra al entrar a la página).
+        
         private string FiltroEstado
         {
             get { return Session["TurnosTrabajo_FiltroEstado"] as string ?? "Activos"; }
@@ -21,6 +21,29 @@ namespace Clinica_Medica_Grupo_e
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+           
+            if (Session["Usuario"] == null)
+            {
+                Session["MensajeLogin"] = "Debés iniciar sesión para acceder al sistema.";
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+            
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            
+            if (usuario.TipoUsuario != TipoUsuario.Admin)
+            {
+                Response.Redirect("~/InicioAdmin.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+
+
             if (!IsPostBack)
             {
                 // La Session no se borra sola: cada visita arranca en la pestaña Activos.

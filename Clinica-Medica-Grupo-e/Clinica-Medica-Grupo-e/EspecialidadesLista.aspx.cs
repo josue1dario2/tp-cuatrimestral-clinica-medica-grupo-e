@@ -11,6 +11,25 @@ namespace Clinica_Medica_Grupo_e
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            if (Session["Usuario"] == null)
+            {
+                Session["MensajeLogin"] = "Debés iniciar sesión para acceder al sistema.";
+                Response.Redirect("~/Login.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            if (usuario.TipoUsuario != TipoUsuario.Admin)
+            {
+                Response.Redirect("~/InicioAdmin.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+
             if (!IsPostBack)
             {
                 cargarGrilla();
