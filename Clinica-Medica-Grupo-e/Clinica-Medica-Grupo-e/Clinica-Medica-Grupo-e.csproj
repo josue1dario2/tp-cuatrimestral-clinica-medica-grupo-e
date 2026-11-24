@@ -65,10 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\Login.css" />
     <Content Include="Content\medico.css" />
     <Content Include="AdminRecep.Master" />
     <Content Include="FormularioModificarUsuario.aspx" />
     <Content Include="GestionObraSociales.aspx" />
+    <Content Include="Login.aspx" />
     <Content Include="Master.Master" />
     <Content Include="CancelarTurno.aspx" />
     <Content Include="Error.aspx" />
@@ -148,6 +150,12 @@
     </Compile>
     <Compile Include="AdminRecep.Master.designer.cs">
       <DependentUpon>AdminRecep.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Master.Master.cs">
       <DependentUpon>Master.Master</DependentUpon>
