@@ -49,6 +49,7 @@
     <Compile Include="EspecialidadNegocio.cs" />
     <Compile Include="InicializadorBD.cs" />
     <Compile Include="MedicoNegocio.cs" />
+    <Compile Include="MotivoNotificacionPaciente.cs" />
     <Compile Include="ObraSocialNegocio.cs" />
     <Compile Include="PacienteNegocio.cs" />
     <Compile Include="PlanObraSocialNegocio.cs" />

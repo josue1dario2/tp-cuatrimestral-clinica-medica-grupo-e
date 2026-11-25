@@ -129,12 +129,12 @@ namespace Clinica_Medica_Grupo_e
                 {
                     paciente.Id = IdPaciente;
                     negocio.modificar(paciente);
-                    NotificarPaciente(paciente, "Modificacion");
+                    NotificarPaciente(paciente, MotivoNotificacionPaciente.Modificacion);
                 }
                 else
                 {
                     negocio.agregar(paciente);
-                    NotificarPaciente(paciente, "Alta");
+                    NotificarPaciente(paciente, MotivoNotificacionPaciente.Alta);
                 }
 
                 // Terminó la edición: la próxima entrada al formulario no arrastra este Id.
@@ -182,7 +182,7 @@ namespace Clinica_Medica_Grupo_e
                     Paciente eliminado = negocio.buscarPorId(IdPaciente);
                     negocio.eliminar(IdPaciente);
                     if (eliminado != null)
-                        NotificarPaciente(eliminado, "Baja");
+                        NotificarPaciente(eliminado, MotivoNotificacionPaciente.Baja);
 
                     Session.Remove("FormularioPaciente_Id");
                     Response.Redirect("Pacientes.aspx", false);
@@ -197,11 +197,19 @@ namespace Clinica_Medica_Grupo_e
 
         // Correo al paciente con la plantilla Plantillas/AltaPaciente.html.
         // motivo: "Alta", "Modificacion" o "Baja".
-        private void NotificarPaciente(Paciente paciente, string motivo)
+        // Correo al paciente con la plantilla Plantillas/AltaPaciente.html.
+        private void NotificarPaciente(Paciente paciente, MotivoNotificacionPaciente motivo)
         {
-            // TODO correo: armar la plantilla según el motivo y enviarla a paciente.Email.
-            //      Conviene envolver el envío en try/catch: si el correo falla, el alta,
-            //      la modificación o la baja ya quedaron guardadas y no deben perderse.
+            try
+            {
+                EmailNegocio email = new EmailNegocio();
+                email.EnviarCorreoPaciente(paciente, motivo);
+            }
+            catch (Exception)
+            {
+                // El alta, la modificación o la baja ya quedaron guardadas:
+                // si falla el correo, no se deshace la operación ni se va a Error.aspx.
+            }
         }
     }
 }
