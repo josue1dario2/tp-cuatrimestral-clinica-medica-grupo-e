@@ -50,10 +50,10 @@
                         <i class="bi bi-calendar3 fs-5"></i>
                         <span>Mis turnos</span>
                     </asp:HyperLink>
-                    <asp:HyperLink ID="lnkNavEspecialidades" runat="server" NavigateUrl="~/EspecialidadesLista.aspx" CssClass="cl-nav-link">
+                    <%--<asp:HyperLink ID="lnkNavEspecialidades" runat="server" NavigateUrl="~/EspecialidadesLista.aspx" CssClass="cl-nav-link">
                         <i class="bi bi-tags-fill fs-5"></i>
                         <span>Especialidades</span>
-                    </asp:HyperLink>
+                    </asp:HyperLink>--%>
                 </nav>
             </div>
 
