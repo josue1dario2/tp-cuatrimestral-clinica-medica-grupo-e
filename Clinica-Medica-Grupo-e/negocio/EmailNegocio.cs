@@ -13,8 +13,11 @@ namespace negocio
         private string dirEmail = "admin@clinicamedica.com";
         private string asuntoEmail;
 
+        public EmailNegocio()
+        {
+        }
 
-        public EmailNegocio (String asuntoEmail)
+        public EmailNegocio(String asuntoEmail)
         {
             this.asuntoEmail = ObtenerAsunto(asuntoEmail);
         }
@@ -31,7 +34,7 @@ namespace negocio
 
                 case "Recordatorio":
                     return "Recordatorio de turno";
-                
+
                 case "Reprogramacion":
                     return "Reprogramación de turno";
 
@@ -40,6 +43,19 @@ namespace negocio
             }
         }
 
+        public string EnviarCorreoPaciente(Paciente paciente, MotivoNotificacionPaciente motivo)
+        {
+            if (string.IsNullOrWhiteSpace(paciente.Email))
+                return string.Empty;   // Sin correo, no hay a quién avisar
+
+            PlantillaUsuarioNegocio plantilla = new PlantillaUsuarioNegocio(motivo, paciente);
+            string cuerpo = plantilla.ProcesarPlantilla();
+
+            EmailService email = new EmailService();
+            email.armarCorreo(paciente.Email, plantilla.ObtenerAsunto(), cuerpo);
+            email.enviarEmail();
+            return paciente.Email;
+        }
 
         public string EnviarCorreo(Turno turno, string asuntoEmail)
         {
@@ -48,7 +64,7 @@ namespace negocio
             try
             {
                 PlantillasNegocio plNegocio = new PlantillasNegocio(asuntoEmail, turno);
-                string cuerpo= plNegocio.ProcesarPlantilla();
+                string cuerpo = plNegocio.ProcesarPlantilla();
                 dirEmail = turno.Paciente.Email == null ? dirEmail : turno.Paciente.Email;
                 if (cuerpo != null)
                 {

@@ -90,6 +90,8 @@
     <Content Include="MisTurnos.aspx" />
     <Content Include="NuevoTurno.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="Plantillas\AltaPaciente.html" />
+    <Content Include="Plantillas\AltaUsuario.html" />
     <Content Include="Plantillas\NotificacionTurno.html" />
     <Content Include="PlanesObraSocial.aspx" />
     <Content Include="ReprogramarTurno.aspx" />

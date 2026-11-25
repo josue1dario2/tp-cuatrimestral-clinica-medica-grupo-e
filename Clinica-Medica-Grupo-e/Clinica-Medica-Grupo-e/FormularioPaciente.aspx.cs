@@ -13,6 +13,20 @@ namespace Clinica_Medica_Grupo_e
             set { Session["FormularioPaciente_ConfirmaEliminacion"] = value; }
         }
 
+        // Id del paciente que se está modificando. 0 = alta.
+        // Lo guarda Pacientes.aspx al hacer clic en "Editar" y lo borra al hacer clic en "Nuevo Paciente".
+        // No se borra en el primer !IsPostBack: si se borrara, apretar F5 convertiría una modificación en un alta.
+        private int IdPaciente
+        {
+            get { return Session["FormularioPaciente_Id"] == null ? 0 : (int)Session["FormularioPaciente_Id"]; }
+        }
+
+        // Público porque el .aspx lo usa para mostrar el botón Eliminar.
+        public bool EsModificacion
+        {
+            get { return IdPaciente > 0; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             lblErrorValidacion.Visible = false;
@@ -21,15 +35,14 @@ namespace Clinica_Medica_Grupo_e
             {
                 ConfirmaEliminacion = false;
 
-                string id = Request.QueryString["id"];
-                if (!string.IsNullOrEmpty(id))
+                if (EsModificacion)
                 {
                     lblTitulo.Text = "Modificar Paciente";
                     PacienteNegocio negocio = new PacienteNegocio();
 
                     try
                     {
-                        Paciente seleccionado = negocio.buscarPorId(int.Parse(id));
+                        Paciente seleccionado = negocio.buscarPorId(IdPaciente);
                         if (seleccionado != null)
                         {
                             txtNombre.Text = seleccionado.Nombre;
@@ -42,6 +55,8 @@ namespace Clinica_Medica_Grupo_e
                         }
                         else
                         {
+                            // El paciente ya no existe: se vuelve al listado.
+                            Session.Remove("FormularioPaciente_Id");
                             Response.Redirect("Pacientes.aspx", false);
                         }
                     }
@@ -110,16 +125,20 @@ namespace Clinica_Medica_Grupo_e
                 paciente.Telefono = string.IsNullOrWhiteSpace(txtTelefono.Text) ? null : txtTelefono.Text.Trim();
                 paciente.Direccion = string.IsNullOrWhiteSpace(txtDireccion.Text) ? null : txtDireccion.Text.Trim();
 
-                if (Request.QueryString["id"] != null)
+                if (EsModificacion)
                 {
-                    paciente.Id = int.Parse(Request.QueryString["id"]);
+                    paciente.Id = IdPaciente;
                     negocio.modificar(paciente);
+                    NotificarPaciente(paciente, MotivoNotificacionPaciente.Modificacion);
                 }
                 else
                 {
                     negocio.agregar(paciente);
+                    NotificarPaciente(paciente, MotivoNotificacionPaciente.Alta);
                 }
 
+                // Terminó la edición: la próxima entrada al formulario no arrastra este Id.
+                Session.Remove("FormularioPaciente_Id");
                 Response.Redirect("Pacientes.aspx", false);
             }
             catch (Exception ex)
@@ -155,10 +174,17 @@ namespace Clinica_Medica_Grupo_e
         {
             try
             {
-                if (chkConfirmarEliminar.Checked && Request.QueryString["id"] != null)
+                if (chkConfirmarEliminar.Checked && EsModificacion)
                 {
                     PacienteNegocio negocio = new PacienteNegocio();
-                    negocio.eliminar(int.Parse(Request.QueryString["id"]));
+
+                    // Se leen los datos antes de eliminar, para poder armar el correo de baja.
+                    Paciente eliminado = negocio.buscarPorId(IdPaciente);
+                    negocio.eliminar(IdPaciente);
+                    if (eliminado != null)
+                        NotificarPaciente(eliminado, MotivoNotificacionPaciente.Baja);
+
+                    Session.Remove("FormularioPaciente_Id");
                     Response.Redirect("Pacientes.aspx", false);
                 }
             }
@@ -168,6 +194,22 @@ namespace Clinica_Medica_Grupo_e
                 Response.Redirect("Error.aspx", false);
             }
         }
+
+        // Correo al paciente con la plantilla Plantillas/AltaPaciente.html.
+        // motivo: "Alta", "Modificacion" o "Baja".
+        // Correo al paciente con la plantilla Plantillas/AltaPaciente.html.
+        private void NotificarPaciente(Paciente paciente, MotivoNotificacionPaciente motivo)
+        {
+            try
+            {
+                EmailNegocio email = new EmailNegocio();
+                email.EnviarCorreoPaciente(paciente, motivo);
+            }
+            catch (Exception)
+            {
+                // El alta, la modificación o la baja ya quedaron guardadas:
+                // si falla el correo, no se deshace la operación ni se va a Error.aspx.
+            }
+        }
     }
 }
-

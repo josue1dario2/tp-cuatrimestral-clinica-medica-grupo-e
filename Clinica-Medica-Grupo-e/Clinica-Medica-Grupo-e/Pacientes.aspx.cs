@@ -14,6 +14,8 @@ namespace Clinica_Medica_Grupo_e
         {
             if (!IsPostBack)
             {
+                // Volver al listado termina cualquier edición que haya quedado abierta (por ejemplo, con Cancelar).
+                Session.Remove("FormularioPaciente_Id");
                 cargarGrilla();
             }
         }
@@ -65,8 +67,9 @@ namespace Clinica_Medica_Grupo_e
         {
             try
             {
-                string id = dgvPacientes.SelectedDataKey.Value.ToString();
-                Response.Redirect("FormularioPaciente.aspx?id=" + id, false);
+                // Modificación: el formulario lee el Id de Session.
+                Session["FormularioPaciente_Id"] = int.Parse(dgvPacientes.SelectedDataKey.Value.ToString());
+                Response.Redirect("FormularioPaciente.aspx", false);
             }
             catch (Exception ex)
             {
@@ -96,6 +99,8 @@ namespace Clinica_Medica_Grupo_e
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+            // Alta: se borra cualquier Id que haya quedado de una edición anterior.
+            Session.Remove("FormularioPaciente_Id");
             Response.Redirect("FormularioPaciente.aspx", false);
         }
     }

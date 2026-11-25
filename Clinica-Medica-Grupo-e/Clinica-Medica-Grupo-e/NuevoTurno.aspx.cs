@@ -17,6 +17,10 @@ namespace Clinica_Medica_Grupo_e
         {
             if (!IsPostBack)
             {
+                // El enlace "nuevo paciente" de esta página tiene que abrir FormularioPaciente como alta,
+                // aunque haya quedado el Id de una edición que no se terminó.
+                Session.Remove("FormularioPaciente_Id");
+
                 try
                 {
                     InicializarFormulario();
