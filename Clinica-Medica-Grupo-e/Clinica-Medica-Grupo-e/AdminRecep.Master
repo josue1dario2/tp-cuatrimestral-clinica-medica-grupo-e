@@ -197,7 +197,8 @@
                     <span class="material-symbols-outlined icon-18">calendar_today</span>
                     <asp:Label ID="lblFechaHoy" runat="server" Text="Hoy, 24 de mayo 2025"></asp:Label>
                 </div>
-                <asp:Panel ID="pnlBuscarGlobal" runat="server" DefaultButton="btnBuscarGlobal"
+                <%-- Búsqueda global sin implementar (btnBuscarGlobal_Click está vacío): queda oculta. --%>
+                <asp:Panel ID="pnlBuscarGlobal" runat="server" DefaultButton="btnBuscarGlobal" Visible="false"
                     CssClass="topbar-search d-none d-md-flex align-items-center position-relative">
                     <span class="topbar-search-icon material-symbols-outlined icon-18 position-absolute text-secondary">search</span>
                     <asp:TextBox ID="txtBuscarGlobal" runat="server" CssClass="topbar-search-input form-control form-control-sm ps-5 rounded-3 border-0"
