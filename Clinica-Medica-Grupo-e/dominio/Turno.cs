@@ -25,5 +25,15 @@ namespace dominio
         {
             get { return Hora.ToString("00") + ":00 hs"; }
         }
+
+        public bool EsPendiente
+        {
+            get { return Estado == EstadoTurno.Nuevo || Estado == EstadoTurno.Reprogramado; }
+        }
+
+        public bool EsResuelto
+        {
+            get { return Estado == EstadoTurno.Cerrado || Estado == EstadoTurno.NoAsistio; }
+        }
     }
 }
