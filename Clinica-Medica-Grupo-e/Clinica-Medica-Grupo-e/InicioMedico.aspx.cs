@@ -52,9 +52,8 @@ namespace Clinica_Medica_Grupo_e
             Usuario usuario = Session["Usuario"] as Usuario;
             if (usuario == null) return 0;
 
-            Medico medico = new MedicoNegocio().listarConDetalle()
-                .Find(m => m.Usuario != null && m.Usuario.Id == usuario.Id);
-            return medico != null ? medico.Id : 0;
+            Medico logueado = new MedicoNegocio().buscarPorIdUsuario(usuario.Id);
+            return logueado != null ? logueado.Id : 0;
         }
 
         //private int ObtenerIdMedico()

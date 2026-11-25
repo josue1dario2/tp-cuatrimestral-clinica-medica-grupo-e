@@ -279,10 +279,15 @@ namespace negocio
 
 
 
-
+        // Médico asociado al usuario logueado (null si ese usuario no tiene médico).
+        public Medico buscarPorIdUsuario(int idUsuario)
+        {
+            return listarConDetalle().Find(m => m.Usuario != null && m.Usuario.Id == idUsuario);
+        }
 
 
 
 
     }
+
 }

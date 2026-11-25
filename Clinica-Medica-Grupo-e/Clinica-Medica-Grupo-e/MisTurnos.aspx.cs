@@ -17,9 +17,9 @@ namespace Clinica_Medica_Grupo_e
         private dominio.Medico medico;
         private List<Turno> turnosSemana = new List<Turno>();
 
-        
+
         /// Día que se está mirando. Se guarda en Session para que sobreviva a los PostBack (se borra al entrar a la página).
-        
+
         private DateTime FechaSeleccionada
         {
             get { return Session["MisTurnos_FechaSeleccionada"] == null ? DateTime.Today : (DateTime)Session["MisTurnos_FechaSeleccionada"]; }
@@ -37,31 +37,24 @@ namespace Clinica_Medica_Grupo_e
         }
 
         // Carga principal
-        
+
+        private int ObtenerIdMedico()
+        {
+            Usuario usuario = Session["Usuario"] as Usuario;
+            if (usuario == null) return 0;
+
+            Medico logueado = new MedicoNegocio().buscarPorIdUsuario(usuario.Id);
+            return logueado != null ? logueado.Id : 0;
+        }
+
+
         private void CargarAgenda()
         {
-            int idMedico;
-            if (!int.TryParse(Request.QueryString["idMedico"], out idMedico))
+            int idMedico = ObtenerIdMedico();
+            if (idMedico == 0)
             {
-                if (Session["medicoLogueado"] is dominio.Medico medSesion)
-                {
-                    idMedico = medSesion.Id;
-                }
-                else
-                {
-                    try
-                    {
-                        List<dominio.Medico> lista = new MedicoNegocio().listar(true);
-                        if (lista != null && lista.Count > 0)
-                            idMedico = lista[0].Id;
-                        else
-                            idMedico = 1;
-                    }
-                    catch
-                    {
-                        idMedico = 1;
-                    }
-                }
+                MostrarError("Su usuario no tiene un médico asociado.");
+                return;
             }
 
             try
@@ -101,17 +94,18 @@ namespace Clinica_Medica_Grupo_e
             phContenido.Visible = false;
         }
 
-        
         // Encabezado
-        
+
 
         private void MostrarDatosMedico()
         {
             string especialidades = medico.Especialidades.Count > 0
                 ? string.Join(", ", medico.Especialidades.Select(esp => esp.Descripcion))
                 : "Sin especialidad asignada";
-            string horario = medico.TurnoTrabajo.HoraEntrada.ToString("00") + ":00 a "
-                + medico.TurnoTrabajo.HoraSalida.ToString("00") + ":00 hs";
+            string horario = medico.TurnoTrabajo != null
+    ? medico.TurnoTrabajo.HoraEntrada.ToString("00") + ":00 a " + medico.TurnoTrabajo.HoraSalida.ToString("00") + ":00 hs"
+    : "Sin horario";
+            medico.TurnoTrabajo.Nombre = medico.TurnoTrabajo != null ? medico.TurnoTrabajo.Nombre : "Sin turno de trabajo";
 
             lblNombreMedico.Text = medico.NombreCompleto;
             lblDatosConsultorio.Text = "Especialidad: " + especialidades + " • Matrícula " + medico.Matricula;
@@ -126,9 +120,9 @@ namespace Clinica_Medica_Grupo_e
                 master.MostrarMedico(medico.NombreCompleto, especialidades);
         }
 
-        
+
         // Semana
-        
+
 
         private static DateTime InicioDeSemana(DateTime fecha)
         {
@@ -147,7 +141,7 @@ namespace Clinica_Medica_Grupo_e
             {
                 DateTime dia = lunes.AddDays(i);
                 List<Turno> turnosDia = turnosSemana.Where(t => t.Fecha.Date == dia).ToList();
-                int pendientes = turnosDia.Count(t => EsPendiente(t.Estado));
+                int pendientes = turnosDia.Count(t => t.EsPendiente);
                 int atendidos = turnosDia.Count(t => t.Estado == EstadoTurno.Cerrado);
 
                 string cardCss = "";
@@ -179,14 +173,14 @@ namespace Clinica_Medica_Grupo_e
             lblFechaSeleccionada.Text = FechaSeleccionada == DateTime.Today ? "Hoy - " + textoFecha : textoFecha;
         }
 
-        
+
         // Métricas del día
-        
+
 
         private void MostrarMetricas(List<Turno> turnosDelDia)
         {
             int total = turnosDelDia.Count;
-            int pendientes = turnosDelDia.Count(t => EsPendiente(t.Estado));
+            int pendientes = turnosDelDia.Count(t => t.EsPendiente);
             int reprogramados = turnosDelDia.Count(t => t.Estado == EstadoTurno.Reprogramado);
             int atendidos = turnosDelDia.Count(t => t.Estado == EstadoTurno.Cerrado);
             int cancelados = turnosDelDia.Count(t => t.Estado == EstadoTurno.Cancelado);
@@ -202,14 +196,14 @@ namespace Clinica_Medica_Grupo_e
             lblMetricaPorcentaje.Text = porcentaje + "% de la jornada completada";
         }
 
-        
+
         // Tabla de turnos
-        
+
 
         private void ActualizarFiltroEstado(List<Turno> turnosDelDia)
         {
             ddlFiltroEstado.Items.FindByValue("todos").Text = "Todos los estados (" + turnosDelDia.Count + ")";
-            ddlFiltroEstado.Items.FindByValue("nuevo").Text = "Nuevos / Pendientes (" + turnosDelDia.Count(t => EsPendiente(t.Estado)) + ")";
+            ddlFiltroEstado.Items.FindByValue("nuevo").Text = "Nuevos / Pendientes (" + turnosDelDia.Count(t => t.EsPendiente) + ")";
             ddlFiltroEstado.Items.FindByValue("cerrado").Text = "Atendidos / Cerrados (" + turnosDelDia.Count(t => t.Estado == EstadoTurno.Cerrado) + ")";
             ddlFiltroEstado.Items.FindByValue("reprogramado").Text = "Reprogramados (" + turnosDelDia.Count(t => t.Estado == EstadoTurno.Reprogramado) + ")";
             ddlFiltroEstado.Items.FindByValue("noasistio").Text = "No asistió (" + turnosDelDia.Count(t => t.Estado == EstadoTurno.NoAsistio) + ")";
@@ -222,7 +216,7 @@ namespace Clinica_Medica_Grupo_e
 
             // El primer turno pendiente de hoy se resalta como "el próximo a atender".
             Turno proximo = FechaSeleccionada == DateTime.Today
-                ? filtrados.FirstOrDefault(t => EsPendiente(t.Estado))
+                ? filtrados.FirstOrDefault(t => t.EsPendiente)
                 : null;
 
             rptMisTurnos.DataSource = filtrados.Select(t => ArmarFila(t, t == proximo)).ToList();
@@ -233,7 +227,7 @@ namespace Clinica_Medica_Grupo_e
 
             lblResumenTabla.Text = "Mostrando " + filtrados.Count + " de " + turnosDelDia.Count
                 + " turnos de " + medico.NombreCompleto + " para el " + FechaSeleccionada.ToString("dd/MM/yyyy");
-            lblTurnosRestantes.Text = "Turnos restantes: " + turnosDelDia.Count(t => EsPendiente(t.Estado));
+            lblTurnosRestantes.Text = "Turnos restantes: " + turnosDelDia.Count(t => t.EsPendiente);
         }
 
         private List<Turno> AplicarFiltros(List<Turno> turnos)
@@ -242,7 +236,7 @@ namespace Clinica_Medica_Grupo_e
 
             switch (ddlFiltroEstado.SelectedValue)
             {
-                case "nuevo": resultado = resultado.Where(t => EsPendiente(t.Estado)); break;
+                case "nuevo": resultado = resultado.Where(t => t.EsPendiente); break;
                 case "cerrado": resultado = resultado.Where(t => t.Estado == EstadoTurno.Cerrado); break;
                 case "reprogramado": resultado = resultado.Where(t => t.Estado == EstadoTurno.Reprogramado); break;
                 case "noasistio": resultado = resultado.Where(t => t.Estado == EstadoTurno.NoAsistio); break;
@@ -262,7 +256,7 @@ namespace Clinica_Medica_Grupo_e
         }
 
         /// Convierte un turno en los campos que espera el Repeater rptMisTurnos.
-        
+
         private object ArmarFila(Turno turno, bool esProximo)
         {
             string estadoTexto, estadoCss, estadoIcono;
@@ -290,7 +284,7 @@ namespace Clinica_Medica_Grupo_e
                     break;
             }
 
-            if (EsPendiente(turno.Estado))
+            if (turno.EsPendiente)
             {
                 accionComando = "Atender";
                 accionIcono = "bi-hospital";
@@ -336,23 +330,19 @@ namespace Clinica_Medica_Grupo_e
             };
         }
 
-        private static bool EsPendiente(EstadoTurno estado)
-        {
-            return estado == EstadoTurno.Nuevo || estado == EstadoTurno.Reprogramado;
-        }
+        //private static bool EsPendiente(EstadoTurno estado)
+        //{
+        //    return estado == EstadoTurno.Nuevo || estado == EstadoTurno.Reprogramado;
+        //}
+
 
         
-        /// "35111222" -> "35.111.222".
-        
-        private static string FormatearDni(string dni)
-        {
-            long numero;
-            return long.TryParse(dni, out numero) ? numero.ToString("#,0", Cultura) : dni;
-        }
 
         
+
+
         // Eventos
-        
+
 
         protected void btnExportarAgenda_Click(object sender, EventArgs e) { }
 
