@@ -55,7 +55,7 @@
                     <div class="d-flex align-items-center gap-2 pt-2 border-top">
                         <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-teal px-4 fw-semibold shadow-sm" OnClick="btnAceptar_Click" />
                         <a href="Pacientes.aspx" class="btn btn-light border px-4 text-secondary">Cancelar</a>
-                        <% if (Request.QueryString["id"] != null) { %>
+                        <% if (EsModificacion) { %>
                         <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-danger ms-auto px-3" OnClick="btnEliminar_Click" />
                         <% } %>
                     </div>
