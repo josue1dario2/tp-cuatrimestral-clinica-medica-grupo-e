@@ -1968,6 +1968,17 @@ tr.pagination-container td {
     color: var(--cl-danger);
 }
 
+/* Sin variación o sin período anterior para comparar */
+.estadisticas .es-tendencia-neutra {
+    background-color: var(--cl-surface-container);
+    color: var(--cl-text-secondary);
+}
+
+/* Campos Desde / Hasta del rango personalizado */
+.estadisticas .es-fecha {
+    font-size: 13px;
+}
+
 .estadisticas .es-icono-tendencia {
     font-size: 14px;
 }

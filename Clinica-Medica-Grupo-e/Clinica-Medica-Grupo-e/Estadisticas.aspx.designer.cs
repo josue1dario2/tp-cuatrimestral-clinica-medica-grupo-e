@@ -60,6 +60,60 @@ namespace Clinica_Medica_Grupo_e
         protected global::System.Web.UI.WebControls.DropDownList ddlPeriodo;
 
         /// <summary>
+        /// pnlRangoPersonalizado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRangoPersonalizado;
+
+        /// <summary>
+        /// lblDesde control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDesde;
+
+        /// <summary>
+        /// txtDesde control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDesde;
+
+        /// <summary>
+        /// lblHasta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHasta;
+
+        /// <summary>
+        /// txtHasta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtHasta;
+
+        /// <summary>
+        /// phSede control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phSede;
+
+        /// <summary>
         /// lblSede control.
         /// </summary>
         /// <remarks>
@@ -112,6 +166,24 @@ namespace Clinica_Medica_Grupo_e
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnRestablecer;
+
+        /// <summary>
+        /// pnlMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlMensaje;
+
+        /// <summary>
+        /// lblMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
 
         /// <summary>
         /// lblKpiTotal control.
@@ -357,6 +429,15 @@ namespace Clinica_Medica_Grupo_e
         protected global::System.Web.UI.WebControls.LinkButton lnkVerRanking;
 
         /// <summary>
+        /// lblVerRanking control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblVerRanking;
+
+        /// <summary>
         /// rptActividadMedicos control.
         /// </summary>
         /// <remarks>
@@ -364,6 +445,15 @@ namespace Clinica_Medica_Grupo_e
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptActividadMedicos;
+
+        /// <summary>
+        /// pnlSinMedicos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlSinMedicos;
 
         /// <summary>
         /// btnExportarTabla control.
