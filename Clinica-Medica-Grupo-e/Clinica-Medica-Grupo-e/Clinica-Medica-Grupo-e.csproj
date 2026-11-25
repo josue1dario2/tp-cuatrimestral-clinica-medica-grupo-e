@@ -95,6 +95,7 @@
     <Content Include="Plantillas\NotificacionTurno.html" />
     <Content Include="PlanesObraSocial.aspx" />
     <Content Include="ReprogramarTurno.aspx" />
+    <Content Include="Scripts\estadisticas.js" />
     <Content Include="Scripts\inicio-medico.js" />
     <Content Include="Scripts\reprogramar-turno.js" />
     <Content Include="Scripts\mis-turnos.js" />

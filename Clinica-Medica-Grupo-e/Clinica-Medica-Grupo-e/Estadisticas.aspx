@@ -19,12 +19,14 @@
                 <p class="text-muted fs-14 mb-0">Métricas consolidadas de rendimiento operativo, asistencia y ocupación médica mensual en tiempo real.</p>
             </div>
             <div class="d-flex flex-wrap align-items-center gap-2">
-                <asp:LinkButton ID="btnExportarPdf" runat="server" OnClick="btnExportarPdf_Click"
+                <%-- Exportar PDF y Descargar Excel quedan ocultos (no se implementan): "Imprimir Informe" permite guardar como PDF
+                     y "Exportar tabla a Excel" descarga la matriz. --%>
+                <asp:LinkButton ID="btnExportarPdf" runat="server" OnClick="btnExportarPdf_Click" Visible="false"
                     CssClass="btn btn-soft-outline px-3 py-2 d-inline-flex align-items-center gap-2 fw-semibold">
                     <span class="material-symbols-outlined icon-18 text-danger">picture_as_pdf</span>
                     <span>Exportar PDF</span>
                 </asp:LinkButton>
-                <asp:LinkButton ID="btnExportarExcel" runat="server" OnClick="btnExportarExcel_Click"
+                <asp:LinkButton ID="btnExportarExcel" runat="server" OnClick="btnExportarExcel_Click" Visible="false"
                     CssClass="btn btn-soft-outline px-3 py-2 d-inline-flex align-items-center gap-2 fw-semibold">
                     <span class="material-symbols-outlined icon-18 text-success">table_chart</span>
                     <span>Descargar Excel (CSV)</span>
@@ -44,18 +46,35 @@
                     <asp:Label ID="lblPeriodo" runat="server" AssociatedControlID="ddlPeriodo" CssClass="form-label text-uppercase fw-semibold text-secondary fs-11 mb-1" Text="Período Analítico"></asp:Label>
                     <div class="position-relative">
                         <span class="material-symbols-outlined icon-18 text-secondary es-icono-select">date_range</span>
-                        <asp:DropDownList ID="ddlPeriodo" runat="server" CssClass="form-select form-select-custom es-select w-100">
-                            <asp:ListItem Value="ultimos30" Selected="True">Últimos 30 días (01 May 2025 - 31 May 2025)</asp:ListItem>
-                            <asp:ListItem Value="hoy">Hoy (24 de Mayo 2025)</asp:ListItem>
-                            <asp:ListItem Value="semana">Esta semana en curso</asp:ListItem>
-                            <asp:ListItem Value="mes">Este mes (Mayo 2025)</asp:ListItem>
-                            <asp:ListItem Value="mesAnterior">Mes anterior (Abril 2025)</asp:ListItem>
-                            <asp:ListItem Value="personalizado">Rango Personalizado...</asp:ListItem>
+                        <%-- Los textos con las fechas los completa CargarFiltros() en el code-behind. --%>
+                        <asp:DropDownList ID="ddlPeriodo" runat="server" ClientIDMode="Static" CssClass="form-select form-select-custom es-select w-100">
+                            <asp:ListItem Value="ultimos30" Selected="True">Últimos 30 días</asp:ListItem>
+                            <asp:ListItem Value="hoy">Hoy</asp:ListItem>
+                            <asp:ListItem Value="semana">Esta semana</asp:ListItem>
+                            <asp:ListItem Value="mes">Este mes</asp:ListItem>
+                            <asp:ListItem Value="mesAnterior">Mes anterior</asp:ListItem>
+                            <asp:ListItem Value="personalizado">Rango personalizado...</asp:ListItem>
                         </asp:DropDownList>
                     </div>
                 </div>
+
+                <%-- Rango personalizado: se ve solo con esa opción (Scripts/estadisticas.js y MostrarRangoPersonalizado()). --%>
+                <asp:Panel ID="pnlRangoPersonalizado" runat="server" ClientIDMode="Static" CssClass="col-12 col-md-6 col-lg-3 d-none">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <asp:Label ID="lblDesde" runat="server" AssociatedControlID="txtDesde" CssClass="form-label text-uppercase fw-semibold text-secondary fs-11 mb-1" Text="Desde"></asp:Label>
+                            <asp:TextBox ID="txtDesde" runat="server" TextMode="Date" CssClass="form-control form-control-custom es-fecha w-100"></asp:TextBox>
+                        </div>
+                        <div class="col-6">
+                            <asp:Label ID="lblHasta" runat="server" AssociatedControlID="txtHasta" CssClass="form-label text-uppercase fw-semibold text-secondary fs-11 mb-1" Text="Hasta"></asp:Label>
+                            <asp:TextBox ID="txtHasta" runat="server" TextMode="Date" CssClass="form-control form-control-custom es-fecha w-100"></asp:TextBox>
+                        </div>
+                    </div>
+                </asp:Panel>
+
+                <%-- La base no guarda sedes: el filtro queda oculto. --%>
+                <asp:PlaceHolder ID="phSede" runat="server" Visible="false">
                 <div class="col-12 col-md-6 col-lg-3">
-                    <%-- TEXTO DE EJEMPLO: la base no guarda sedes --%>
                     <asp:Label ID="lblSede" runat="server" AssociatedControlID="ddlSede" CssClass="form-label text-uppercase fw-semibold text-secondary fs-11 mb-1" Text="Sede Operativa"></asp:Label>
                     <div class="position-relative">
                         <span class="material-symbols-outlined icon-18 text-secondary es-icono-select">domain</span>
@@ -66,19 +85,14 @@
                         </asp:DropDownList>
                     </div>
                 </div>
+                </asp:PlaceHolder>
                 <div class="col-12 col-md-6 col-lg-3">
                     <asp:Label ID="lblEspecialidad" runat="server" AssociatedControlID="ddlEspecialidad" CssClass="form-label text-uppercase fw-semibold text-secondary fs-11 mb-1" Text="Especialidad Médica"></asp:Label>
                     <div class="position-relative">
                         <span class="material-symbols-outlined icon-18 text-secondary es-icono-select">stethoscope</span>
-                        <%-- Ítems de ejemplo: Value = Id de la especialidad (0 = todas) --%>
+                        <%-- Se llena desde la base en CargarFiltros(): Value = Id de la especialidad (0 = todas) --%>
                         <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select form-select-custom es-select w-100">
-                            <asp:ListItem Value="0" Selected="True">Todas las especialidades (12 activas)</asp:ListItem>
-                            <asp:ListItem Value="1">Cardiología Clínica</asp:ListItem>
-                            <asp:ListItem Value="2">Dermatología Médica</asp:ListItem>
-                            <asp:ListItem Value="3">Traumatología y Ortopedia</asp:ListItem>
-                            <asp:ListItem Value="4">Pediatría Integral</asp:ListItem>
-                            <asp:ListItem Value="5">Neurología</asp:ListItem>
-                            <asp:ListItem Value="6">Oftalmología</asp:ListItem>
+                            <asp:ListItem Value="0" Selected="True">Todas las especialidades</asp:ListItem>
                         </asp:DropDownList>
                     </div>
                 </div>
@@ -95,6 +109,11 @@
                     </asp:LinkButton>
                 </div>
             </div>
+        </asp:Panel>
+
+        <%-- Avisos: filtro inválido, período sin turnos o error de base de datos --%>
+        <asp:Panel ID="pnlMensaje" runat="server" Visible="false" CssClass="alert alert-warning mb-0">
+            <asp:Label ID="lblMensaje" runat="server"></asp:Label>
         </asp:Panel>
 
         <!--  3. TARJETAS KPI  -->
@@ -122,7 +141,7 @@
                                 <asp:Label ID="lblKpiTotalIcono" runat="server" CssClass="material-symbols-outlined es-icono-tendencia" Text="trending_up"></asp:Label>
                                 <asp:Label ID="lblKpiTotalTendencia" runat="server" Text="+8.4%"></asp:Label>
                             </span>
-                            <span class="text-secondary small">vs. mes anterior</span>
+                            <span class="text-secondary small">vs. período anterior</span>
                         </div>
                         <asp:Label ID="lblKpiTotalPromedio" runat="server" CssClass="text-muted fs-12" Text="Promedio: 47.6 turnos/día hábil"></asp:Label>
                     </div>
@@ -149,7 +168,7 @@
                                 <asp:Label ID="lblKpiCancelacionIcono" runat="server" CssClass="material-symbols-outlined es-icono-tendencia" Text="trending_down"></asp:Label>
                                 <asp:Label ID="lblKpiCancelacionTendencia" runat="server" Text="-1.5%"></asp:Label>
                             </span>
-                            <span class="text-secondary small">mejora favorable</span>
+                            <span class="text-secondary small">vs. período anterior</span>
                         </div>
                         <asp:Label ID="lblKpiCancelados" runat="server" CssClass="text-muted fs-12" Text="103 turnos cancelados en total"></asp:Label>
                     </div>
@@ -176,7 +195,7 @@
                                 <asp:Label ID="lblKpiInasistenciaIcono" runat="server" CssClass="material-symbols-outlined es-icono-tendencia" Text="trending_down"></asp:Label>
                                 <asp:Label ID="lblKpiInasistenciaTendencia" runat="server" Text="-0.8%"></asp:Label>
                             </span>
-                            <span class="text-secondary small">vs. mes anterior</span>
+                            <span class="text-secondary small">vs. período anterior</span>
                         </div>
                         <asp:Label ID="lblKpiAusentes" runat="server" CssClass="text-muted fs-12" Text="83 pacientes ausentes sin aviso previo"></asp:Label>
                     </div>
@@ -203,7 +222,7 @@
                                 <asp:Label ID="lblKpiCerradosIcono" runat="server" CssClass="material-symbols-outlined es-icono-tendencia" Text="trending_up"></asp:Label>
                                 <asp:Label ID="lblKpiCerradosTendencia" runat="server" Text="+3.2%"></asp:Label>
                             </span>
-                            <span class="text-secondary small">efectividad alta</span>
+                            <span class="text-secondary small">vs. período anterior</span>
                         </div>
                         <span class="text-muted fs-12">Efectividad de consulta completada</span>
                     </div>
@@ -281,8 +300,8 @@
                         <span class="material-symbols-outlined text-secondary">bar_chart</span>
                     </div>
                     <%--
-                        Campos de cada fila: Especialidad, Promedio ("(Prom. 22 min)" - TEXTO DE EJEMPLO, la base no guarda la duración),
-                        Porcentaje ("26.9%"), Cantidad (384) y Ancho ("100%": la especialidad con más turnos ocupa toda la barra).
+                        Campos de cada fila: Especialidad, Porcentaje ("26,9%"), Cantidad ("384") y Ancho ("100%": la especialidad
+                        con más turnos ocupa toda la barra). El promedio de duración del diseño no se muestra: la base no guarda la duración.
                     --%>
                     <div class="d-flex flex-column gap-3 my-3">
                         <asp:Repeater ID="rptDemanda" runat="server">
@@ -291,7 +310,6 @@
                                     <div class="d-flex align-items-center justify-content-between mb-1">
                                         <div class="d-flex align-items-center gap-2">
                                             <span class="fw-semibold text-dark small"><%#: Eval("Especialidad") %></span>
-                                            <span class="text-muted small"><%#: Eval("Promedio") %></span>
                                         </div>
                                         <div class="d-flex align-items-center gap-3">
                                             <span class="text-secondary small fw-medium"><%#: Eval("Porcentaje") %></span>
@@ -309,7 +327,7 @@
                         <span class="fs-12">Base total calculada sobre <asp:Label ID="lblDemandaTotal" runat="server" Text="1.428"></asp:Label> citas asignadas</span>
                         <asp:LinkButton ID="lnkVerRanking" runat="server" OnClick="lnkVerRanking_Click"
                             CssClass="small text-decoration-none fw-semibold d-inline-flex align-items-center gap-1 text-cl-primary">
-                            <span>Ver ranking completo</span>
+                            <asp:Label ID="lblVerRanking" runat="server" Text="Ver ranking completo"></asp:Label>
                             <span class="material-symbols-outlined icon-18">arrow_forward</span>
                         </asp:LinkButton>
                     </div>
@@ -351,6 +369,9 @@
                             </ItemTemplate>
                         </asp:Repeater>
                     </div>
+                    <asp:Panel ID="pnlSinMedicos" runat="server" Visible="false" CssClass="text-center text-muted small py-4">
+                        No hay turnos asignados a médicos en el período elegido.
+                    </asp:Panel>
                 </div>
             </div>
         </div>
@@ -375,9 +396,10 @@
                 </div>
             </div>
             <%--
-                Campos de cada fila: IdEspecialidad, Especialidad, Detalle (consultorio - TEXTO DE EJEMPLO, la base no lo guarda),
-                Icono (nombre Material Symbols), IconoCss (icon-box-red, icon-box-teal, icon-box-blue, es-icono-gris),
-                Medicos, Total, Atendidos, Cancelados, Inasistencias y Cumplimiento ("83.6%").
+                Campos de cada fila: IdEspecialidad, Especialidad, Icono (nombre Material Symbols),
+                IconoCss (icon-box-red, icon-box-teal, icon-box-blue, es-icono-gris), Medicos, Total, Atendidos, Cancelados,
+                Inasistencias, Cumplimiento ("83,6%") y CumplimientoCss (verde desde 80%, rojo debajo).
+                El consultorio del diseño (Detalle) no se muestra: la base no lo guarda.
             --%>
             <div class="table-responsive">
                 <table class="table es-tabla mb-0 w-100">
@@ -404,7 +426,6 @@
                                             </div>
                                             <div>
                                                 <span class="fw-semibold text-dark d-block"><%#: Eval("Especialidad") %></span>
-                                                <span class="text-muted fs-12"><%#: Eval("Detalle") %></span>
                                             </div>
                                         </div>
                                     </td>
@@ -414,7 +435,7 @@
                                     <td class="text-end text-danger"><%#: Eval("Cancelados") %></td>
                                     <td class="text-end text-secondary"><%#: Eval("Inasistencias") %></td>
                                     <td class="text-center">
-                                        <span class="es-tendencia es-tendencia-positiva"><%#: Eval("Cumplimiento") %></span>
+                                        <span class='<%# "es-tendencia " + Eval("CumplimientoCss") %>'><%#: Eval("Cumplimiento") %></span>
                                     </td>
                                     <td class="text-center">
                                         <asp:LinkButton ID="btnVerDesglose" runat="server" CommandName="VerDesglose" CommandArgument='<%# Eval("IdEspecialidad") %>'
@@ -443,7 +464,7 @@
                             <td class="text-center">
                                 <asp:Label ID="lblTotalCumplimiento" runat="server" CssClass="badge rounded-pill text-white px-3 py-1 fs-12 es-badge-total" Text="81.6% PROM."></asp:Label>
                             </td>
-                            <td class="text-center text-muted small"><asp:Label ID="lblTotalAuditoria" runat="server" Text="Auditoría OK"></asp:Label></td>
+                            <td class="text-center text-muted small"><%-- Sin datos de auditoría: queda oculto --%><asp:Label ID="lblTotalAuditoria" runat="server" Visible="false" Text="Auditoría OK"></asp:Label></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -452,7 +473,7 @@
                 <span class="text-secondary small">
                     <asp:Label ID="lblMostrando" runat="server" Text="Mostrando 6 especialidades de 6 auditadas"></asp:Label>
                     | Reporte generado automáticamente por
-                    <%-- TEXTO DE EJEMPLO: podría ser el usuario logueado --%>
+                    <%-- Usuario logueado (MostrarAutor) --%>
                     <asp:Label ID="lblAutorReporte" runat="server" CssClass="text-dark fw-medium" Text="Lic. Martín Palermo"></asp:Label>
                 </span>
                 <div class="d-flex align-items-center gap-1">
@@ -469,4 +490,5 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="Scripts" runat="server">
+    <script src='<%= ResolveUrl("~/Scripts/estadisticas.js") %>'></script>
 </asp:Content>
