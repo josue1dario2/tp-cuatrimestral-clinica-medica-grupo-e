@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <!--
-    PLANTILLA DE CORREO: alta de paciente.
+    PLANTILLA DE CORREO: notificación al paciente (alta, modificación o baja del registro).
     El paciente no tiene usuario en el sistema: este correo no lleva nombre de usuario ni contraseña.
 
     Reglas para correos HTML:
@@ -10,17 +10,31 @@
     - Color principal fijo: #14263E (azul marino).
 
     VARIABLES (se reemplazan desde el código con .Replace("{{NOMBRE}}", valor)):
+      {{MOTIVO_NOTIFICACION}} Texto de la etiqueta superior y del <title>. Ej.: "Alta de paciente",
+                             "Modificación de datos", "Baja del sistema"
+      {{MENSAJE}}            Texto bajo el saludo (trato de "usted"). Ejemplos:
+                             Alta: "Usted recibe este correo porque fue registrado/a como paciente de
+                                   Clínica Médica. A partir de ahora puede solicitar turnos con nuestros profesionales."
+                             Modificación: "Le informamos que se actualizaron sus datos como paciente de
+                                   Clínica Médica."
+                             Baja: "Le informamos que su registro como paciente de Clínica Médica fue dado
+                                   de baja. Ya no podrá solicitar turnos con nuestros profesionales."
       {{NOMBRE}}  {{APELLIDO}}  {{DNI}}
       {{FECHA_NACIMIENTO}}   Ej.: 14/08/1983
       {{EMAIL}}
       {{TELEFONO}}           Si no lo cargaron, conviene reemplazarlo por "No informado"
       {{DIRECCION}}          Si no la cargaron, conviene reemplazarla por "No informada"
+
+    BLOQUES OPCIONALES (se quitan con QuitarBloque(html, "X")):
+      DATOS        Pedido de revisión + tabla de datos. Quitarlo en la baja.
+      AVISO_DATOS  Aviso "¿Algún dato es incorrecto...?". Quitarlo en la baja.
+      AVISO_BAJA   Aviso "¿Usted no solicitó la baja?". Quitarlo en el alta y en la modificación.
 -->
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bienvenido/a a Clínica Médica</title>
+    <title>{{MOTIVO_NOTIFICACION}} - Clínica Médica</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f8f9ff; font-family: Arial, Helvetica, sans-serif; color: #0b1c30;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f8f9ff;">
@@ -43,18 +57,18 @@
                         </td>
                     </tr>
 
-                    <!-- Bienvenida -->
+                    <!-- Saludo y motivo de la notificación -->
                     <tr>
                         <td align="center" style="padding: 16px 24px 24px 24px; background-color: #eff4ff;">
-                            <span style="display: inline-block; padding: 4px 12px; border-radius: 999px; background-color: #14263E; color: #ffffff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Alta de paciente</span>
-                            <h1 style="margin: 12px 0 6px 0; font-size: 24px; line-height: 32px; color: #14263E;">¡Bienvenido/a, {{NOMBRE}}!</h1>
+                            <span style="display: inline-block; padding: 4px 12px; border-radius: 999px; background-color: #14263E; color: #ffffff; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">{{MOTIVO_NOTIFICACION}}</span>
+                            <h1 style="margin: 12px 0 6px 0; font-size: 24px; line-height: 32px; color: #14263E;">Estimado/a {{NOMBRE}}:</h1>
                             <p style="margin: 0; font-size: 14px; line-height: 21px; color: #4d5f7b;">
-                                Usted recibe este correo porque fue registrado/a como paciente de <strong style="color: #14263E;">Clínica Médica</strong>.
-                                A partir de ahora puede solicitar turnos con nuestros profesionales.
+                                {{MENSAJE}}
                             </p>
                         </td>
                     </tr>
 
+                    <!--INICIO_DATOS-->
                     <!-- Pedido de revisión -->
                     <tr>
                         <td style="padding: 24px 24px 12px 24px;">
@@ -101,15 +115,31 @@
                         </td>
                     </tr>
 
-                    <!-- Aviso: datos incorrectos o alta no solicitada -->
+                    <!--FIN_DATOS-->
+
+                    <!--INICIO_AVISO_DATOS-->
+                    <!-- Aviso: datos incorrectos u operación no solicitada -->
                     <tr>
                         <td style="padding: 0 24px 24px 24px;">
                             <p style="margin: 0; padding: 14px 16px; background-color: #fff4e5; border-left: 4px solid #B45309; border-radius: 8px; font-size: 13px; line-height: 20px; color: #5c2d04;">
-                                <strong>¿Algún dato es incorrecto o usted no solicitó este registro?</strong><br />
-                                Comuníquese con la recepción de la clínica para que podamos corregirlo o dar de baja el registro.
+                                <strong>¿Algún dato es incorrecto o usted no reconoce esta operación?</strong><br />
+                                Comuníquese con la recepción de la clínica para que podamos corregirlo.
                             </p>
                         </td>
                     </tr>
+                    <!--FIN_AVISO_DATOS-->
+
+                    <!--INICIO_AVISO_BAJA-->
+                    <!-- Aviso: baja no solicitada -->
+                    <tr>
+                        <td style="padding: 24px 24px 24px 24px;">
+                            <p style="margin: 0; padding: 14px 16px; background-color: #fff4e5; border-left: 4px solid #B45309; border-radius: 8px; font-size: 13px; line-height: 20px; color: #5c2d04;">
+                                <strong>¿Usted no solicitó la baja?</strong><br />
+                                Comuníquese con la recepción de la clínica para que podamos revisar su registro.
+                            </p>
+                        </td>
+                    </tr>
+                    <!--FIN_AVISO_BAJA-->
 
                     <!-- Pie -->
                     <tr>
