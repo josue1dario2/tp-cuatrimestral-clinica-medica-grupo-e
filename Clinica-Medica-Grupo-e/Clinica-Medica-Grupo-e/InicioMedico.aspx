@@ -11,6 +11,7 @@
 
         <asp:PlaceHolder ID="phContenido" runat="server">
 
+
             <!--  1. BIENVENIDA  -->
             <div class="cl-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                 <div class="d-flex flex-column gap-1">

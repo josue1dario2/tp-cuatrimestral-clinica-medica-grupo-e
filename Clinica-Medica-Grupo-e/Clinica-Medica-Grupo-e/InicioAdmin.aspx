@@ -6,6 +6,7 @@
 <asp:Content ID="cntMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="d-flex flex-column gap-4">
 
+
         <!--  1. BIENVENIDA  -->
         <section class="card-custom p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div class="d-flex flex-column">
@@ -13,17 +14,23 @@
                     <h1 class="fs-24 fw-semibold text-dark mb-0 tracking-tight">
                         <asp:Label ID="lblSaludo" runat="server" Text="Buenos días, María"></asp:Label>
                     </h1>
-                    <asp:Label ID="lblSede" runat="server" CssClass="chip-soft badge rounded-pill px-2 py-1 fw-normal fs-11" Text="Sede Central"></asp:Label>
+                    <%-- La base no guarda sedes: queda oculto. --%>
+                    <asp:Label ID="lblSede" runat="server" Visible="false" CssClass="chip-soft badge rounded-pill px-2 py-1 fw-normal fs-11" Text="Sede Central"></asp:Label>
                 </div>
                 <p class="fs-14 text-cl-secondary mb-0 mt-1 d-flex align-items-center gap-2 flex-wrap">
                     <span class="material-symbols-outlined icon-18 text-cl-primary">event_available</span>
                     <asp:Label ID="lblFechaLarga" runat="server" Text="Lunes 24 de octubre de 2025"></asp:Label>
-                    •
-                    <asp:Label ID="lblTurnoNombre" runat="server" CssClass="fw-semibold text-dark" Text="Turno Mañana"></asp:Label>
-                    <asp:Label ID="lblTurnoHorario" runat="server" Text="(08:00 - 14:00 hs)"></asp:Label>
+                    <%-- Los turnos de trabajo son de los médicos, no del usuario de recepción: queda oculto. --%>
+                    <asp:PlaceHolder ID="phTurnoTrabajo" runat="server" Visible="false">
+                        •
+                        <asp:Label ID="lblTurnoNombre" runat="server" CssClass="fw-semibold text-dark" Text="Turno Mañana"></asp:Label>
+                        <asp:Label ID="lblTurnoHorario" runat="server" Text="(08:00 - 14:00 hs)"></asp:Label>
+                    </asp:PlaceHolder>
                 </p>
             </div>
             <div class="d-flex align-items-center gap-3 flex-wrap">
+                <%-- La base no guarda el estado de la recepción ni el box: queda oculto. --%>
+                <asp:PlaceHolder ID="phEstadoRecepcion" runat="server" Visible="false">
                 <div class="bg-cl-low d-flex align-items-center gap-2 px-3 py-2 rounded-3">
                     <div class="pulse-dot-wrapper">
                         <span class="pulse-dot-ping"></span>
@@ -32,17 +39,38 @@
                     <asp:Label ID="lblEstadoRecepcion" runat="server" CssClass="fw-semibold text-dark fs-14" Text="Recepción Activa"></asp:Label>
                     <asp:Label ID="lblBox" runat="server" CssClass="chip-soft-strong badge rounded-pill px-2 py-1 fs-11" Text="Box 02"></asp:Label>
                 </div>
+                </asp:PlaceHolder>
                 <asp:LinkButton ID="btnCambiarFecha" runat="server" OnClick="btnCambiarFecha_Click"
                     CssClass="btn-soft-outline btn d-flex align-items-center gap-2 px-3 py-2 rounded-3">
                     <span class="material-symbols-outlined icon-18">calendar_today</span>
                     <span>Cambiar Fecha</span>
                 </asp:LinkButton>
+                <%-- Elegir otro día: lo muestra btnCambiarFecha --%>
+                <asp:Panel ID="pnlCambiarFecha" runat="server" Visible="false" DefaultButton="btnVerFecha" CssClass="d-flex align-items-center gap-2">
+                    <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-control-custom" ToolTip="Día a mostrar"></asp:TextBox>
+                    <asp:LinkButton ID="btnVerFecha" runat="server" OnClick="btnVerFecha_Click"
+                        CssClass="btn-soft-outline btn d-flex align-items-center gap-1 px-3 py-2 rounded-3">
+                        <span class="material-symbols-outlined icon-18">check</span>
+                        <span>Ver</span>
+                    </asp:LinkButton>
+                </asp:Panel>
+                <%-- Vuelve al día actual (visible solo si se está viendo otro día) --%>
+                <asp:LinkButton ID="btnFechaHoy" runat="server" OnClick="btnFechaHoy_Click" Visible="false"
+                    CssClass="btn-soft-outline btn d-flex align-items-center gap-1 px-3 py-2 rounded-3">
+                    <span class="material-symbols-outlined icon-18">today</span>
+                    <span>Hoy</span>
+                </asp:LinkButton>
             </div>
         </section>
 
+        <%-- Errores de carga (base de datos o fecha inválida) --%>
+        <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert alert-danger mb-0">
+            <asp:Label ID="lblError" runat="server"></asp:Label>
+        </asp:Panel>
+
         <!--  2. ACCESOS RÁPIDOS  -->
         <section class="row g-3">
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-4">
                 <asp:HyperLink ID="lnkNuevoTurno" runat="server" NavigateUrl="~/NuevoTurno.aspx" CssClass="card-quick-action card-quick-action-primary w-100">
                     <div class="icon-box icon-box-48 icon-box-white rounded-3">
                         <span class="material-symbols-outlined icon-28">add_circle</span>
@@ -54,7 +82,7 @@
                     <span class="material-symbols-outlined text-white-50">arrow_forward</span>
                 </asp:HyperLink>
             </div>
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-4">
                 <asp:HyperLink ID="lnkBuscarPaciente" runat="server" NavigateUrl="~/Pacientes.aspx" CssClass="card-quick-action w-100">
                     <div class="icon-box icon-box-48 icon-box-blue rounded-3">
                         <span class="material-symbols-outlined icon-26">person_search</span>
@@ -66,7 +94,7 @@
                     <span class="material-symbols-outlined text-secondary">chevron_right</span>
                 </asp:HyperLink>
             </div>
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-sm-6 col-lg-4">
                 <asp:HyperLink ID="lnkVerTurnos" runat="server" NavigateUrl="~/Turnos.aspx" CssClass="card-quick-action w-100">
                     <div class="icon-box icon-box-48 icon-box-high rounded-3">
                         <span class="material-symbols-outlined icon-26">calendar_month</span>
@@ -78,6 +106,8 @@
                     <span class="material-symbols-outlined text-secondary">chevron_right</span>
                 </asp:HyperLink>
             </div>
+            <%-- No hay registro de ingreso a sala en la base: el acceso a Check-in queda oculto. --%>
+            <asp:PlaceHolder ID="phCheckin" runat="server" Visible="false">
             <div class="col-12 col-sm-6 col-lg-3">
                 <asp:LinkButton ID="btnRecepcionCheckin" runat="server" OnClick="btnRecepcionCheckin_Click" CssClass="card-quick-action w-100">
                     <div class="icon-box icon-box-48 icon-box-green rounded-3">
@@ -90,6 +120,7 @@
                     <span class="material-symbols-outlined text-secondary">chevron_right</span>
                 </asp:LinkButton>
             </div>
+            </asp:PlaceHolder>
         </section>
 
         <!--  3. INDICADORES DEL DÍA  -->
@@ -100,7 +131,7 @@
                 <div class="card-custom p-4 d-flex flex-column justify-content-between h-100">
                     <div class="d-flex align-items-start justify-content-between">
                         <div class="d-flex flex-column">
-                            <span class="kpi-label text-uppercase fw-semibold text-secondary">Turnos de hoy</span>
+                            <asp:Label ID="lblKpiTurnosTitulo" runat="server" CssClass="kpi-label text-uppercase fw-semibold text-secondary" Text="Turnos de hoy"></asp:Label>
                             <asp:Label ID="lblKpiTurnosHoy" runat="server" CssClass="kpi-value fw-semibold text-dark tracking-tight mt-1" Text="42"></asp:Label>
                         </div>
                         <div class="icon-box icon-box-40 icon-box-teal rounded-3">
@@ -108,8 +139,9 @@
                         </div>
                     </div>
                     <div class="mt-3 pt-2 d-flex align-items-center justify-content-between">
-                        <div class="kpi-foot d-flex align-items-center gap-1 text-cl-success">
-                            <span class="material-symbols-outlined icon-16">trending_up</span>
+                        <%-- Color e ícono según la diferencia con el día anterior (MostrarIndicadores) --%>
+                        <div id="divKpiVariacion" runat="server" class="kpi-foot d-flex align-items-center gap-1 text-cl-success">
+                            <asp:Label ID="lblKpiVariacionIcono" runat="server" CssClass="material-symbols-outlined icon-16" Text="trending_up"></asp:Label>
                             <asp:Label ID="lblKpiVariacion" runat="server" Text="+4 respecto a ayer"></asp:Label>
                         </div>
                         <svg class="kpi-sparkline flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 64 24">
@@ -134,7 +166,7 @@
                     <div class="mt-3 pt-2 d-flex align-items-center justify-content-between">
                         <div class="kpi-foot d-flex align-items-center gap-1 text-secondary">
                             <span class="material-symbols-outlined icon-16">hourglass_top</span>
-                            <span>En sala o por llegar</span>
+                            <span>Por atender</span>
                         </div>
                         <div class="kpi-progress rounded-pill overflow-hidden">
                             <%-- El ancho se asigna desde el code-behind: pnlBarraPendientes.Style["width"] = "33%"; --%>
@@ -149,7 +181,7 @@
                 <div class="card-custom p-4 d-flex flex-column justify-content-between h-100">
                     <div class="d-flex align-items-start justify-content-between">
                         <div class="d-flex flex-column">
-                            <span class="kpi-label text-uppercase fw-semibold text-secondary">Cancelados hoy</span>
+                            <asp:Label ID="lblKpiCanceladosTitulo" runat="server" CssClass="kpi-label text-uppercase fw-semibold text-secondary" Text="Cancelados hoy"></asp:Label>
                             <asp:Label ID="lblKpiCancelados" runat="server" CssClass="kpi-value fw-semibold tracking-tight mt-1 text-danger" Text="3"></asp:Label>
                         </div>
                         <div class="icon-box icon-box-40 icon-box-red rounded-3">
@@ -183,10 +215,10 @@
                             <span class="material-symbols-outlined icon-16">task_alt</span>
                             <asp:Label ID="lblKpiAtendidosPorcentaje" runat="server" Text="59% del total diario"></asp:Label>
                         </div>
-                        <%-- Anillo decorativo: stroke-dashoffset = 88 - (88 * porcentaje / 100) --%>
+                        <%-- Anillo: stroke-dashoffset = 88 - (88 * porcentaje / 100), lo asigna MostrarIndicadores() --%>
                         <svg class="kpi-donut flex-shrink-0" viewBox="0 0 36 36">
                             <circle class="kpi-donut-track" cx="18" cy="18" r="14" fill="none" stroke="currentColor" stroke-width="4"></circle>
-                            <circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="88" stroke-dashoffset="36" stroke-linecap="round"></circle>
+                            <circle id="cirKpiAtendidos" runat="server" cx="18" cy="18" r="14" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="88" stroke-dashoffset="36" stroke-linecap="round"></circle>
                         </svg>
                     </div>
                 </div>
@@ -203,7 +235,9 @@
                         <div class="icon-box icon-box-32 icon-box-low rounded-3">
                             <span class="material-symbols-outlined">view_timeline</span>
                         </div>
-                        <h2 class="fs-20 fw-semibold text-dark mb-0">Turnos de hoy</h2>
+                        <h2 class="fs-20 fw-semibold text-dark mb-0">
+                            <asp:Label ID="lblTituloTabla" runat="server" Text="Turnos de hoy"></asp:Label>
+                        </h2>
                     </div>
                     <span class="chip-soft badge rounded-pill px-3 py-2 fw-medium fs-13">
                         Mostrando
@@ -248,8 +282,10 @@
                       EstadoTexto, EstadoCss (badge-estado-nuevo | -cerrado | -reprogramado | -no-asistio | -cancelado),
                       FilaCss ("" | row-highlight | row-cancelado),
                       AvatarCss ("" | avatar-circle-primary | avatar-circle-danger),
-                      AccionTexto, AccionComando (CheckIn | VerFicha | Reprogramar | VerCambio | LiberarCupo),
-                      AccionCss (btn-action-outline | btn-action-primary)
+                      AccionTexto, AccionComando (Reprogramar si el turno está pendiente; VerFicha si está resuelto o cancelado),
+                      AccionCss (btn-action-outline | btn-action-primary),
+                      PuedeReprogramar (todo menos Cerrado), PuedeCancelar (solo Nuevo o Reprogramado).
+                    El diseño traía Check-in, Ver cambio y Liberar cupo: la base no tiene esos datos.
                 --%>
                 <asp:Repeater ID="rptTurnosHoy" runat="server" OnItemCommand="rptTurnosHoy_ItemCommand">
                     <HeaderTemplate>
@@ -311,10 +347,14 @@
                                                     <span class="material-symbols-outlined icon-18">more_vert</span>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                                    <li><asp:LinkButton ID="lnkMenuVerFicha" runat="server" CssClass="dropdown-item" CommandName="VerFicha" CommandArgument='<%# Eval("IdTurno") %>' Text="Ver ficha"></asp:LinkButton></li>
-                                                    <li><asp:LinkButton ID="lnkMenuReprogramar" runat="server" CssClass="dropdown-item" CommandName="Reprogramar" CommandArgument='<%# Eval("IdTurno") %>' Text="Reprogramar"></asp:LinkButton></li>
-                                                    <li><hr class="dropdown-divider" /></li>
-                                                    <li><asp:LinkButton ID="lnkMenuCancelar" runat="server" CssClass="dropdown-item text-danger" CommandName="Cancelar" CommandArgument='<%# Eval("IdTurno") %>' Text="Cancelar turno"></asp:LinkButton></li>
+                                                    <li><asp:LinkButton ID="lnkMenuVerFicha" runat="server" CssClass="dropdown-item" CommandName="VerFicha" CommandArgument='<%# Eval("IdTurno") %>' Text="Ver detalle"></asp:LinkButton></li>
+                                                    <asp:PlaceHolder ID="phMenuReprogramar" runat="server" Visible='<%# (bool)Eval("PuedeReprogramar") %>'>
+                                                        <li><asp:LinkButton ID="lnkMenuReprogramar" runat="server" CssClass="dropdown-item" CommandName="Reprogramar" CommandArgument='<%# Eval("IdTurno") %>' Text="Reprogramar"></asp:LinkButton></li>
+                                                    </asp:PlaceHolder>
+                                                    <asp:PlaceHolder ID="phMenuCancelar" runat="server" Visible='<%# (bool)Eval("PuedeCancelar") %>'>
+                                                        <li><hr class="dropdown-divider" /></li>
+                                                        <li><asp:LinkButton ID="lnkMenuCancelar" runat="server" CssClass="dropdown-item text-danger" CommandName="Cancelar" CommandArgument='<%# Eval("IdTurno") %>' Text="Cancelar turno"></asp:LinkButton></li>
+                                                    </asp:PlaceHolder>
                                                 </ul>
                                             </div>
                                         </div>
