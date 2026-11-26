@@ -44,9 +44,9 @@ namespace negocio
                 conexion.Open();
                 lector = comando.ExecuteReader();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex; 
+                throw;
             }
         }
 
@@ -58,9 +58,9 @@ namespace negocio
                 conexion.Open();
                 comando.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex; 
+                throw;
             }
         }
 
@@ -72,9 +72,9 @@ namespace negocio
                 conexion.Open();
                 return int.Parse(comando.ExecuteScalar().ToString());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex; 
+                throw;
             }
         }
 

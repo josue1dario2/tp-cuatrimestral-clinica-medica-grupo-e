@@ -184,7 +184,7 @@ END
 GO
 
 --actualizacion 5/11/2026 creacion de los procedimientos y modificaciones necesarias para Usuarios
-USE CLINICA_DB;
+USE [CLINICA_DB];
 GO
 
 IF COL_LENGTH('dbo.USUARIOS', 'NombreUsuario') IS NULL

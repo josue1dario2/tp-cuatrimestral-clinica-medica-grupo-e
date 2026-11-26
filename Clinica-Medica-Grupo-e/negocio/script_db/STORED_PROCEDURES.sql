@@ -21,7 +21,7 @@ IF OBJECT_ID('dbo.storedListarEspecialidades', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarEspecialidades];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarEspecialidades]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarEspecialidades]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -37,7 +37,7 @@ IF OBJECT_ID('dbo.storedAltaEspecialidad', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedAltaEspecialidad];
 GO
 
-CREATE PROCEDURE [dbo].[storedAltaEspecialidad]
+CREATE OR ALTER PROCEDURE [dbo].[storedAltaEspecialidad]
     @Descripcion VARCHAR(50)
 AS
 BEGIN
@@ -59,7 +59,7 @@ IF OBJECT_ID('dbo.storedModificarEspecialidad', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedModificarEspecialidad];
 GO
 
-CREATE PROCEDURE [dbo].[storedModificarEspecialidad]
+CREATE OR ALTER PROCEDURE [dbo].[storedModificarEspecialidad]
     @Id INT,
     @Descripcion VARCHAR(50)
 AS
@@ -83,7 +83,7 @@ IF OBJECT_ID('dbo.storedEliminarEspecialidad', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedEliminarEspecialidad];
 GO
 
-CREATE PROCEDURE [dbo].[storedEliminarEspecialidad]
+CREATE OR ALTER PROCEDURE [dbo].[storedEliminarEspecialidad]
     @Id INT
 AS
 BEGIN
@@ -99,7 +99,7 @@ IF OBJECT_ID('dbo.storedEliminarEspecialidadFisica', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedEliminarEspecialidadFisica];
 GO
 
-CREATE PROCEDURE [dbo].[storedEliminarEspecialidadFisica]
+CREATE OR ALTER PROCEDURE [dbo].[storedEliminarEspecialidadFisica]
     @Id INT
 AS
 BEGIN
@@ -119,7 +119,7 @@ IF OBJECT_ID('dbo.storedListarTurnosTrabajo', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarTurnosTrabajo];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarTurnosTrabajo]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarTurnosTrabajo]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -135,7 +135,7 @@ IF OBJECT_ID('dbo.storedListarTurnosTrabajoGestion', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarTurnosTrabajoGestion];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarTurnosTrabajoGestion]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarTurnosTrabajoGestion]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -151,7 +151,7 @@ IF OBJECT_ID('dbo.storedAltaTurnoTrabajo', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedAltaTurnoTrabajo];
 GO
 
-CREATE PROCEDURE [dbo].[storedAltaTurnoTrabajo]
+CREATE OR ALTER PROCEDURE [dbo].[storedAltaTurnoTrabajo]
     @Nombre VARCHAR(50),
     @HoraEntrada INT,
     @HoraSalida INT
@@ -168,7 +168,7 @@ IF OBJECT_ID('dbo.storedModificarTurnoTrabajo', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedModificarTurnoTrabajo];
 GO
 
-CREATE PROCEDURE [dbo].[storedModificarTurnoTrabajo]
+CREATE OR ALTER PROCEDURE [dbo].[storedModificarTurnoTrabajo]
     @Id INT,
     @Nombre VARCHAR(50),
     @HoraEntrada INT,
@@ -189,7 +189,7 @@ IF OBJECT_ID('dbo.storedEliminarTurnoTrabajo', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedEliminarTurnoTrabajo];
 GO
 
-CREATE PROCEDURE [dbo].[storedEliminarTurnoTrabajo]
+CREATE OR ALTER PROCEDURE [dbo].[storedEliminarTurnoTrabajo]
     @Id INT
 AS
 BEGIN
@@ -205,7 +205,7 @@ IF OBJECT_ID('dbo.storedReactivarTurnoTrabajo', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedReactivarTurnoTrabajo];
 GO
 
-CREATE PROCEDURE [dbo].[storedReactivarTurnoTrabajo]
+CREATE OR ALTER PROCEDURE [dbo].[storedReactivarTurnoTrabajo]
     @Id INT
 AS
 BEGIN
@@ -226,7 +226,7 @@ IF OBJECT_ID('dbo.storedListarMedicosConDetalle', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarMedicosConDetalle];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarMedicosConDetalle]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarMedicosConDetalle]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -246,7 +246,7 @@ IF OBJECT_ID('dbo.storedListarEspecialidadesPorMedico', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarEspecialidadesPorMedico];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarEspecialidadesPorMedico]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarEspecialidadesPorMedico]
     @IdMedico INT
 AS
 BEGIN
@@ -263,7 +263,7 @@ IF OBJECT_ID('dbo.storedAltaMedico', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedAltaMedico];
 GO
 
-CREATE PROCEDURE [dbo].[storedAltaMedico]
+CREATE OR ALTER PROCEDURE [dbo].[storedAltaMedico]
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
     @Matricula VARCHAR(20),
@@ -304,7 +304,7 @@ IF OBJECT_ID('dbo.storedModificarMedico', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedModificarMedico];
 GO
 
-CREATE PROCEDURE [dbo].[storedModificarMedico]
+CREATE OR ALTER PROCEDURE [dbo].[storedModificarMedico]
     @Id INT,
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
@@ -351,7 +351,7 @@ IF OBJECT_ID('dbo.storedEliminarMedico', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedEliminarMedico];
 GO
 
-CREATE PROCEDURE [dbo].[storedEliminarMedico]
+CREATE OR ALTER PROCEDURE [dbo].[storedEliminarMedico]
     @Id INT
 AS
 BEGIN
@@ -372,7 +372,7 @@ IF OBJECT_ID('dbo.storedListarPacientes', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarPacientes];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarPacientes]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarPacientes]
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -388,7 +388,7 @@ IF OBJECT_ID('dbo.storedAltaPaciente', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedAltaPaciente];
 GO
 
-CREATE PROCEDURE [dbo].[storedAltaPaciente]
+CREATE OR ALTER PROCEDURE [dbo].[storedAltaPaciente]
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
     @Dni VARCHAR(15),
@@ -417,7 +417,7 @@ IF OBJECT_ID('dbo.storedModificarPaciente', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedModificarPaciente];
 GO
 
-CREATE PROCEDURE [dbo].[storedModificarPaciente]
+CREATE OR ALTER PROCEDURE [dbo].[storedModificarPaciente]
     @Id INT,
     @Nombre VARCHAR(50),
     @Apellido VARCHAR(50),
@@ -454,7 +454,7 @@ IF OBJECT_ID('dbo.storedEliminarPaciente', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedEliminarPaciente];
 GO
 
-CREATE PROCEDURE [dbo].[storedEliminarPaciente]
+CREATE OR ALTER PROCEDURE [dbo].[storedEliminarPaciente]
     @Id INT
 AS
 BEGIN
@@ -488,7 +488,7 @@ IF OBJECT_ID('dbo.storedListarPlanesPorObraSocial', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedListarPlanesPorObraSocial];
 GO
 
-CREATE PROCEDURE [dbo].[storedListarPlanesPorObraSocial]
+CREATE OR ALTER PROCEDURE [dbo].[storedListarPlanesPorObraSocial]
     @IdObraSocial INT
 AS
 BEGIN
@@ -506,7 +506,7 @@ GO
 --Creacion de procedimientos almacenados requeridos 5/11/2026
 
 
-CREATE PROCEDURE StoredListarUsuarios
+CREATE OR ALTER PROCEDURE StoredListarUsuarios
 
 AS
 
@@ -532,7 +532,7 @@ ON U.Id= M.IdUsuario
 END;
 GO
 
-CREATE PROCEDURE StoredBuscarPorID
+CREATE OR ALTER PROCEDURE StoredBuscarPorID
 
 @IdABuscar INT
 AS
@@ -559,7 +559,7 @@ END;
 GO
 
 
-CREATE PROCEDURE StoredRegistrarUsuario
+CREATE OR ALTER PROCEDURE StoredRegistrarUsuario
 
 @Nombreusuario VARCHAR(50),
 @Email VARCHAR(50),
@@ -611,7 +611,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredBuscarMedicosSinUsuario
+CREATE OR ALTER PROCEDURE StoredBuscarMedicosSinUsuario
 
 AS 
 
@@ -631,7 +631,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredModificarUsuario
+CREATE OR ALTER PROCEDURE StoredModificarUsuario
 
 @pass VARCHAR(50),
 @nombreUsuario VARCHAR(50),
@@ -651,7 +651,7 @@ WHERE USUARIOS.Id= @Id;
 END;
 GO
 
-CREATE PROCEDURE StoredModificarEstadoUsuario
+CREATE OR ALTER PROCEDURE StoredModificarEstadoUsuario
 
 @Id int
 
@@ -671,7 +671,7 @@ WHERE id=@Id
 end;
 go
 
-CREATE PROCEDURE StoredActualizarUltimaConexion
+CREATE OR ALTER PROCEDURE StoredActualizarUltimaConexion
 
 @Id int
 
@@ -689,7 +689,7 @@ end;
 go
 
 
-CREATE PROCEDURE FiltrarUsuarios
+CREATE OR ALTER PROCEDURE FiltrarUsuarios
 
 @Texto VARCHAR(50),
 @Rol INT,
@@ -735,7 +735,7 @@ IF OBJECT_ID('dbo.storedCancelarTurno', 'P') IS NOT NULL
     DROP PROCEDURE [dbo].[storedCancelarTurno];
 GO
 
-CREATE PROCEDURE [dbo].[storedCancelarTurno]
+CREATE OR ALTER PROCEDURE [dbo].[storedCancelarTurno]
     @Id INT,
     @Motivo VARCHAR(300)
 AS
@@ -754,34 +754,11 @@ GO
 
 
 -- actualizacion procedimientos obra social 16/11
+-- Nota: StoredListarObrasSociales ya se define mas arriba con CREATE OR ALTER.
+-- La definicion duplicada que estaba aqui provocaba el error "ya existe un objeto
+-- llamado 'StoredListarObrasSociales'" al ejecutar el script completo.
 
-CREATE PROCEDURE StoredListarObrasSociales
-
-@Texto VARCHAR(100) = NULL
-
-AS
-
-BEGIN
-
-SELECT
-
-idObraSocial,Nombre,Sigla,Activo FROM ObrasSociales
-
-where
-(@Texto IS NULL OR Nombre LIKE '%' + @Texto + '%' OR Sigla LIKE '%' + @Texto + '%')
-ORDER BY Nombre;
-END;
-GO
-
-
-
-
-
-
-
-
-
-CREATE PROCEDURE StoredBuscarObraSocialPorID
+CREATE OR ALTER PROCEDURE StoredBuscarObraSocialPorID
 @IdObraSocial INT
 
 AS 
@@ -800,7 +777,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredRegistrarObraSocial
+CREATE OR ALTER PROCEDURE StoredRegistrarObraSocial
 @Nombre VARCHAR(100),
 @Sigla VARCHAR(30) = NULL
 
@@ -831,7 +808,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredModificarObraSocial
+CREATE OR ALTER PROCEDURE StoredModificarObraSocial
 @IdObraSocial INT,
 @Nombre VARCHAR(100),
 @Sigla VARCHAR(30) = NULL
@@ -862,7 +839,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredModificarEstadoObraSocial
+CREATE OR ALTER PROCEDURE StoredModificarEstadoObraSocial
     @IdObraSocial INT
 AS
 BEGIN
@@ -878,7 +855,7 @@ GO
 
 --Procesos de planes de obra social 
 
-CREATE PROCEDURE StoredListarPlanesObraSocial
+CREATE OR ALTER PROCEDURE StoredListarPlanesObraSocial
     @Texto VARCHAR(100) = NULL,
     @IdObraSocial INT = NULL,
     @Activo BIT = NULL
@@ -923,7 +900,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredBuscarPlanPorID
+CREATE OR ALTER PROCEDURE StoredBuscarPlanPorID
     @IdPlan INT
 AS
 BEGIN
@@ -944,7 +921,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredRegistrarPlanObraSocial
+CREATE OR ALTER PROCEDURE StoredRegistrarPlanObraSocial
     @IdObraSocial INT,
     @NombrePlan VARCHAR(100)
 AS
@@ -995,7 +972,7 @@ GO
 
 
 
-CREATE PROCEDURE StoredModificarEstadoPlanObraSocial
+CREATE OR ALTER PROCEDURE StoredModificarEstadoPlanObraSocial
     @IdPlan INT
 AS
 BEGIN
@@ -1010,7 +987,7 @@ END;
 GO
     
 
-CREATE PROCEDURE StoredModificarPlanObraSocial
+CREATE OR ALTER PROCEDURE StoredModificarPlanObraSocial
     @IdPlan INT,
     @IdObraSocial INT,
     @NombrePlan VARCHAR(100)

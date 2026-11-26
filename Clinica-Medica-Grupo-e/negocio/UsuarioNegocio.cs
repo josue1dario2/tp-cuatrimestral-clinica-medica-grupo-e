@@ -286,7 +286,7 @@ namespace negocio
         {
 
             AccesoDatos datos = new AccesoDatos();
-            Usuario aBuscar = new Usuario();
+            Usuario aBuscar = null;
 
             try
             {
@@ -327,10 +327,10 @@ namespace negocio
                 return aBuscar;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+ 
+                throw;
             }
             finally { datos.cerrarConexion(); }
 
@@ -341,6 +341,9 @@ namespace negocio
 
         public Usuario Login(string NombreUsuario, string Pass)
         {
+            if (string.IsNullOrWhiteSpace(NombreUsuario) || Pass == null)
+                return null;
+
             Usuario usuario = BuscarUsuarioPorNombreUsuario(NombreUsuario);
 
             if (usuario == null)

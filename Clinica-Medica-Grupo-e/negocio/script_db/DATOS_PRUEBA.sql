@@ -29,36 +29,36 @@ GO
 IF NOT EXISTS (SELECT 1 FROM USUARIOS WHERE Email = 'admin@clinica.com')
 BEGIN
     SET IDENTITY_INSERT [dbo].[USUARIOS] ON;
-    INSERT INTO USUARIOS (Id, Email, Pass, TipoUsuario, Activo) VALUES
-    ( 1, 'admin@clinica.com', 'admin', 1, 1),
-    ( 2, 'recepcion@clinica.com', 'recep', 2, 1),
-    ( 3, 'house@clinica.com', 'medico', 3, 1),
-    ( 4, 'recepcion2@clinica.com', 'recep', 2, 1),
-    ( 5, 'marta.sanchez@clinica.com', 'medico', 3, 1),
-    ( 6, 'ricardo.gutierrez@clinica.com', 'medico', 3, 1),
-    ( 7, 'laura.benitez@clinica.com', 'medico', 3, 1),
-    ( 8, 'fernando.rios@clinica.com', 'medico', 3, 1),
-    ( 9, 'silvia.navarro@clinica.com', 'medico', 3, 1),
-    (10, 'andres.molina@clinica.com', 'medico', 3, 1),
-    (11, 'patricia.salinas@clinica.com', 'medico', 3, 1),
-    (12, 'gustavo.peralta@clinica.com', 'medico', 3, 1),
-    (13, 'veronica.castro@clinica.com', 'medico', 3, 1),
-    (14, 'damian.ferreyra@clinica.com', 'medico', 3, 1),
-    (15, 'claudia.rojas@clinica.com', 'medico', 3, 1),
-    (16, 'hernan.quiroga@clinica.com', 'medico', 3, 1),
-    (17, 'monica.luna@clinica.com', 'medico', 3, 1),
-    (18, 'sergio.dominguez@clinica.com', 'medico', 3, 1),
-    (19, 'andrea.paz@clinica.com', 'medico', 3, 1),
-    (20, 'eduardo.sosa@clinica.com', 'medico', 3, 1),
-    (21, 'gabriela.medina@clinica.com', 'medico', 3, 1),
-    (22, 'pablo.arce@clinica.com', 'medico', 3, 1),
-    (23, 'lucia.herrera@clinica.com', 'medico', 3, 1),
-    (24, 'martin.cabrera@clinica.com', 'medico', 3, 1),
-    (25, 'alejandro.ponce@clinica.com', 'medico', 3, 1),
-    (26, 'natalia.vega@clinica.com', 'medico', 3, 1),
-    (27, 'ignacio.aguirre@clinica.com', 'medico', 3, 1),
-    (28, 'carolina.bustos@clinica.com', 'medico', 3, 1),
-    (29, 'raul.villalba@clinica.com', 'medico', 3, 0); -- Inactivo
+    INSERT INTO USUARIOS (Id, Email, Pass, TipoUsuario, NombreUsuario, Activo) VALUES
+    ( 1, 'admin@clinica.com', 'admin', 1, 'admin@clinica.com', 1),
+    ( 2, 'recepcion@clinica.com', 'recep', 2, 'recepcion@clinica.com', 1),
+    ( 3, 'house@clinica.com', 'medico', 3, 'house@clinica.com', 1),
+    ( 4, 'recepcion2@clinica.com', 'recep', 2, 'recepcion2@clinica.com', 1),
+    ( 5, 'marta.sanchez@clinica.com', 'medico', 3, 'marta.sanchez@clinica.com', 1),
+    ( 6, 'ricardo.gutierrez@clinica.com', 'medico', 3, 'ricardo.gutierrez@clinica.com', 1),
+    ( 7, 'laura.benitez@clinica.com', 'medico', 3, 'laura.benitez@clinica.com', 1),
+    ( 8, 'fernando.rios@clinica.com', 'medico', 3, 'fernando.rios@clinica.com', 1),
+    ( 9, 'silvia.navarro@clinica.com', 'medico', 3, 'silvia.navarro@clinica.com', 1),
+    (10, 'andres.molina@clinica.com', 'medico', 3, 'andres.molina@clinica.com', 1),
+    (11, 'patricia.salinas@clinica.com', 'medico', 3, 'patricia.salinas@clinica.com', 1),
+    (12, 'gustavo.peralta@clinica.com', 'medico', 3, 'gustavo.peralta@clinica.com', 1),
+    (13, 'veronica.castro@clinica.com', 'medico', 3, 'veronica.castro@clinica.com', 1),
+    (14, 'damian.ferreyra@clinica.com', 'medico', 3, 'damian.ferreyra@clinica.com', 1),
+    (15, 'claudia.rojas@clinica.com', 'medico', 3, 'claudia.rojas@clinica.com', 1),
+    (16, 'hernan.quiroga@clinica.com', 'medico', 3, 'hernan.quiroga@clinica.com', 1),
+    (17, 'monica.luna@clinica.com', 'medico', 3, 'monica.luna@clinica.com', 1),
+    (18, 'sergio.dominguez@clinica.com', 'medico', 3, 'sergio.dominguez@clinica.com', 1),
+    (19, 'andrea.paz@clinica.com', 'medico', 3, 'andrea.paz@clinica.com', 1),
+    (20, 'eduardo.sosa@clinica.com', 'medico', 3, 'eduardo.sosa@clinica.com', 1),
+    (21, 'gabriela.medina@clinica.com', 'medico', 3, 'gabriela.medina@clinica.com', 1),
+    (22, 'pablo.arce@clinica.com', 'medico', 3, 'pablo.arce@clinica.com', 1),
+    (23, 'lucia.herrera@clinica.com', 'medico', 3, 'lucia.herrera@clinica.com', 1),
+    (24, 'martin.cabrera@clinica.com', 'medico', 3, 'martin.cabrera@clinica.com', 1),
+    (25, 'alejandro.ponce@clinica.com', 'medico', 3, 'alejandro.ponce@clinica.com', 1),
+    (26, 'natalia.vega@clinica.com', 'medico', 3, 'natalia.vega@clinica.com', 1),
+    (27, 'ignacio.aguirre@clinica.com', 'medico', 3, 'ignacio.aguirre@clinica.com', 1),
+    (28, 'carolina.bustos@clinica.com', 'medico', 3, 'carolina.bustos@clinica.com', 1),
+    (29, 'raul.villalba@clinica.com', 'medico', 3, 'raul.villalba@clinica.com', 0); -- Inactivo
     SET IDENTITY_INSERT [dbo].[USUARIOS] OFF;
 END
 GO
@@ -129,7 +129,7 @@ GO
 -- -----------------------------------------------------------------------------
 -- 4. MEDICOS
 -- -----------------------------------------------------------------------------
-IF NOT EXISTS (SELECT 1 FROM MEDICOS WHERE Id = 1)
+IF NOT EXISTS (SELECT 1 FROM MEDICOS WHERE Matricula = 'MN-10455')
 BEGIN
     SET IDENTITY_INSERT [dbo].[MEDICOS] ON;
     INSERT INTO MEDICOS (Id, Nombre, Apellido, Matricula, Email, Telefono, IdTurnoTrabajo, IdUsuario, Activo) VALUES
@@ -213,32 +213,32 @@ GO
 -- -----------------------------------------------------------------------------
 -- 6. PACIENTES
 -- -----------------------------------------------------------------------------
-IF NOT EXISTS (SELECT 1 FROM PACIENTES WHERE Id = 1)
+IF NOT EXISTS (SELECT 1 FROM PACIENTES WHERE Dni = '35111222')
 BEGIN
     SET IDENTITY_INSERT [dbo].[PACIENTES] ON;
     INSERT INTO PACIENTES (Id, Nombre, Apellido, Dni, FechaNacimiento, Email, Telefono, Direccion, Activo) VALUES
-    ( 1, 'Juan', 'Pérez', '35111222', '1990-05-15', 'juan.perez@email.com', '261-555-1234', 'Av. San Martín 123', 1),
-    ( 2, 'María', 'Gómez', '40333444', '1997-10-20', 'maria.gomez@email.com', '261-555-5678', 'Belgrano 456', 1),
-    ( 3, 'Carlos', 'Rodríguez', '28456789', '1980-03-12', 'carlos.rodriguez@email.com', '261-555-2001', 'Av. Las Heras 245', 1),
-    ( 4, 'Lucía', 'Fernández', '36789012', '1992-07-08', 'lucia.fernandez@email.com', '261-555-2002', 'Mitre 890', 1),
-    ( 5, 'Roberto', 'Álvarez', '25678901', '1976-11-25', 'roberto.alvarez@email.com', '261-555-2003', 'San Lorenzo 1020', 1),
-    ( 6, 'Ana', 'Martínez', '38901234', '1995-02-17', 'ana.martinez@email.com', '261-555-2004', 'Sarmiento 455', 1),
-    ( 7, 'Jorge', 'López', '31456789', '1984-09-30', 'jorge.lopez@email.com', '261-555-2005', 'Av. España 780', 1),
-    ( 8, 'Valeria', 'Romero', '40123456', '1998-04-05', 'valeria.romero@email.com', '261-555-2006', 'Colón 1150', 1),
-    ( 9, 'Miguel', 'Torres', '27345678', '1948-01-22', 'miguel.torres@email.com', '261-555-2007', 'Av. Independencia 300', 1),
-    (10, 'Silvana', 'Rojas', '35678901', '1991-06-14', 'silvana.rojas@email.com', '261-555-2008', 'Perú 220', 1),
-    (11, 'Diego', 'Acosta', '29876543', '1982-12-03', 'diego.acosta@email.com', '261-555-2009', 'Godoy Cruz 1420', 1),
-    (12, 'Carolina', 'Molina', '41234567', '2025-08-19', 'carolina.molina@email.com', '261-555-2010', 'Av. Colón 2100', 1),
-    (13, 'Héctor', 'Benítez', '24345678', '1951-05-27', 'hector.benitez@email.com', '261-555-2011', 'Lavalle 990', 1),
-    (14, 'Paola', 'Suárez', '37890123', '1993-10-11', 'paola.suarez@email.com', '261-555-2012', 'Rivadavia 640', 1),
-    (15, 'Facundo', 'Giménez', '33456789', '1987-07-01', 'facundo.gimenez@email.com', '261-555-2013', 'Catamarca 375', 1),
-    (16, 'Mariana', 'Cabrera', '39234567', '2016-03-23', 'mariana.cabrera@email.com', '261-555-2014', 'Almirante Brown 180', 1),
-    (17, 'Esteban', 'Ríos', '26567890', '1946-09-09', 'esteban.rios@email.com', '261-555-2015', 'Av. San Juan 730', 1),
-    (18, 'Rocío', 'Aguilar', '42567890', '2000-01-16', 'rocio.aguilar@email.com', '261-555-2016', 'Junín 510', 1),
-    (19, 'Daniel', 'Paredes', '30789012', '1983-04-28', 'daniel.paredes@email.com', '261-555-2017', 'Las Rosas 260', 1),
-    (20, 'Nadia', 'Ortiz', '36456789', '1992-12-12', 'nadia.ortiz@email.com', '261-555-2018', 'Balcarce 1180', 1),
-    (21, 'Tomás', 'Villalba', '43890123', '2003-06-06', 'tomas.villalba@email.com', '261-555-2019', 'Chile 445', 1),
-    (22, 'Elena', 'Quintero', '22890123', '1943-02-09', 'elena.quintero@email.com', '261-555-2020', 'Av. Argentina 950', 0); -- Inactivo
+    ( 1, 'Juan', 'Pérez', '35111222', '19900515', 'juan.perez@email.com', '261-555-1234', 'Av. San Martín 123', 1),
+    ( 2, 'María', 'Gómez', '40333444', '19971020', 'maria.gomez@email.com', '261-555-5678', 'Belgrano 456', 1),
+    ( 3, 'Carlos', 'Rodríguez', '28456789', '19800312', 'carlos.rodriguez@email.com', '261-555-2001', 'Av. Las Heras 245', 1),
+    ( 4, 'Lucía', 'Fernández', '36789012', '19920708', 'lucia.fernandez@email.com', '261-555-2002', 'Mitre 890', 1),
+    ( 5, 'Roberto', 'Álvarez', '25678901', '19761125', 'roberto.alvarez@email.com', '261-555-2003', 'San Lorenzo 1020', 1),
+    ( 6, 'Ana', 'Martínez', '38901234', '19950217', 'ana.martinez@email.com', '261-555-2004', 'Sarmiento 455', 1),
+    ( 7, 'Jorge', 'López', '31456789', '19840930', 'jorge.lopez@email.com', '261-555-2005', 'Av. España 780', 1),
+    ( 8, 'Valeria', 'Romero', '40123456', '19980405', 'valeria.romero@email.com', '261-555-2006', 'Colón 1150', 1),
+    ( 9, 'Miguel', 'Torres', '27345678', '19480122', 'miguel.torres@email.com', '261-555-2007', 'Av. Independencia 300', 1),
+    (10, 'Silvana', 'Rojas', '35678901', '19910614', 'silvana.rojas@email.com', '261-555-2008', 'Perú 220', 1),
+    (11, 'Diego', 'Acosta', '29876543', '19821203', 'diego.acosta@email.com', '261-555-2009', 'Godoy Cruz 1420', 1),
+    (12, 'Carolina', 'Molina', '41234567', '20250819', 'carolina.molina@email.com', '261-555-2010', 'Av. Colón 2100', 1),
+    (13, 'Héctor', 'Benítez', '24345678', '19510527', 'hector.benitez@email.com', '261-555-2011', 'Lavalle 990', 1),
+    (14, 'Paola', 'Suárez', '37890123', '19931011', 'paola.suarez@email.com', '261-555-2012', 'Rivadavia 640', 1),
+    (15, 'Facundo', 'Giménez', '33456789', '19870701', 'facundo.gimenez@email.com', '261-555-2013', 'Catamarca 375', 1),
+    (16, 'Mariana', 'Cabrera', '39234567', '20160323', 'mariana.cabrera@email.com', '261-555-2014', 'Almirante Brown 180', 1),
+    (17, 'Esteban', 'Ríos', '26567890', '19460909', 'esteban.rios@email.com', '261-555-2015', 'Av. San Juan 730', 1),
+    (18, 'Rocío', 'Aguilar', '42567890', '20000116', 'rocio.aguilar@email.com', '261-555-2016', 'Junín 510', 1),
+    (19, 'Daniel', 'Paredes', '30789012', '19830428', 'daniel.paredes@email.com', '261-555-2017', 'Las Rosas 260', 1),
+    (20, 'Nadia', 'Ortiz', '36456789', '19921212', 'nadia.ortiz@email.com', '261-555-2018', 'Balcarce 1180', 1),
+    (21, 'Tomás', 'Villalba', '43890123', '20030606', 'tomas.villalba@email.com', '261-555-2019', 'Chile 445', 1),
+    (22, 'Elena', 'Quintero', '22890123', '19430209', 'elena.quintero@email.com', '261-555-2020', 'Av. Argentina 950', 0); -- Inactivo
     SET IDENTITY_INSERT [dbo].[PACIENTES] OFF;
 END
 GO

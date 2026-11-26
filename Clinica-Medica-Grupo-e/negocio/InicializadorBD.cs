@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
+using System.Reflection;
+using System.Text;
 
 namespace negocio
 {
     public static class InicializadorBD
     {
+
+        private const string NombreRecursoMigracion = "negocio.script_db.MIGRACION_ESTRUCTURA.sql";
+
         public static void AsegurarEstructura()
         {
             try
@@ -58,7 +64,9 @@ namespace negocio
                                 [Email] [varchar](50) NOT NULL UNIQUE,
                                 [Pass] [varchar](50) NOT NULL,
                                 [TipoUsuario] [int] NOT NULL,
-                                [Activo] [bit] NOT NULL DEFAULT 1
+                                [Activo] [bit] NOT NULL DEFAULT 1,
+                                [NombreUsuario] [varchar](50) NOT NULL,
+                                [UltimaConexion] [datetime] NULL
                             );
                         END");
 
@@ -150,6 +158,13 @@ namespace negocio
                             ALTER TABLE [dbo].[TURNOS] ADD [IdPlan] [int] NULL;
                             ALTER TABLE [dbo].[TURNOS] ADD [NumeroAfiliado] [varchar](50) NULL;
                         END");
+
+                    // La migracion va aca, con las tablas ya creadas: completa la
+                    // estructura que usa el codigo (columnas de USUARIOS, tabla
+                    // ATENCIONES y los procedimientos de usuarios, obras sociales,
+                    // planes y atenciones). Antes de esto no se podia aplicar porque
+                    // las columnas de USUARIOS y la tabla ATENCIONES no existian.
+                    AplicarMigracion(conexion);
 
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarEspecialidades', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarEspecialidades]");
                     EjecutarComando(conexion, @"
@@ -534,10 +549,10 @@ namespace negocio
                     EjecutarComando(conexion, @"
                         IF NOT EXISTS (SELECT * FROM USUARIOS WHERE Email = 'admin@clinica.com')
                         BEGIN
-                            INSERT INTO USUARIOS (Email, Pass, TipoUsuario, Activo) VALUES 
-                            ('admin@clinica.com', 'admin', 1, 1),
-                            ('recepcion@clinica.com', 'recep', 2, 1),
-                            ('house@clinica.com', 'medico', 3, 1);
+                            INSERT INTO USUARIOS (Email, Pass, TipoUsuario, NombreUsuario, Activo) VALUES 
+                            ('admin@clinica.com', 'admin', 1, 'admin@clinica.com', 1),
+                            ('recepcion@clinica.com', 'recep', 2, 'recepcion@clinica.com', 1),
+                            ('house@clinica.com', 'medico', 3, 'house@clinica.com', 1);
                         END");
 
                     EjecutarComando(conexion, @"
@@ -628,9 +643,115 @@ namespace negocio
                         END");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Antes el error se silenciaba y la base quedaba incompleta sin avisar.
+                // Ahora queda registrado para poder diagnosticarlo.
+                System.Diagnostics.Trace.TraceError(
+                    "InicializadorBD: no se pudo asegurar la estructura de la base. " + ex);
             }
+        }
+
+        /// <summary>
+        /// Ejecuta MIGRACION_ESTRUCTURA.sql embebido en el ensamblado. Es idempotente:
+        /// se puede correr en cada arranque de la aplicacion sin efectos acumulativos.
+        /// </summary>
+        private static void AplicarMigracion(SqlConnection conexion)
+        {
+            string sql = LeerScriptMigracion();
+
+            if (string.IsNullOrEmpty(sql))
+                return;
+
+            string[] lotes = SepararPorLotesGo(sql);
+
+            foreach (string lote in lotes)
+            {
+                if (lote.Length == 0)
+                    continue;
+
+                using (SqlCommand comando = new SqlCommand(lote, conexion))
+                {
+                    comando.CommandTimeout = 120;
+                    comando.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Divide el script en lotes separados por una linea que solo contenga GO.
+        /// </summary>
+        private static string[] SepararPorLotesGo(string sql)
+        {
+            List<string> lotes = new List<string>();
+            StringBuilder actual = new StringBuilder();
+
+            using (StringReader reader = new StringReader(sql))
+            {
+                string linea;
+
+                while ((linea = reader.ReadLine()) != null)
+                {
+                    string recortada = linea.Trim();
+
+                    if (recortada == "GO" || recortada.StartsWith("GO ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        lotes.Add(actual.ToString());
+                        actual.Length = 0;
+                        continue;
+                    }
+
+                    actual.AppendLine(linea);
+                }
+            }
+
+            lotes.Add(actual.ToString());
+
+            return lotes.ToArray();
+        }
+
+        /// <summary>
+        /// Lee el script de migracion desde el recurso embebido. Si no esta disponible
+        /// (por ejemplo, al compilar sin incluirlo), devuelve null.
+        /// </summary>
+        private static string LeerScriptMigracion()
+        {
+            try
+            {
+                Assembly assembly = typeof(InicializadorBD).Assembly;
+                string ruta = NombreRecursoMigracion;
+
+                if (!nombreRecursoExiste(assembly, ruta))
+                    return null;
+
+                using (Stream stream = assembly.GetManifestResourceStream(ruta))
+                {
+                    if (stream == null)
+                        return null;
+
+                    using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceWarning(
+                    "InicializadorBD: no se pudo leer el script de migracion embebido. " + ex.Message);
+                return null;
+            }
+        }
+
+        private static bool nombreRecursoExiste(Assembly assembly, string nombre)
+        {
+            foreach (string recurso in assembly.GetManifestResourceNames())
+            {
+                if (string.Equals(recurso, nombre, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
         }
 
         private static void EjecutarComando(SqlConnection conexion, string sql)
