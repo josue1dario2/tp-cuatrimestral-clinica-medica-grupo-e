@@ -28,9 +28,7 @@ namespace Clinica_Medica_Grupo_e
             }
             catch (Exception ex)
             {
-                // Antes la llamada al negocio estaba fuera del try: la excepcion de la
-                // base (por ejemplo, un procedimiento que no existe) se escapaba y el
-                // usuario veia la pantalla de error de ASP.NET en vez del mensaje.
+  
                 System.Diagnostics.Trace.TraceError("Login: fallo al consultar el usuario. " + ex);
 
                 pnlError.Visible = true;

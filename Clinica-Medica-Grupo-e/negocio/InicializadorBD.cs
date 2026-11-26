@@ -159,11 +159,6 @@ namespace negocio
                             ALTER TABLE [dbo].[TURNOS] ADD [NumeroAfiliado] [varchar](50) NULL;
                         END");
 
-                    // La migracion va aca, con las tablas ya creadas: completa la
-                    // estructura que usa el codigo (columnas de USUARIOS, tabla
-                    // ATENCIONES y los procedimientos de usuarios, obras sociales,
-                    // planes y atenciones). Antes de esto no se podia aplicar porque
-                    // las columnas de USUARIOS y la tabla ATENCIONES no existian.
                     AplicarMigracion(conexion);
 
                     EjecutarComando(conexion, "IF OBJECT_ID('dbo.storedListarEspecialidades', 'P') IS NOT NULL DROP PROCEDURE [dbo].[storedListarEspecialidades]");
@@ -645,17 +640,11 @@ namespace negocio
             }
             catch (Exception ex)
             {
-                // Antes el error se silenciaba y la base quedaba incompleta sin avisar.
-                // Ahora queda registrado para poder diagnosticarlo.
                 System.Diagnostics.Trace.TraceError(
                     "InicializadorBD: no se pudo asegurar la estructura de la base. " + ex);
             }
         }
 
-        /// <summary>
-        /// Ejecuta MIGRACION_ESTRUCTURA.sql embebido en el ensamblado. Es idempotente:
-        /// se puede correr en cada arranque de la aplicacion sin efectos acumulativos.
-        /// </summary>
         private static void AplicarMigracion(SqlConnection conexion)
         {
             string sql = LeerScriptMigracion();
@@ -678,9 +667,6 @@ namespace negocio
             }
         }
 
-        /// <summary>
-        /// Divide el script en lotes separados por una linea que solo contenga GO.
-        /// </summary>
         private static string[] SepararPorLotesGo(string sql)
         {
             List<string> lotes = new List<string>();
@@ -710,10 +696,6 @@ namespace negocio
             return lotes.ToArray();
         }
 
-        /// <summary>
-        /// Lee el script de migracion desde el recurso embebido. Si no esta disponible
-        /// (por ejemplo, al compilar sin incluirlo), devuelve null.
-        /// </summary>
         private static string LeerScriptMigracion()
         {
             try

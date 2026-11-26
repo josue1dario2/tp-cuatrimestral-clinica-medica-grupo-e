@@ -753,11 +753,6 @@ END
 GO
 
 
--- actualizacion procedimientos obra social 16/11
--- Nota: StoredListarObrasSociales ya se define mas arriba con CREATE OR ALTER.
--- La definicion duplicada que estaba aqui provocaba el error "ya existe un objeto
--- llamado 'StoredListarObrasSociales'" al ejecutar el script completo.
-
 CREATE OR ALTER PROCEDURE StoredBuscarObraSocialPorID
 @IdObraSocial INT
 
